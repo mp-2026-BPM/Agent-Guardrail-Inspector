@@ -46,6 +46,11 @@ Baseline policy family:
 - `baseline_flag` — every `baseline` guardrail in `flag` mode. Agents behave as unconstrained; violations still logged.
 - `anti_flow` — lifecycle gates inverted + severed barista handover; orders trapped mid-flow. Worst-case misconfiguration.
 - `strict_flow` — linear pipeline plus `process_order_once_per_conversation` (via `max_tool_calls` predicate).
+- `baseline_soft` / `strict_flow_soft` — every rule enforced by an LLM judge; the hard predicates run as `flag` shadows (deterministic call counters stay hard).
+- `baseline_hard` / `strict_flow_hard` — every rule enforced by a deterministic predicate, including hard versions of the menu, handover-reason and price judges.
+- `strict_flow_flag` — every `strict_flow` guardrail in `flag` mode.
+
+Within each family (`baseline*`, `strict_flow*`) agents, prompts and guidelines are identical and every rule has the same strength; `tests/test_setup_coherence.py` enforces this.
 
 List available setups: `poetry run simulate --list-setups`.
 

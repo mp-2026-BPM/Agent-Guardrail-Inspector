@@ -29,6 +29,8 @@ guardrails:
   - check_inventory:order_status
   - update_stock:order_status
   - transfer:context_summary_nonempty
+  - handover:reason_matches_target
+  - assistant_message:no_price_promises
 guidelines:
   - provide_handoff_context
   - summarize_before_handoff

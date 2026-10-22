@@ -45,6 +45,8 @@ guardrails:
   - end_preparation:order_status
   - transfer:context_summary_nonempty
   - clean_machine:only_after_error
+  - handover:reason_matches_target
+  - assistant_message:no_price_promises
 guidelines:
   - provide_handoff_context
   - summarize_before_handoff

@@ -284,11 +284,27 @@ def refund_within_limit_predicate(
     return _eval
 
 
+def _is_failed_tool_result(content) -> bool:
+    """True when a tool *returned* a failure instead of raising: the tools report
+    bad input as `"Error..."` text (process_order, refunds) or as JSON with
+    `"status": "error"` (barista, tray), while the ToolMessage status stays success."""
+    text = str(content).lstrip()
+    if text.startswith("Error"):
+        return True
+    try:
+        data = json.loads(text)
+    except (json.JSONDecodeError, TypeError):
+        return False
+    return isinstance(data, dict) and data.get("status") == "error"
+
+
 def max_tool_calls_predicate(tool_name: str, max_calls: int, effect: str = "deny"):
     """Factory: cap the number of successful invocations of `tool_name` in one
     conversation. Counts prior ToolMessages in `state["messages"]` whose `name`
-    matches and whose `status` is not "error" (i.e. previously allowed by the
-    gateway and executed by the tool). Violation when the count is already at or
+    matches, whose `status` is not "error" (i.e. previously allowed by the
+    gateway and executed by the tool) and whose content is not a failure the tool
+    returned (see `_is_failed_tool_result`), so a rejected process_order does not
+    use up the only allowed call. Violation when the count is already at or
     above `max_calls` at the moment of evaluation — remember the gateway runs
     *before* the current call, so `>= max_calls` blocks the (max+1)-th attempt.
     """
@@ -301,6 +317,7 @@ def max_tool_calls_predicate(tool_name: str, max_calls: int, effect: str = "deny
             for m in messages
             if getattr(m, "name", None) == tool_name
             and getattr(m, "status", None) != "error"
+            and not _is_failed_tool_result(getattr(m, "content", ""))
         )
         if prior < max_calls:
             return Verdict(

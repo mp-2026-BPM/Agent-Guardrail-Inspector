@@ -160,6 +160,7 @@ guardrails:
     predicate: refund_within_limit
     predicate_args:
       max_pct: 50
+      min_pct: 0
       effect: deny
 
   - id: transfer:context_summary_nonempty
@@ -308,6 +309,9 @@ guardrails:
     effect: flag
     description: Flag transfer_to_agent calls whose context_summary does not include an ORD#### order id.
     predicate: transfer_includes_order_id
+    predicate_args:
+      effect: flag
+      only_after_order_placed: true
 
   - id: offer_refund:max_calls
     type: hard

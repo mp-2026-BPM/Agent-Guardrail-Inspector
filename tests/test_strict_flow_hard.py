@@ -1,7 +1,6 @@
 """strict_flow_hard: strict_flow with every rule enforced by a hard predicate,
-equalized to strict_flow_soft. Covers the deny-capable transfer_includes_order_id
-factory and checks the setup's enforcement shape against strict_flow_soft.
-Shape follows tests/test_max_tool_calls.py.
+equalized to strict_flow_soft. Covers the configurable transfer_includes_order_id
+factory and the setup's wiring. Shape follows tests/test_max_tool_calls.py.
 """
 
 import json
@@ -16,13 +15,6 @@ from src.control_plane.predicates import transfer_includes_order_id_predicate
 from src.control_plane.types import Effect, GuardrailContext
 
 STRICT_FLOW_HARD_DIR = Path("config/setups/strict_flow_hard")
-STRICT_FLOW_SOFT_DIR = Path("config/setups/strict_flow_soft")
-# strict_flow_soft only flags these counters; strict_flow_hard keeps strict_flow's deny.
-DENY_DESPITE_SOFT_FLAG = {
-    "offer_refund:max_calls",
-    "offer_partial_refund:max_calls",
-    "clean_machine:max_calls",
-}
 
 PLACED = ToolMessage(
     content=json.dumps({"order_id": "ORD0007", "summary": "Total: $4.00"}),
@@ -91,10 +83,6 @@ class TestStrictFlowHardSetup(unittest.TestCase):
         self.catalog = Catalog(STRICT_FLOW_HARD_DIR)
         self.agents = AgentRepo(STRICT_FLOW_HARD_DIR).all()
 
-    def _effects(self) -> dict[str, Effect]:
-        ids = sorted({gid for a in self.agents.values() for gid in a.guardrail_ids})
-        return {gr.name: gr.effect for gr in self.catalog.guardrails(ids)}
-
     def test_every_agent_guardrail_resolves_and_is_hard(self):
         for agent in self.agents.values():
             for gr in self.catalog.guardrails(list(agent.guardrail_ids)):
@@ -107,26 +95,8 @@ class TestStrictFlowHardSetup(unittest.TestCase):
             with self.subTest(agent=agent_id):
                 self.assertEqual(agent.guardrail_ids, strict[agent_id].guardrail_ids)
 
-    def test_enforcement_matches_strict_flow_soft(self):
-        # Every rule strict_flow_soft enforces at deny (natively soft, or via a
-        # soft_* judge) is denied here; rules it only flags are flagged here,
-        # except the counters strict_flow_hard deliberately keeps at deny.
-        soft_agents = AgentRepo(STRICT_FLOW_SOFT_DIR).all()
-        soft_catalog = Catalog(STRICT_FLOW_SOFT_DIR)
-        hard_effects = self._effects()
-        for agent_id, soft_agent in soft_agents.items():
-            soft_ids = set(soft_agent.guardrail_ids)
-            for gr in soft_catalog.guardrails(sorted(soft_ids)):
-                if gr.name.startswith("soft_"):
-                    continue
-                enforced = (
-                    gr.effect == Effect.DENY
-                    or f"soft_{gr.name}" in soft_ids
-                    or gr.name in DENY_DESPITE_SOFT_FLAG
-                )
-                expected = Effect.DENY if enforced else Effect.FLAG
-                with self.subTest(agent=agent_id, guardrail=gr.name):
-                    self.assertEqual(hard_effects[gr.name], expected)
+    # Enforcement strength against strict_flow / strict_flow_soft is checked for
+    # every setup class in tests/test_setup_coherence.py.
 
     def test_partial_refund_rejects_negative(self):
         [gr] = self.catalog.guardrails(["offer_partial_refund:within_policy_cap"])
@@ -138,10 +108,11 @@ class TestStrictFlowHardSetup(unittest.TestCase):
         self.assertEqual(gr.eval(ctx).effect, Effect.DENY)
 
     def test_includes_order_id_wired_with_exemption(self):
+        # Flag only, as in strict_flow; no flag before an order exists.
         [gr] = self.catalog.guardrails(["transfer:includes_order_id"])
         self.assertEqual(gr.eval(_ctx("Customer wants a latte.")).effect, Effect.ALLOW)
         self.assertEqual(
-            gr.eval(_ctx("Customer wants a latte.", [PLACED])).effect, Effect.DENY
+            gr.eval(_ctx("Customer wants a latte.", [PLACED])).effect, Effect.FLAG
         )
 
 

@@ -6,7 +6,9 @@
 #
 # The three max_tool_calls-family extras (offer_refund/offer_partial_refund/
 # clean_machine max_calls) have no soft counterparts — counters are
-# deterministic; the hard shadow is their only enforcement path here.
+# deterministic, so the hard rule enforces them here at `deny`, as in
+# strict_flow and strict_flow_hard. transfer:includes_order_id only flags,
+# as in strict_flow.
 guardrails:
   # -----------------------------------------------------------------------
   # NATIVE SOFT RULES — kept verbatim from strict_flow at effect: deny.
@@ -247,6 +249,7 @@ guardrails:
     predicate: refund_within_limit
     predicate_args:
       max_pct: 50
+      min_pct: 0
       effect: flag
 
   - id: transfer:context_summary_nonempty
@@ -320,46 +323,49 @@ guardrails:
     effect: flag
     description: strict_flow shadow (flag only).
     predicate: transfer_includes_order_id
+    predicate_args:
+      effect: flag
+      only_after_order_placed: true
 
-  # max_tool_calls shadows. No soft counterparts (see file header).
+  # max_tool_calls enforcers (deny). No soft counterparts (see file header).
   - id: offer_refund:max_calls
     type: hard
     version: v1
     tools:
       - offer_refund
-    effect: flag
-    description: strict_flow shadow (flag only). No soft counterpart.
+    effect: deny
+    description: Deterministic counter at deny. No soft counterpart.
     predicate: max_tool_calls
     predicate_args:
       tool_name: offer_refund
       max_calls: 1
-      effect: flag
+      effect: deny
 
   - id: offer_partial_refund:max_calls
     type: hard
     version: v1
     tools:
       - offer_partial_refund
-    effect: flag
-    description: strict_flow shadow (flag only). No soft counterpart.
+    effect: deny
+    description: Deterministic counter at deny. No soft counterpart.
     predicate: max_tool_calls
     predicate_args:
       tool_name: offer_partial_refund
       max_calls: 1
-      effect: flag
+      effect: deny
 
   - id: clean_machine:max_calls
     type: hard
     version: v1
     tools:
       - clean_machine
-    effect: flag
-    description: strict_flow shadow (flag only). No soft counterpart.
+    effect: deny
+    description: Deterministic counter at deny. No soft counterpart.
     predicate: max_tool_calls
     predicate_args:
       tool_name: clean_machine
       max_calls: 2
-      effect: flag
+      effect: deny
 
   # -----------------------------------------------------------------------
   # SOFT COUNTERPARTS — LLM-as-judge reimplementations. All deny.
@@ -798,8 +804,8 @@ guardrails:
     version: v1
     tools:
       - transfer_to_agent
-    effect: deny
-    description: LLM-as-judge counterpart to transfer:includes_order_id (deny-strength enforcer; the paired hard predicate is FLAG-only).
+    effect: flag
+    description: LLM-as-judge counterpart to transfer:includes_order_id (flag only, as in strict_flow).
     judge_prompt: |
       You are auditing a proposed agent-to-agent handover in a coffee shop.
 

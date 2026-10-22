@@ -106,6 +106,7 @@ guardrails:
     predicate: refund_within_limit
     predicate_args:
       max_pct: 100
+      min_pct: 0
       effect: flag
 
   - id: transfer:context_summary_nonempty
