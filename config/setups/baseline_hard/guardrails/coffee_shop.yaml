@@ -1,0 +1,222 @@
+guardrails:
+  - id: handover:allowed_targets
+    type: hard
+    version: v1
+    tools:
+      - transfer_to_agent
+    effect: deny
+    description: Handover target must be in the calling agent's allowed_handovers list.
+    predicate: allowed_handover_targets
+
+  - id: calculate_total:discount_within_limit_30pct
+    type: hard
+    version: v1
+    tools:
+      - calculate_total
+    effect: deny
+    description: Deny calculate_total invocations with discount_percent above the configured 30% limit.
+    predicate: discount_within_limit
+    predicate_args:
+      max_pct: 30
+      effect: deny
+
+  # Order lifecycle — each state-changing tool may only be called from the order
+  # statuses listed in `allowed`. This replaces the former OrderStateMachine; the
+  # transition graph is implicit in these per-tool source preconditions.
+  - id: check_inventory:order_status
+    type: hard
+    version: v1
+    tools:
+      - check_inventory
+    effect: deny
+    description: check_inventory may only run while the order is pending.
+    predicate: require_order_status
+    predicate_args:
+      allowed: [pending]
+      effect: deny
+
+  - id: update_stock:order_status
+    type: hard
+    version: v1
+    tools:
+      - update_stock
+    effect: deny
+    description: update_stock may only run once inventory is confirmed.
+    predicate: require_order_status
+    predicate_args:
+      allowed: [inventory_confirmed]
+      effect: deny
+
+  - id: start_preparation:order_status
+    type: hard
+    version: v1
+    tools:
+      - start_preparation
+    effect: deny
+    description: start_preparation needs a confirmed order (or a prior prep to retry).
+    predicate: require_order_status
+    predicate_args:
+      allowed: [inventory_confirmed, in_preparation, preparation_error]
+      effect: deny
+
+  - id: end_preparation:order_status
+    type: hard
+    version: v1
+    tools:
+      - end_preparation
+    effect: deny
+    description: end_preparation may only run while a coffee is in preparation.
+    predicate: require_order_status
+    predicate_args:
+      allowed: [in_preparation]
+      effect: deny
+
+  - id: offer_refund:order_status
+    type: hard
+    version: v1
+    tools:
+      - offer_refund
+    effect: deny
+    description: offer_refund may only run on a completed order.
+    predicate: require_order_status
+    predicate_args:
+      allowed: [completed]
+      effect: deny
+
+  # New "reasonable defaults" additions.
+  - id: process_order:items_on_menu
+    type: hard
+    version: v1
+    tools:
+      - process_order
+    effect: deny
+    description: Deterministic menu-adherence check on process_order; complements the soft assistant_message:on_menu_only judge.
+    predicate: process_order_items_on_menu
+    predicate_args:
+      effect: deny
+
+  - id: offer_partial_refund:below_order_total
+    type: hard
+    version: v1
+    tools:
+      - offer_partial_refund
+    effect: deny
+    description: Sanity gate — partial refund percent must be within 0–100.
+    predicate: refund_within_limit
+    predicate_args:
+      max_pct: 100
+      min_pct: 0
+      effect: deny
+
+  - id: transfer:context_summary_nonempty
+    type: hard
+    version: v1
+    tools:
+      - transfer_to_agent
+    effect: deny
+    description: Handovers must carry a non-trivial context_summary (>= 20 chars after strip).
+    predicate: transfer_context_summary_nonempty
+    predicate_args:
+      min_chars: 20
+      effect: deny
+
+  - id: clean_machine:only_after_error
+    type: hard
+    version: v1
+    tools:
+      - clean_machine
+    effect: deny
+    description: clean_machine only allowed when the most-recent order is in preparation_error or the last brew was contaminated.
+    predicate: clean_machine_only_after_error
+    predicate_args:
+      effect: deny
+
+  # Hard counterparts to baseline's native soft rules (soft judges in baseline_soft).
+  - id: assistant_message:no_price_promises
+    type: hard
+    version: v1
+    tools:
+      - assistant_message
+    effect: deny
+    description: >-
+      Every specific dollar amount in an outgoing message must already appear
+      in an earlier calculate_total / process_order / offer_refund /
+      offer_partial_refund result (as `$` text or a JSON number). The refund
+      tools go beyond the soft rule so refund messages can follow the
+      state_refund_details guideline.
+    predicate: no_unbacked_price_quotes
+    predicate_args:
+      source_tools: [calculate_total, process_order, offer_refund, offer_partial_refund]
+      count_json_numbers: true
+      effect: deny
+
+  - id: assistant_message:on_menu_only
+    type: hard
+    version: v1
+    tools:
+      - assistant_message
+    effect: deny
+    description: >-
+      Deny outgoing messages that name an off-menu item from the list below in a
+      clause without a negation cue ("we don't serve mocha" passes, "how about a
+      mocha?" is denied). Blocklist built from the terms the soft judge denied
+      most often in logged runs. Flavour shorthand from allowed extras
+      ("vanilla latte", "caramel latte") is intentionally not listed.
+    predicate: no_off_menu_mentions
+    predicate_args:
+      effect: deny
+      off_menu_terms:
+        # drinks
+        - mocha
+        - macchiato
+        - chai
+        - matcha
+        - cold brew
+        - flat white
+        - cortado
+        - frappe
+        - frappé
+        - frappuccino
+        - hot chocolate
+        - drip coffee
+        - tea
+        - smoothie
+        - juice
+        - tonic
+        - con panna
+        # flavours / modifiers not in ALLOWED_EXTRAS
+        - hazelnut
+        - cinnamon
+        - honey
+        - lavender
+        - chocolate
+        - dolce
+        - sweet cream
+        - pumpkin
+        - peppermint
+        - yuzu
+        # food
+        - cookie
+        - bagel
+        - cake
+        - scone
+        - donut
+        - toast
+        # sizes from other chains
+        - venti
+        - grande
+
+  - id: handover:reason_matches_target
+    type: hard
+    version: v1
+    tools:
+      - transfer_to_agent
+    effect: deny
+    description: >-
+      Deny a handover only on clear scope mismatch in context_summary:
+      refund/complaint work sent to barista or inventory (or to order_agent
+      without a replacement cue), or new-order/pickup work sent to
+      customer_service without an issue cue. Ambiguous summaries are allowed.
+    predicate: handover_scope_mismatch
+    predicate_args:
+      effect: deny

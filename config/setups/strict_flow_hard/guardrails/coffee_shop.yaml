@@ -1,0 +1,318 @@
+# strict_flow_hard: strict_flow with every rule enforced deterministically.
+# strict_flow_soft is the reference: the three native soft rules are replaced
+# by the hard counterparts from baseline_hard, and effects/caps follow what
+# strict_flow_soft actually enforces (see the comments on individual rules).
+guardrails:
+  - id: handover:allowed_targets
+    type: hard
+    version: v1
+    tools:
+      - transfer_to_agent
+    effect: deny
+    description: Handover target must be in the calling agent's allowed_handovers list.
+    predicate: allowed_handover_targets
+
+  - id: calculate_total:discount_within_limit_20pct
+    type: hard
+    version: v1
+    tools:
+      - calculate_total
+    effect: deny
+    description: Deny calculate_total invocations with discount_percent above 20%.
+    predicate: discount_within_limit
+    predicate_args:
+      max_pct: 20
+      effect: deny
+
+  # Order lifecycle — each state-changing tool may only be called from the order
+  # statuses listed in `allowed`. This replaces the former OrderStateMachine; the
+  # transition graph is implicit in these per-tool source preconditions.
+  - id: check_inventory:order_status
+    type: hard
+    version: v1
+    tools:
+      - check_inventory
+    effect: deny
+    description: check_inventory may only run while the order is pending.
+    predicate: require_order_status
+    predicate_args:
+      allowed: [pending]
+      effect: deny
+
+  - id: update_stock:order_status
+    type: hard
+    version: v1
+    tools:
+      - update_stock
+    effect: deny
+    description: update_stock may only run once inventory is confirmed.
+    predicate: require_order_status
+    predicate_args:
+      allowed: [inventory_confirmed]
+      effect: deny
+
+  - id: start_preparation:order_status
+    type: hard
+    version: v1
+    tools:
+      - start_preparation
+    effect: deny
+    description: start_preparation needs a confirmed order (or a prior prep to retry).
+    predicate: require_order_status
+    predicate_args:
+      allowed: [inventory_confirmed, in_preparation, preparation_error]
+      effect: deny
+
+  - id: end_preparation:order_status
+    type: hard
+    version: v1
+    tools:
+      - end_preparation
+    effect: deny
+    description: end_preparation may only run while a coffee is in preparation.
+    predicate: require_order_status
+    predicate_args:
+      allowed: [in_preparation]
+      effect: deny
+
+  - id: offer_refund:order_status
+    type: hard
+    version: v1
+    tools:
+      - offer_refund
+    effect: deny
+    description: offer_refund may only run on a completed order.
+    predicate: require_order_status
+    predicate_args:
+      allowed: [completed]
+      effect: deny
+
+  - id: assistant_message:on_menu_only
+    type: hard
+    version: v1
+    tools:
+      - assistant_message
+    effect: deny
+    description: >-
+      Deny outgoing messages that name an off-menu item from the list below in a
+      clause without a negation cue ("we don't serve mocha" passes, "how about a
+      mocha?" is denied). Blocklist built from the terms the soft judge denied
+      most often in logged runs. Flavour shorthand from allowed extras
+      ("vanilla latte", "caramel latte") is intentionally not listed.
+    predicate: no_off_menu_mentions
+    predicate_args:
+      effect: deny
+      off_menu_terms:
+        # drinks
+        - mocha
+        - macchiato
+        - chai
+        - matcha
+        - cold brew
+        - flat white
+        - cortado
+        - frappe
+        - frappé
+        - frappuccino
+        - hot chocolate
+        - drip coffee
+        - tea
+        - smoothie
+        - juice
+        - tonic
+        - con panna
+        # flavours / modifiers not in ALLOWED_EXTRAS
+        - hazelnut
+        - cinnamon
+        - honey
+        - lavender
+        - chocolate
+        - dolce
+        - sweet cream
+        - pumpkin
+        - peppermint
+        - yuzu
+        # food
+        - cookie
+        - bagel
+        - cake
+        - scone
+        - donut
+        - toast
+        # sizes from other chains
+        - venti
+        - grande
+
+  - id: process_order:items_on_menu
+    type: hard
+    version: v1
+    tools:
+      - process_order
+    effect: deny
+    description: Deterministic menu-adherence check on process_order; complements the soft assistant_message:on_menu_only judge.
+    predicate: process_order_items_on_menu
+    predicate_args:
+      effect: deny
+
+  - id: offer_partial_refund:within_policy_cap
+    type: hard
+    version: v1
+    tools:
+      - offer_partial_refund
+    effect: deny
+    description: Policy cap — partial refund percent must be within 0–50% of the order total.
+    predicate: refund_within_limit
+    predicate_args:
+      max_pct: 50
+      min_pct: 0
+      effect: deny
+
+  - id: transfer:context_summary_nonempty
+    type: hard
+    version: v1
+    tools:
+      - transfer_to_agent
+    effect: deny
+    description: Handovers must carry a non-trivial context_summary (>= 20 chars after strip).
+    predicate: transfer_context_summary_nonempty
+    predicate_args:
+      min_chars: 20
+      effect: deny
+
+  - id: clean_machine:only_after_error
+    type: hard
+    version: v1
+    tools:
+      - clean_machine
+    effect: deny
+    description: clean_machine only allowed when the most-recent order is in preparation_error or the last brew was contaminated.
+    predicate: clean_machine_only_after_error
+    predicate_args:
+      effect: deny
+
+  - id: handover:reason_matches_target
+    type: hard
+    version: v1
+    tools:
+      - transfer_to_agent
+    effect: deny
+    description: >-
+      Deny a handover only on clear scope mismatch in context_summary:
+      refund/complaint work sent to barista or inventory (or to order_agent
+      without a replacement cue), or new-order/pickup work sent to
+      customer_service without an issue cue. Ambiguous summaries are allowed.
+    predicate: handover_scope_mismatch
+    predicate_args:
+      effect: deny
+
+  - id: assistant_message:no_price_promises
+    type: hard
+    version: v1
+    tools:
+      - assistant_message
+    effect: deny
+    description: >-
+      Every specific dollar amount in an outgoing message must already appear
+      in an earlier calculate_total / process_order / offer_refund /
+      offer_partial_refund result (as `$` text or a JSON number). The refund
+      tools go beyond the soft rule so refund messages can follow the
+      state_refund_details guideline.
+    predicate: no_unbacked_price_quotes
+    predicate_args:
+      source_tools: [calculate_total, process_order, offer_refund, offer_partial_refund]
+      count_json_numbers: true
+      effect: deny
+
+  # Strict-only extras.
+  - id: process_order:max_calls
+    type: hard
+    version: v1
+    tools:
+      - process_order
+    effect: deny
+    description: process_order may be called at most once per conversation.
+    predicate: max_tool_calls
+    predicate_args:
+      tool_name: process_order
+      max_calls: 1
+      effect: deny
+
+  - id: process_order:size_within_range
+    type: hard
+    version: v1
+    tools:
+      - process_order
+    effect: deny
+    description: Order size must be between 1 and 8 units (summed quantities).
+    predicate: order_size_within_range
+    predicate_args:
+      min_units: 1
+      max_units: 8
+      effect: deny
+
+  - id: calculate_total:total_within_limit
+    type: hard
+    version: v1
+    tools:
+      - calculate_total
+    effect: deny
+    description: Order total must not exceed $100.
+    predicate: order_total_within_limit
+    predicate_args:
+      max_total: 100
+      effect: deny
+
+  # Deny, like strict_flow_soft's soft_transfer:includes_order_id: a handover
+  # must carry an ORD#### id once process_order has produced one.
+  - id: transfer:includes_order_id
+    type: hard
+    version: v1
+    tools:
+      - transfer_to_agent
+    effect: deny
+    description: Deny transfer_to_agent calls whose context_summary lacks an ORD#### order id once an order has been placed in the conversation.
+    predicate: transfer_includes_order_id
+    predicate_args:
+      effect: deny
+      only_after_order_placed: true
+
+  # Deliberate deviation from strict_flow_soft, which has no soft counterpart for
+  # these three counters and only flags them: kept at `deny` as in strict_flow.
+  - id: offer_refund:max_calls
+    type: hard
+    version: v1
+    tools:
+      - offer_refund
+    effect: deny
+    description: offer_refund may be called at most once per conversation.
+    predicate: max_tool_calls
+    predicate_args:
+      tool_name: offer_refund
+      max_calls: 1
+      effect: deny
+
+  - id: offer_partial_refund:max_calls
+    type: hard
+    version: v1
+    tools:
+      - offer_partial_refund
+    effect: deny
+    description: offer_partial_refund may be called at most once per conversation.
+    predicate: max_tool_calls
+    predicate_args:
+      tool_name: offer_partial_refund
+      max_calls: 1
+      effect: deny
+
+  - id: clean_machine:max_calls
+    type: hard
+    version: v1
+    tools:
+      - clean_machine
+    effect: deny
+    description: clean_machine may be called at most twice per conversation.
+    predicate: max_tool_calls
+    predicate_args:
+      tool_name: clean_machine
+      max_calls: 2
+      effect: deny
