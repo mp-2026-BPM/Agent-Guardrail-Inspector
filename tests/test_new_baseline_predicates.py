@@ -8,9 +8,18 @@ defaults" refinement:
 Test style mirrors ``tests/test_require_order_status.py``.
 """
 
+import tempfile
 import unittest
+from pathlib import Path
 
-from src.agents.order_store import init_db, reset_inventory, save_order
+from src.agents.order_store import (
+    create_order_store_engine,
+    get_engine,
+    init_db,
+    reset_inventory,
+    save_order,
+    set_engine,
+)
 from src.agents.shared_components import Order, OrderItem, OrderStatus
 from src.control_plane.predicates import (
     PREDICATE_REGISTRY,
@@ -172,9 +181,21 @@ class TestCleanMachineOnlyAfterError(unittest.TestCase):
 
     def test_allows_when_no_order(self):
         # Fresh DB, no orders — cannot resolve state; err toward ALLOW so
-        # bootstrap / test-harness calls aren't spuriously blocked.
-        predicate = clean_machine_only_after_error_predicate()
-        self.assertEqual(predicate(_ctx("clean_machine", {})).effect, Effect.ALLOW)
+        # bootstrap / test-harness calls aren't spuriously blocked. Uses its own
+        # empty DB: the shared one holds orders saved by earlier tests.
+        previous = get_engine()
+        with tempfile.TemporaryDirectory() as tmp:
+            engine = create_order_store_engine(f"sqlite:///{Path(tmp) / 'orders.db'}")
+            set_engine(engine)
+            try:
+                init_db()
+                predicate = clean_machine_only_after_error_predicate()
+                self.assertEqual(
+                    predicate(_ctx("clean_machine", {})).effect, Effect.ALLOW
+                )
+            finally:
+                set_engine(previous)
+                engine.dispose()
 
     def test_flag_effect_when_configured(self):
         self._seed_order(OrderStatus.IN_PREPARATION)
