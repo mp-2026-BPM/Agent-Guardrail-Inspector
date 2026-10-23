@@ -9,6 +9,7 @@ driving state through it with a stub LLM and a stub soft guardrail. Verifies:
   * The correction HumanMessage carries the rejected content and reason.
   * The retry cap terminates the loop after MAX_RESPONSE_GUARDRAIL_RETRIES.
 """
+
 import unittest
 
 from langchain_core.messages import AIMessage, HumanMessage
@@ -58,6 +59,14 @@ def _off_menu_judge(system: str, user: str) -> str:
 
 def _always_allow_judge(_s: str, _u: str) -> str:
     return '{"decision": "allow", "reason": ""}'
+
+
+class _RecordingSink:
+    def __init__(self):
+        self.events: list[dict] = []
+
+    def append(self, event: dict) -> None:
+        self.events.append(event)
 
 
 def _build_gateway(judge=_off_menu_judge) -> Gateway:
@@ -139,9 +148,7 @@ class TestCorrectionCounter(unittest.TestCase):
     def test_multiple_corrections_counted(self):
         msgs = [
             HumanMessage(content="hi"),
-            HumanMessage(
-                content="fix", additional_kwargs={CORRECTION_KWARG: True}
-            ),
+            HumanMessage(content="fix", additional_kwargs={CORRECTION_KWARG: True}),
             HumanMessage(
                 content="fix again", additional_kwargs={CORRECTION_KWARG: True}
             ),
@@ -151,9 +158,7 @@ class TestCorrectionCounter(unittest.TestCase):
     def test_counter_resets_after_new_user_turn(self):
         msgs = [
             HumanMessage(content="hi"),
-            HumanMessage(
-                content="fix", additional_kwargs={CORRECTION_KWARG: True}
-            ),
+            HumanMessage(content="fix", additional_kwargs={CORRECTION_KWARG: True}),
             HumanMessage(content="another user turn"),
         ]
         self.assertEqual(_corrections_since_last_user_turn(msgs), 0)
@@ -161,9 +166,7 @@ class TestCorrectionCounter(unittest.TestCase):
 
 class TestIsCorrectionMessage(unittest.TestCase):
     def test_marks_correction(self):
-        msg = HumanMessage(
-            content="fix", additional_kwargs={CORRECTION_KWARG: True}
-        )
+        msg = HumanMessage(content="fix", additional_kwargs={CORRECTION_KWARG: True})
         self.assertTrue(_is_correction_message(msg))
 
     def test_plain_human_not_correction(self):
@@ -177,32 +180,48 @@ class TestResponseGateway(unittest.TestCase):
     """End-to-end: drive the compiled subgraph through the response gateway."""
 
     def test_clean_message_flows_through(self):
-        llm = _StubLLM([AIMessage(content="Welcome! Would you like a latte?", id="ai-1")])
+        llm = _StubLLM(
+            [AIMessage(content="Welcome! Would you like a latte?", id="ai-1")]
+        )
         gateway = _build_gateway(_always_allow_judge)
         graph = create_agent_subgraph(
-            agent_id="order_agent", llm=llm, tools=[], prompt="p", gateway=gateway,
+            agent_id="order_agent",
+            llm=llm,
+            tools=[],
+            prompt="p",
+            gateway=gateway,
         )
 
-        result = graph.invoke({"messages": [HumanMessage(content="Hi")], "handoff_context": None})
+        result = graph.invoke(
+            {"messages": [HumanMessage(content="Hi")], "handoff_context": None}
+        )
 
         contents = [m.content for m in result["messages"] if isinstance(m, AIMessage)]
         self.assertEqual(contents, ["Welcome! Would you like a latte?"])
         self.assertEqual(llm.call_count, 1)
 
     def test_off_menu_message_is_rejected_and_retried(self):
-        llm = _StubLLM([
-            AIMessage(content="Would you like a hazelnut latte?", id="ai-bad"),
-            AIMessage(content="Would you like a latte?", id="ai-good"),
-        ])
+        llm = _StubLLM(
+            [
+                AIMessage(content="Would you like a hazelnut latte?", id="ai-bad"),
+                AIMessage(content="Would you like a latte?", id="ai-good"),
+            ]
+        )
         gateway = _build_gateway(_off_menu_judge)
         graph = create_agent_subgraph(
-            agent_id="order_agent", llm=llm, tools=[], prompt="p", gateway=gateway,
+            agent_id="order_agent",
+            llm=llm,
+            tools=[],
+            prompt="p",
+            gateway=gateway,
         )
 
-        result = graph.invoke({
-            "messages": [HumanMessage(content="Recommend something")],
-            "handoff_context": None,
-        })
+        result = graph.invoke(
+            {
+                "messages": [HumanMessage(content="Recommend something")],
+                "handoff_context": None,
+            }
+        )
 
         self.assertEqual(llm.call_count, 2)
         ai_contents = [
@@ -214,8 +233,12 @@ class TestResponseGateway(unittest.TestCase):
         corrections = [m for m in result["messages"] if _is_correction_message(m)]
         self.assertEqual(len(corrections), 1)
         stamp = corrections[0].additional_kwargs
-        self.assertEqual(stamp[REJECTED_CONTENT_KWARG], "Would you like a hazelnut latte?")
-        self.assertEqual(stamp[REJECTING_GUARDRAIL_KWARG], "assistant_message:on_menu_only")
+        self.assertEqual(
+            stamp[REJECTED_CONTENT_KWARG], "Would you like a hazelnut latte?"
+        )
+        self.assertEqual(
+            stamp[REJECTING_GUARDRAIL_KWARG], "assistant_message:on_menu_only"
+        )
         self.assertEqual(stamp[REJECTED_AGENT_KWARG], "order_agent")
         self.assertIn("not on our menu", stamp[REJECTION_REASON_KWARG])
 
@@ -235,13 +258,19 @@ class TestResponseGateway(unittest.TestCase):
         llm = _StubLLM(bad_responses)
         gateway = _build_gateway(_off_menu_judge)
         graph = create_agent_subgraph(
-            agent_id="order_agent", llm=llm, tools=[], prompt="p", gateway=gateway,
+            agent_id="order_agent",
+            llm=llm,
+            tools=[],
+            prompt="p",
+            gateway=gateway,
         )
 
-        result = graph.invoke({
-            "messages": [HumanMessage(content="Recommend something")],
-            "handoff_context": None,
-        })
+        result = graph.invoke(
+            {
+                "messages": [HumanMessage(content="Recommend something")],
+                "handoff_context": None,
+            }
+        )
 
         self.assertEqual(llm.call_count, MAX_RESPONSE_GUARDRAIL_RETRIES + 1)
         corrections = [m for m in result["messages"] if _is_correction_message(m)]
@@ -256,13 +285,88 @@ class TestResponseGateway(unittest.TestCase):
             "The final off-menu recommendation must not reach the transcript",
         )
         from src.control_plane.subgraph import CAP_EXHAUSTED_FALLBACK
+
         self.assertIn(CAP_EXHAUSTED_FALLBACK, ai_contents)
 
         fallback = next(
-            m for m in result["messages"]
+            m
+            for m in result["messages"]
             if isinstance(m, AIMessage) and m.content == CAP_EXHAUSTED_FALLBACK
         )
         self.assertTrue((fallback.additional_kwargs or {}).get(CORRECTION_KWARG))
+
+    def test_retry_cap_logs_fallback_event(self):
+        """The fallback is invisible in gateway_decision rows (those only show the
+        deny), so the cap hit gets its own record in the guardrail log."""
+        from src.control_plane.subgraph import CAP_EXHAUSTED_FALLBACK
+
+        sink = _RecordingSink()
+        gateway = _build_gateway(_off_menu_judge)
+        gateway.log_sink = sink
+        llm = _StubLLM(
+            [
+                AIMessage(content=f"Try our caramel macchiato #{i}", id=f"ai-{i}")
+                for i in range(MAX_RESPONSE_GUARDRAIL_RETRIES + 3)
+            ]
+        )
+        graph = create_agent_subgraph(
+            agent_id="order_agent",
+            llm=llm,
+            tools=[],
+            prompt="p",
+            gateway=gateway,
+        )
+
+        graph.invoke(
+            {
+                "messages": [HumanMessage(content="Recommend something")],
+                "handoff_context": None,
+            },
+            config={"configurable": {"thread_id": "thread-cap"}},
+        )
+
+        fallbacks = [
+            e for e in sink.events if e["event_type"] == "response_guardrail_fallback"
+        ]
+        self.assertEqual(len(fallbacks), 1)
+        event = fallbacks[0]
+        self.assertEqual(event["thread_id"], "thread-cap")
+        self.assertEqual(event["agent_id"], "order_agent")
+        self.assertEqual(event["rejecting_guardrail"], "assistant_message:on_menu_only")
+        self.assertEqual(
+            event["rejected_content"],
+            f"Try our caramel macchiato #{MAX_RESPONSE_GUARDRAIL_RETRIES}",
+        )
+        self.assertEqual(
+            event["corrections_before_fallback"], MAX_RESPONSE_GUARDRAIL_RETRIES
+        )
+        self.assertEqual(event["fallback_content"], CAP_EXHAUSTED_FALLBACK)
+
+    def test_no_fallback_event_when_retry_succeeds(self):
+        sink = _RecordingSink()
+        gateway = _build_gateway(_off_menu_judge)
+        gateway.log_sink = sink
+        llm = _StubLLM(
+            [
+                AIMessage(content="Would you like a hazelnut latte?", id="ai-bad"),
+                AIMessage(content="Would you like a latte?", id="ai-good"),
+            ]
+        )
+        graph = create_agent_subgraph(
+            agent_id="order_agent",
+            llm=llm,
+            tools=[],
+            prompt="p",
+            gateway=gateway,
+        )
+
+        graph.invoke(
+            {"messages": [HumanMessage(content="Hi")], "handoff_context": None}
+        )
+
+        self.assertFalse(
+            [e for e in sink.events if e["event_type"] == "response_guardrail_fallback"]
+        )
 
 
 if __name__ == "__main__":

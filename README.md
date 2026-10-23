@@ -98,7 +98,7 @@ poetry run python scripts/run_experiment.py --help                              
 
 poetry run python scripts/run_experiment.py --dry-run                           # print the grid, run nothing
 poetry run python scripts/run_experiment.py --setups baseline --scenarios 1 --count 2   # pilot
-poetry run python scripts/run_experiment.py                                     # 6 setups x 4 scenarios x 50
+poetry run python scripts/run_experiment.py                                     # 8 setups x 3 scenarios (1, 3, 4) x 25
 poetry run python scripts/run_experiment.py --resume experiment_runs/<dir>      # continue after an interrupt
 ```
 

@@ -157,10 +157,10 @@ guardrails:
     tools:
       - offer_partial_refund
     effect: deny
-    description: Sanity gate — partial refund percent must not exceed 100.
+    description: Sanity gate — a partial refund must be 0–99%; a full refund goes through offer_refund.
     predicate: refund_within_limit
     predicate_args:
-      max_pct: 100
+      max_pct: 99
       min_pct: 0
       effect: deny
 

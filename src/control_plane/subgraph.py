@@ -23,9 +23,16 @@ tool_call_id in the AIMessage so the Anthropic tool_use↔tool_result invariant
 holds, and control returns to the LLM with denial reasons. Only when every
 proposed call is allowed (or flagged) does the batch reach `tools`.
 """
+
 import logging
 
-from langchain_core.messages import AIMessage, HumanMessage, RemoveMessage, SystemMessage, ToolMessage
+from langchain_core.messages import (
+    AIMessage,
+    HumanMessage,
+    RemoveMessage,
+    SystemMessage,
+    ToolMessage,
+)
 from langchain_core.runnables import RunnableConfig
 from langgraph.graph import END, START, StateGraph
 from langgraph.prebuilt import ToolNode
@@ -127,7 +134,7 @@ def _bounded_reason(reason: str, guardrail_name: str) -> str:
     safe = _sanitize_reason(reason)
     label = guardrail_name or "response"
     return (
-        f'The {label} guardrail rejected the previous message with note: '
+        f"The {label} guardrail rejected the previous message with note: "
         f'"{safe}". Rewrite the message to comply with the coffee shop policy.'
     )
 
@@ -139,9 +146,9 @@ def _bounded_tool_reason(reason: str, guardrail_name: str, tool_name: str) -> st
     safe = _sanitize_reason(reason)
     label = guardrail_name or "response"
     return (
-        f'The {label} guardrail rejected the tool call {tool_name!r} with '
+        f"The {label} guardrail rejected the tool call {tool_name!r} with "
         f'note: "{safe}". Choose a different action that complies with the '
-        f'coffee shop policy.'
+        f"coffee shop policy."
     )
 
 
@@ -202,7 +209,8 @@ def create_agent_subgraph(
             return {}
 
         applicable = [
-            gr for gr in gateway.guardrails
+            gr
+            for gr in gateway.guardrails
             if gr.applies_to(RESPONSE_GUARDRAIL_TOOL_NAME)
         ]
         if not applicable:
@@ -219,7 +227,9 @@ def create_agent_subgraph(
             "id": f"resp-{rejected_message_id or 'unknown'}",
         }
         decision = gateway.evaluate_call(
-            synthetic_call, dict(state), thread_id=_thread_id_of(config),
+            synthetic_call,
+            dict(state),
+            thread_id=_thread_id_of(config),
         )
 
         if decision.final_decision != Effect.DENY:
@@ -238,8 +248,16 @@ def create_agent_subgraph(
         )
         if prior_corrections >= MAX_RESPONSE_GUARDRAIL_RETRIES:
             logger.warning(
-                "response guardrail retry cap (%d) reached for %s; publishing fallback",
-                MAX_RESPONSE_GUARDRAIL_RETRIES, agent_id,
+                f"response guardrail retry cap ({MAX_RESPONSE_GUARDRAIL_RETRIES}) "
+                f"reached for {agent_id}; publishing fallback"
+            )
+            gateway.log_response_fallback(
+                thread_id=_thread_id_of(config),
+                rejecting_guardrail=rejecting_guardrail,
+                rejected_content=content,
+                reason=raw_reason,
+                corrections=prior_corrections,
+                fallback_content=CAP_EXHAUSTED_FALLBACK,
             )
             fallback = AIMessage(
                 content=CAP_EXHAUSTED_FALLBACK,
@@ -319,12 +337,14 @@ def create_agent_subgraph(
                     f"Tool call {d.tool_name!r} was not executed because a sibling tool "
                     f"call in the same batch was denied by a guardrail: {sibling_blurb}"
                 )
-            synth.append(ToolMessage(
-                content=content,
-                name=d.tool_name,
-                tool_call_id=d.tool_call_id,
-                status="error",
-            ))
+            synth.append(
+                ToolMessage(
+                    content=content,
+                    name=d.tool_name,
+                    tool_call_id=d.tool_call_id,
+                    status="error",
+                )
+            )
         return {"messages": synth}
 
     def route_after_gateway(state: CoffeeShopState) -> str:
@@ -352,6 +372,8 @@ def create_agent_subgraph(
         route_after_response_gateway,
         {"llm": "llm", "gateway": "gateway", END: END},
     )
-    g.add_conditional_edges("gateway", route_after_gateway, {"tools": "tools", "llm": "llm", END: END})
+    g.add_conditional_edges(
+        "gateway", route_after_gateway, {"tools": "tools", "llm": "llm", END: END}
+    )
     g.add_edge("tools", "llm")
     return g.compile()
