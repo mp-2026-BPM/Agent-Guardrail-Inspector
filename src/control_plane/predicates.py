@@ -463,6 +463,24 @@ def transfer_context_summary_nonempty_predicate(
     return _eval
 
 
+def recent_order_brew_state():
+    """(most recent order or None, whether the barista cache flags its last brew
+    as contaminated). Shared by the hard clean_machine predicate and the soft
+    judges' `{recent_order}` context, so both read the same facts."""
+    order = load_recent_order()
+    if order is None:
+        return None, False
+    try:
+        from src.agents.barista_agent import ORDER_STATUS_CACHE
+
+        cache_entry = ORDER_STATUS_CACHE.get(
+            str(order.id), {}
+        ) or ORDER_STATUS_CACHE.get(f"ORD{int(order.id):04d}", {})
+        return order, bool(cache_entry.get("last_brew_contaminated"))
+    except Exception:
+        return order, False
+
+
 def clean_machine_only_after_error_predicate(effect: str = "deny"):
     """Factory: allow clean_machine only when the most-recent order is in
     `preparation_error` or when the barista cache flags the last brew as
@@ -472,7 +490,7 @@ def clean_machine_only_after_error_predicate(effect: str = "deny"):
     violation_effect = Effect(effect)
 
     def _eval(context: GuardrailContext) -> Verdict:
-        order = load_recent_order()
+        order, contaminated = recent_order_brew_state()
         if order is None:
             # No recent order (fresh session / test harness) — nothing to gate.
             return Verdict(
@@ -482,16 +500,6 @@ def clean_machine_only_after_error_predicate(effect: str = "deny"):
                 reason_internal="no recent order; clean_machine not gated",
             )
         status = order.status.value
-        contaminated = False
-        try:
-            from src.agents.barista_agent import ORDER_STATUS_CACHE
-
-            cache_entry = ORDER_STATUS_CACHE.get(
-                str(order.id), {}
-            ) or ORDER_STATUS_CACHE.get(f"ORD{int(order.id):04d}", {})
-            contaminated = bool(cache_entry.get("last_brew_contaminated"))
-        except Exception:
-            contaminated = False
         if status == "preparation_error" or contaminated:
             return Verdict(
                 effect=Effect.ALLOW,

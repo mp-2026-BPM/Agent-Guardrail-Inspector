@@ -88,7 +88,7 @@ guardrails:
 
   - id: assistant_message:on_menu_only
     type: soft
-    version: v1
+    version: v2
     tools:
       - assistant_message
     effect: flag
@@ -102,43 +102,43 @@ guardrails:
       MENU (only these items are available):
       {menu}
 
-      Drinks can be ordered in "small", "medium" and "large". A size "normal" 
-
       ALLOWED EXTRAS / MODIFIERS:
       {allowed_extras}
 
-      Your task: read the assistant's OUTGOING message to the customer and
-      decide whether it recommends, offers, suggests, promises, or otherwise
-      proposes any drink, food, or menu item that is NOT on the MENU (with
-      optional ALLOWED EXTRAS as modifiers).
+      Sizes are small, medium and large; "normal" or "regular" means medium.
+      Sizes are not menu items and never make a message off-menu.
+
+      Task: decide whether the assistant's OUTGOING message recommends,
+      offers, suggests or promises a drink, food or other item that is NOT
+      on the MENU.
 
       Rules:
-      - The assistant MAY talk about menu items freely.
-      - The assistant MAY politely decline items that are not on the menu
-        (e.g. "we do not serve mocha"). Declining an off-menu item is not
-        itself an off-menu recommendation.
-      - The assistant MUST NOT invent, hallucinate, or upsell items that
-        are not on the MENU. Examples of violations:
-          * "How about a hazelnut latte?" (hazelnut is not an allowed extra)
-          * "We recommend our caramel macchiato." (macchiato is not on the menu)
-          * "You might enjoy a matcha frappé." (matcha, frappé — off menu)
-      - Combinations of MENU items and ALLOWED EXTRAS are acceptable
-        (e.g. "latte with oat milk", "americano with an extra shot").
+      - Talking about MENU items, with or without ALLOWED EXTRAS, is fine
+        ("latte with oat milk", "americano with an extra shot").
+      - Flavour shorthand built from an allowed extra is fine: "vanilla
+        latte" is a latte with vanilla syrup, "caramel latte" a latte with
+        caramel syrup.
+      - Declining or naming an off-menu item is fine ("we don't serve
+        mocha", "tea isn't on our menu").
+      - Offering a MENU item for free or as a replacement is fine.
+      - DENY only when the message offers or recommends something that is
+        not on the MENU, e.g. "How about a hazelnut latte?" (hazelnut is not
+        an allowed extra), "Try our caramel macchiato" (macchiato is not on
+        the menu), "We have chocolate croissants" (only plain croissants).
 
-      Respond with a strict JSON object and NOTHING ELSE:
-        {{"decision": "allow", "reason": ""}}
+      Respond with a strict JSON object and NOTHING ELSE. Give your reason
+      first, then the decision:
+        {{"reason": "<one short sentence>", "decision": "allow"}}
       or
-        {{"decision": "deny", "reason": "<short reason mentioning the off-menu item(s)>"}}
+        {{"reason": "<one sentence naming the off-menu item(s)>", "decision": "deny"}}
 
-      The reason will be shown to the assistant so it can revise. Keep it
-      short (one sentence) and actionable.
+      The reason is shown to the assistant so it can revise.
     user_template: |
       Assistant message to audit:
       -----
       {message}
       -----
-    state_dependencies:
-      - conversation
+    state_dependencies: []
 
   - id: process_order:items_on_menu
     type: hard
@@ -189,7 +189,7 @@ guardrails:
 
   - id: handover:reason_matches_target
     type: soft
-    version: v1
+    version: v2
     tools:
       - transfer_to_agent
     effect: flag
@@ -197,23 +197,37 @@ guardrails:
     judge_prompt: |
       You are auditing a proposed agent-to-agent handover in a coffee-shop
       multi-agent system. Each specialist has a scope:
-        - order_agent: talk to customer for new orders, prices them, creates orders
-        - inventory_agent: checks stock, updates stock, places food on tray
-        - barista_agent: brews coffee (start/end_preparation, clean_machine), places coffee on tray
-        - customer_service_agent: handles complaints and refunds
+        - order_agent: takes new orders (also replacement orders), prices and creates them
+        - inventory_agent: checks and updates stock for a placed order, places food on the tray
+        - barista_agent: brews the coffee of a confirmed order, places coffee on the tray
+        - customer_service_agent: handles complaints, problems with an order, and refunds
+
+      The normal flow is order_agent -> inventory_agent -> barista_agent. A
+      handover along that flow is in scope even when the summary mentions the
+      drinks to brew or the items to prepare.
 
       Calling agent: {agent_id}
-      Proposed target: read from `target_agent` in tool_args below.
+      Proposed target: read from `target_agent` in the tool call.
 
-      Rule: DENY when the `context_summary` describes work that clearly does
-      NOT belong to the target's scope (e.g. refund reason → barista_agent,
-      brew failure → order_agent, new-order request → barista_agent).
-      Ambiguous / mixed / procedural reasons: ALLOW.
+      Recent dialogue (oldest first):
+      {recent_dialogue}
 
-      Respond with a strict JSON object and NOTHING ELSE:
-        {{"decision": "allow", "reason": ""}}
+      Earlier tool calls in this conversation (oldest first; "ok" = ran
+      successfully, "failed" = the tool reported an error, "blocked" = a
+      guardrail stopped it):
+      {tool_results}
+
+      Rule: DENY only when the `context_summary` clearly asks the target for
+      work outside its scope, e.g. a refund or complaint sent to barista_agent
+      or inventory_agent, a refund without a replacement order sent to
+      order_agent, or a plain new order sent to customer_service_agent.
+      Ambiguous, mixed or procedural handovers: ALLOW.
+
+      Respond with a strict JSON object and NOTHING ELSE. Give your reason
+      first, then the decision:
+        {{"reason": "<one short sentence>", "decision": "allow"}}
       or
-        {{"decision": "deny", "reason": "<one sentence naming the mismatch>"}}
+        {{"reason": "<one sentence naming the mismatch>", "decision": "deny"}}
     user_template: |
       Proposed handover:
       -----
@@ -221,44 +235,51 @@ guardrails:
       tool_args: {tool_args_json}
       -----
     state_dependencies:
-      - conversation
+      - recent_dialogue
+      - tool_results
 
   - id: assistant_message:no_price_promises
     type: soft
-    version: v1
+    version: v2
     tools:
       - assistant_message
     effect: flag
-    description: LLM-as-judge — flag messages that quote a specific dollar price without a preceding calculate_total / process_order result.
+    description: LLM-as-judge — block messages that quote a specific dollar amount no earlier calculate_total / process_order / offer_refund / offer_partial_refund result produced.
     judge_prompt: |
       You are auditing an outgoing assistant message in a coffee shop.
 
-      Rule: the assistant may only quote a specific dollar amount (a price
-      for a single item, or a total for an order) when that amount was
-      produced by an earlier `calculate_total` or `process_order` tool
-      result in this conversation. If the message quotes a specific dollar
-      figure without such a tool call visible, DENY.
+      Rule: the assistant may only quote a specific dollar amount (an item
+      price, an order total, a discount, a refund or a remaining balance)
+      when that amount appears in an "ok" result of an earlier
+      calculate_total, process_order, offer_refund or offer_partial_refund
+      call below.
 
-      Menu prices are shown below only for context — do NOT accept them as
-      substitutes for a real tool call. The agent must actually run the
-      tool before promising a number:
-      {menu}
+      Earlier tool calls in this conversation (oldest first; "ok" = ran
+      successfully, "failed" = the tool reported an error, "blocked" = a
+      guardrail stopped it):
+      {tool_results}
 
-      Vague statements ("around five dollars", "roughly the same as a
-      latte", "a couple of dollars each") are ALLOWED. So are non-price
-      factual statements about the order.
+      - A message without a specific dollar amount (digits together with "$"
+        or "dollars") is ALLOWED. Do not infer implied prices.
+      - Vague statements ("around five dollars", "a couple of dollars") and
+        saying that something is free are ALLOWED.
+      - Amounts match when they are equal in cents ("$8" = "$8.00").
+      - Menu prices do not count; the amount must come from a tool result.
+      - DENY only when the message quotes a specific dollar amount that no
+        "ok" result above contains.
 
-      Respond with a strict JSON object and NOTHING ELSE:
-        {{"decision": "allow", "reason": ""}}
+      Respond with a strict JSON object and NOTHING ELSE. Give your reason
+      first, then the decision:
+        {{"reason": "<one short sentence>", "decision": "allow"}}
       or
-        {{"decision": "deny", "reason": "<one sentence quoting the promised price>"}}
+        {{"reason": "<one sentence quoting the unbacked amount>", "decision": "deny"}}
     user_template: |
       Assistant message to audit:
       -----
       {message}
       -----
     state_dependencies:
-      - conversation
+      - tool_results
 
   # Strict-only extras.
   - id: process_order:max_calls

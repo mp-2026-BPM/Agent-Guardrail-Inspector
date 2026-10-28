@@ -33,6 +33,19 @@ _DIRECT_CALL_EFFECT = {
 _STRENGTH = {"allow": 0, "flag": 1, "deny": 2}
 
 
+_ALL_SETUPS = [
+    s for reference, variants in CLASSES.items() for s in (reference, *variants)
+]
+# Judge template variable -> the state_dependencies key that declares it.
+_CONTEXT_VARIABLES = {
+    "tool_results": "tool_results",
+    "recent_dialogue": "recent_dialogue",
+    "recent_order": "recent_order",
+    "order_status": "order",
+    "order_total": "order",
+}
+
+
 def _entries(setup: str) -> list[dict]:
     path = SETUPS_DIR / setup / "guardrails" / "coffee_shop.yaml"
     return yaml.safe_load(path.read_text(encoding="utf-8"))["guardrails"]
@@ -169,6 +182,36 @@ class TestSetupCoherence(unittest.TestCase):
                     if guardrail_id in ref:
                         with self.subTest(setup=setup, guardrail=guardrail_id):
                             self.assertEqual(args, ref[guardrail_id])
+
+    def test_judge_copies_identical_across_setups(self):
+        # A judge id means one judge: the same prompt, template, context and
+        # version wherever it runs (the native judges run in six setups).
+        fields = ("judge_prompt", "user_template", "state_dependencies", "version")
+        seen: dict[str, tuple[str, dict]] = {}
+        for setup in _ALL_SETUPS:
+            for entry in _entries(setup):
+                if entry["type"] != "soft":
+                    continue
+                judge = {f: entry.get(f) for f in fields}
+                first = seen.setdefault(entry["id"], (setup, judge))
+                with self.subTest(guardrail=entry["id"], setup=setup, first=first[0]):
+                    self.assertEqual(judge, first[1])
+
+    def test_judge_context_declared(self):
+        # Every context variable a judge prompt uses is declared in
+        # state_dependencies, and every declared dependency is used.
+        for setup in _ALL_SETUPS:
+            for entry in _entries(setup):
+                if entry["type"] != "soft":
+                    continue
+                text = entry.get("judge_prompt", "") + entry.get("user_template", "")
+                used = {
+                    dep
+                    for variable, dep in _CONTEXT_VARIABLES.items()
+                    if "{" + variable + "}" in text
+                }
+                with self.subTest(setup=setup, guardrail=entry["id"]):
+                    self.assertEqual(set(entry.get("state_dependencies") or []), used)
 
 
 if __name__ == "__main__":
