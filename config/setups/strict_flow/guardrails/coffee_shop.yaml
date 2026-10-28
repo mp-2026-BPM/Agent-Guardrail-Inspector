@@ -94,6 +94,10 @@ guardrails:
       recommends, offers, or otherwise proposes an item that is not on the
       coffee shop menu. Menu adherence is checked against the current MENU
       keys plus ALLOWED_EXTRAS (both injected into the judge prompt).
+    correction_hint: >-
+      The only menu items are: {menu_items}. The only extras are: {allowed_extras}. Sizes are small, medium and large. Offer or recommend only these, exactly as named; do not invent flavours, roasts, toppings or other variations. If the customer wants something else, say we don't serve it and suggest a menu item instead.
+    fallback_message: >-
+      Sorry for the confusion! Here's what we have: {menu_items}. Drinks come in medium or large, and you can add extras like {allowed_extras}. What would you like?
     judge_prompt: |
       You are a strict menu-adherence auditor for a coffee shop assistant.
 
@@ -145,6 +149,8 @@ guardrails:
       - process_order
     effect: deny
     description: Deterministic menu-adherence check on process_order; complements the soft assistant_message:on_menu_only judge.
+    correction_hint: >-
+      Only these items can be ordered: {menu_items}. Extras are not items; they go in an item's extras: {allowed_extras}. Ask the customer to choose from the menu before calling process_order again.
     predicate: process_order_items_on_menu
     predicate_args:
       effect: deny
@@ -243,6 +249,10 @@ guardrails:
       - assistant_message
     effect: deny
     description: LLM-as-judge — block messages that quote a specific dollar amount no earlier calculate_total / process_order / offer_refund / offer_partial_refund result produced.
+    correction_hint: >-
+      Only state a dollar amount that an earlier calculate_total, process_order, offer_refund or offer_partial_refund result returned. Until then, describe the order or refund without a price.
+    fallback_message: >-
+      Thanks for your patience! I'll confirm the exact amount as soon as it has been processed.
     judge_prompt: |
       You are auditing an outgoing assistant message in a coffee shop.
 

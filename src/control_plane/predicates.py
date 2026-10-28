@@ -658,8 +658,6 @@ def no_off_menu_mentions_predicate(off_menu_terms: list[str], effect: str = "den
     violation_effect = Effect(effect)
 
     def _eval(context: GuardrailContext) -> Verdict:
-        from src.agents.shared_components import ALLOWED_EXTRAS, MENU
-
         content = str(context.tool_args.get("content", ""))
         hits: list[str] = []
         for clause in _CLAUSE_SPLIT_RE.split(content):
@@ -678,10 +676,10 @@ def no_off_menu_mentions_predicate(off_menu_terms: list[str], effect: str = "den
             guardrail_name="",
             guardrail_type="",
             reason_internal=f"un-negated off-menu term(s): {hits}",
+            # The menu itself reaches the agent through the guardrail's correction
+            # hint, which the soft judge gets too.
             reason_for_llm=(
-                f"Your message offers {', '.join(repr(h) for h in hits)}, which is not on the menu. "
-                f"Only offer menu items: {', '.join(sorted(MENU))}; allowed extras: "
-                f"{', '.join(sorted(ALLOWED_EXTRAS))}. You may tell the customer we don't serve it."
+                f"Your message offers {', '.join(repr(h) for h in hits)}, which is not on the menu."
             ),
         )
 
@@ -705,9 +703,12 @@ _ISSUE_CUE_RE = re.compile(
 )
 # (cue in context_summary, target it must not go to, cue that makes the summary
 # ambiguous and therefore allowed). Only clear negative evidence denies.
+# A replacement order after a complaint runs the normal order -> inventory ->
+# barista flow, and its summaries keep mentioning the complaint, so a replacement
+# cue exempts every one of those targets.
 _HANDOVER_MISMATCHES = (
-    (_REFUND_CUE_RE, "barista_agent", None),
-    (_REFUND_CUE_RE, "inventory_agent", None),
+    (_REFUND_CUE_RE, "barista_agent", _REPLACEMENT_CUE_RE),
+    (_REFUND_CUE_RE, "inventory_agent", _REPLACEMENT_CUE_RE),
     (_REFUND_CUE_RE, "order_agent", _REPLACEMENT_CUE_RE),
     (_NEW_ORDER_CUE_RE, "customer_service_agent", _ISSUE_CUE_RE),
 )
@@ -722,8 +723,8 @@ _AGENT_SCOPES = {
 def handover_scope_mismatch_predicate(effect: str = "deny"):
     """Factory: deterministic counterpart to the soft `handover:reason_matches_target`
     judge. Violates only on clear negative evidence from `_HANDOVER_MISMATCHES`:
-    refund/complaint work sent to barista or inventory (or to order_agent without a
-    replacement cue), or new-order/pickup work sent to customer_service without an
+    refund/complaint work sent to barista, inventory or order_agent without a
+    replacement cue, or new-order/pickup work sent to customer_service without an
     issue cue. Anything ambiguous or procedural is allowed; unknown targets are left
     to `allowed_handover_targets`. Brewing/preparation words are deliberately not
     used — normal order → inventory summaries mention them all the time.

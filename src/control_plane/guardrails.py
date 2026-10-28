@@ -35,9 +35,21 @@ class Guardrail(ABC):
     tools: list[str] = field(default_factory=list)
     effect: Effect = Effect.DENY
     description: str = ""
+    # Config-authored guidance (trusted, unlike a judge's reason) added to the
+    # agent's correction when this guardrail rejects a message or tool call, and
+    # the reply the customer gets instead once the retry cap is hit.
+    # `{menu_items}` and `{allowed_extras}` are filled from the live menu.
+    correction_hint: str = ""
+    fallback_message: str = ""
 
     @abstractmethod
     def eval(self, context: GuardrailContext) -> Verdict: ...
+
+    def rendered_correction_hint(self) -> str:
+        return _render_menu_placeholders(self.correction_hint)
+
+    def rendered_fallback_message(self) -> str:
+        return _render_menu_placeholders(self.fallback_message)
 
     @property
     def type(self) -> str:
@@ -401,6 +413,22 @@ def _resolve_order_status(order_id: str) -> str:
     if order is None:
         return ""
     return order.status.value
+
+
+def _render_menu_placeholders(text: str) -> str:
+    """Fill `{menu_items}` / `{allowed_extras}` in a config text, on one line."""
+    if not text:
+        return ""
+    from src.agents.shared_components import ALLOWED_EXTRAS, MENU
+
+    rendered = _safe_format(
+        text,
+        {
+            "menu_items": ", ".join(MENU),
+            "allowed_extras": ", ".join(sorted(ALLOWED_EXTRAS)),
+        },
+    )
+    return " ".join(rendered.split())
 
 
 def _safe_format(template: str, variables: dict[str, Any]) -> str:

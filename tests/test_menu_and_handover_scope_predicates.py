@@ -66,7 +66,9 @@ class TestNoOffMenuMentions(unittest.TestCase):
         verdict = self.pred(_msg_ctx("How about a mocha instead? It's really good."))
         self.assertEqual(verdict.effect, Effect.DENY)
         self.assertIn("'mocha'", verdict.reason_for_llm)
-        self.assertIn("latte", verdict.reason_for_llm)  # menu listed for the retry
+        # The menu reaches the agent through the guardrail's correction hint
+        # (shared with the soft judge), not through the reason.
+        self.assertNotIn("latte", verdict.reason_for_llm)
 
     def test_declines_allow(self):
         for text in (
@@ -170,6 +172,26 @@ class TestHandoverScopeMismatch(unittest.TestCase):
                 ctx = _handover_ctx("customer_service_agent", "order_agent", summary)
                 self.assertEqual(self.pred(ctx).effect, Effect.ALLOW)
 
+    def test_replacement_order_passes_normal_flow(self):
+        # From the pilot: a replacement after a complaint goes order -> inventory
+        # -> barista, and the summaries keep mentioning the complaint.
+        for agent, target, summary in (
+            (
+                "order_agent",
+                "inventory_agent",
+                "Customer complaint replacement: free medium cappuccino (ORD0001).",
+            ),
+            (
+                "inventory_agent",
+                "barista_agent",
+                "Customer complaint replacement: free medium cappuccino for ORD0001. "
+                "Stock confirmed (cappuccino: 2 left).",
+            ),
+        ):
+            with self.subTest(target=target):
+                ctx = _handover_ctx(agent, target, summary)
+                self.assertEqual(self.pred(ctx).effect, Effect.ALLOW)
+
     def test_new_order_to_customer_service_denied(self):
         ctx = _handover_ctx(
             "inventory_agent",
@@ -216,6 +238,17 @@ class TestBaselineHardConfig(unittest.TestCase):
         self.assertEqual(
             gr.eval(_msg_ctx("How about a vanilla latte?")).effect, Effect.ALLOW
         )
+
+    def test_menu_hint_and_fallback_list_the_real_menu(self):
+        [gr] = Catalog(BASELINE_HARD_DIR).guardrails(["assistant_message:on_menu_only"])
+        hint = gr.rendered_correction_hint()
+        fallback = gr.rendered_fallback_message()
+        for text in (hint, fallback):
+            with self.subTest(text=text[:40]):
+                self.assertIn("espresso, latte, cappuccino, americano, croissant", text)
+                self.assertIn("oat milk", text)
+                self.assertNotIn("{", text)
+        self.assertIn("do not invent", hint)
 
     def test_handover_guardrail_wired(self):
         [gr] = Catalog(BASELINE_HARD_DIR).guardrails(["handover:reason_matches_target"])

@@ -197,6 +197,18 @@ class TestSetupCoherence(unittest.TestCase):
                 with self.subTest(guardrail=entry["id"], setup=setup, first=first[0]):
                     self.assertEqual(judge, first[1])
 
+    def test_correction_texts_identical_across_setups(self):
+        # A rule gives the agent the same correction hint and fallback reply
+        # whether a judge or a hard predicate enforces it, in every setup.
+        fields = ("correction_hint", "fallback_message")
+        seen: dict[str, tuple[str, dict]] = {}
+        for setup in _ALL_SETUPS:
+            for entry in _entries(setup):
+                texts = {f: entry.get(f, "") for f in fields}
+                first = seen.setdefault(_concept(entry["id"]), (setup, texts))
+                with self.subTest(guardrail=entry["id"], setup=setup, first=first[0]):
+                    self.assertEqual(texts, first[1])
+
     def test_judge_context_declared(self):
         # Every context variable a judge prompt uses is declared in
         # state_dependencies, and every declared dependency is used.
