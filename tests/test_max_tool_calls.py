@@ -49,7 +49,11 @@ class TestMaxToolCalls(unittest.TestCase):
         pred = max_tool_calls_predicate("process_order", max_calls=1)
         history = [
             HumanMessage(content="hi"),
-            ToolMessage(content='{"order_id": "ORD001"}', name="process_order", tool_call_id="tc1"),
+            ToolMessage(
+                content='{"order_id": "ORD001"}',
+                name="process_order",
+                tool_call_id="tc1",
+            ),
         ]
         verdict = pred(_ctx(messages=history))
         self.assertEqual(verdict.effect, Effect.DENY)
@@ -66,6 +70,39 @@ class TestMaxToolCalls(unittest.TestCase):
             ),
         ]
         self.assertEqual(pred(_ctx(messages=history)).effect, Effect.ALLOW)
+
+    def test_prior_returned_failure_does_not_count(self):
+        # Tools report bad input in their reply while the ToolMessage status stays
+        # success; such a rejected attempt must not use up the only allowed call.
+        pred = max_tool_calls_predicate("process_order", max_calls=1)
+        for content in (
+            "Error: Unknown extras: vanilla. Allowed: caramel syrup, ...",
+            "Error processing order: bad payload. Please use specified format.",
+            '{"status": "error", "message": "Coffee machine is not available."}',
+        ):
+            with self.subTest(content=content):
+                history = [
+                    ToolMessage(
+                        content=content, name="process_order", tool_call_id="tc1"
+                    )
+                ]
+                self.assertEqual(pred(_ctx(messages=history)).effect, Effect.ALLOW)
+
+    def test_success_after_failure_still_counts(self):
+        pred = max_tool_calls_predicate("process_order", max_calls=1)
+        history = [
+            ToolMessage(
+                content="Error: Unknown extras: vanilla.",
+                name="process_order",
+                tool_call_id="tc1",
+            ),
+            ToolMessage(
+                content='{"order_id": "ORD001"}',
+                name="process_order",
+                tool_call_id="tc2",
+            ),
+        ]
+        self.assertEqual(pred(_ctx(messages=history)).effect, Effect.DENY)
 
     def test_max_calls_two_permits_second_call(self):
         pred = max_tool_calls_predicate("process_order", max_calls=2)

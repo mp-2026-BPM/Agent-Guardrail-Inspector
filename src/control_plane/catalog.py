@@ -4,6 +4,7 @@ Guardrails and guidelines are both loaded from YAML at construction time.
 Predicate logic itself lives in `predicates.py` and is referenced by name
 through `PREDICATE_REGISTRY` so YAML stays declarative.
 """
+
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -25,12 +26,16 @@ def _build_guardrail(entry: dict) -> Guardrail:
     guardrail_id = entry["id"]
     guardrail_type = entry.get("type")
     if guardrail_type not in ("hard", "soft"):
-        raise ValueError(f"Guardrail {guardrail_id!r}: type must be 'hard' or 'soft', got {guardrail_type!r}")
+        raise ValueError(
+            f"Guardrail {guardrail_id!r}: type must be 'hard' or 'soft', got {guardrail_type!r}"
+        )
 
     try:
         effect = Effect(entry.get("effect", "flag"))
     except ValueError as exc:
-        raise ValueError(f"Guardrail {guardrail_id!r}: invalid effect {entry.get('effect')!r}") from exc
+        raise ValueError(
+            f"Guardrail {guardrail_id!r}: invalid effect {entry.get('effect')!r}"
+        ) from exc
 
     common = {
         "name": guardrail_id,
@@ -38,6 +43,8 @@ def _build_guardrail(entry: dict) -> Guardrail:
         "tools": list(entry.get("tools", [])),
         "effect": effect,
         "description": entry.get("description", ""),
+        "correction_hint": entry.get("correction_hint", ""),
+        "fallback_message": entry.get("fallback_message", ""),
     }
 
     if guardrail_type == "hard":
@@ -56,7 +63,9 @@ def _build_guardrail(entry: dict) -> Guardrail:
                 f"Guardrail {guardrail_id!r}: could not build predicate {predicate_name!r} "
                 f"with args {predicate_args!r}: {exc}"
             ) from exc
-        return HardGuardrail(predicate=predicate, predicate_args=predicate_args, **common)
+        return HardGuardrail(
+            predicate=predicate, predicate_args=predicate_args, **common
+        )
 
     return SoftGuardrail(
         judge_prompt=entry.get("judge_prompt", ""),

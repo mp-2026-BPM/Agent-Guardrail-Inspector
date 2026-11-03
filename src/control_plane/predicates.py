@@ -1,3 +1,4 @@
+import json
 import re
 
 from src.agents.order_store import load_order, load_recent_order
@@ -80,9 +81,23 @@ def discount_within_limit_predicate(max_pct: int, effect: str = "flag"):
     return _eval
 
 
-def transfer_includes_order_id_predicate(context: GuardrailContext) -> Verdict:
-    """Hard guardrail: FLAG if transfer_to_agent does not include an ORD#### order id."""
+def _order_placed_in_conversation(context: GuardrailContext) -> bool:
+    """True once a process_order result carrying an ORD id is in the conversation.
+    process_order reports failures as plain "Error ..." strings without an id, so the
+    id is the success signal."""
+    return any(
+        getattr(m, "name", None) == "process_order"
+        and getattr(m, "status", None) != "error"
+        and _ORDER_ID_RE.search(str(getattr(m, "content", "")))
+        for m in context.state.get("messages", []) or []
+    )
 
+
+def _transfer_includes_order_id_eval(
+    context: GuardrailContext,
+    effect: str = "flag",
+    only_after_order_placed: bool = False,
+) -> Verdict:
     summary = str(context.tool_args.get("context_summary", ""))
     if _ORDER_ID_RE.search(summary):
         return Verdict(
@@ -91,16 +106,43 @@ def transfer_includes_order_id_predicate(context: GuardrailContext) -> Verdict:
             guardrail_type="",
             reason_internal="transfer includes order_id",
         )
+    if only_after_order_placed and not _order_placed_in_conversation(context):
+        return Verdict(
+            effect=Effect.ALLOW,
+            guardrail_name="",
+            guardrail_type="",
+            reason_internal="transfer missing order_id, but no order placed yet in this conversation",
+        )
     return Verdict(
-        effect=Effect.FLAG,
+        effect=Effect(effect),
         guardrail_name="",
         guardrail_type="",
-        reason_internal="transfer missing order_id (flagged, not blocked)",
+        reason_internal=f"transfer missing order_id ({effect})",
         reason_for_llm=(
             "When transferring to another agent, always include the order id so the next agent can look up order details."
             " Include the order id when handing over in this pattern: ORDXXXX"
         ),
     )
+
+
+def transfer_includes_order_id_predicate(*args, **kwargs):
+    """Dual-use, like `allowed_handover_targets_predicate`: called directly with a
+    GuardrailContext it FLAGs a transfer_to_agent without an ORD#### order id (the
+    historical behavior). Called as a factory with `effect` and/or
+    `only_after_order_placed` it binds those; the latter exempts handovers that happen
+    before any process_order succeeded, when there is no id to reference yet.
+    """
+    if args and isinstance(args[0], GuardrailContext):
+        return _transfer_includes_order_id_eval(args[0])
+    effect = kwargs.get("effect", "flag")
+    only_after_order_placed = bool(kwargs.get("only_after_order_placed", False))
+
+    def _bound(context: GuardrailContext) -> Verdict:
+        return _transfer_includes_order_id_eval(
+            context, effect=effect, only_after_order_placed=only_after_order_placed
+        )
+
+    return _bound
 
 
 def require_order_status_predicate(allowed: list[str], effect: str = "deny"):
@@ -200,14 +242,28 @@ def order_size_within_range_predicate(
     return _eval
 
 
-def refund_within_limit_predicate(max_pct: int, effect: str = "deny"):
+def refund_within_limit_predicate(
+    max_pct: int, min_pct: int | None = None, effect: str = "deny"
+):
     """Factory: constrain offer_partial_refund's `refund_percent`. Violation when the
-    requested percentage exceeds `max_pct`. Mirrors the tool default of 50 when absent.
+    requested percentage exceeds `max_pct`, or falls below `min_pct` when one is set
+    (e.g. `min_pct: 0` rejects negative refunds). Mirrors the tool default of 50 when
+    absent.
     """
     violation_effect = Effect(effect)
 
     def _eval(context: GuardrailContext) -> Verdict:
         pct = int(context.tool_args.get("refund_percent", 50) or 0)
+        if min_pct is not None and pct < min_pct:
+            return Verdict(
+                effect=violation_effect,
+                guardrail_name="",
+                guardrail_type="",
+                reason_internal=f"refund_percent={pct} below minimum {min_pct}",
+                reason_for_llm=(
+                    f"A partial refund of {pct}% is not allowed; the refund must be at least {min_pct}%."
+                ),
+            )
         if pct <= max_pct:
             return Verdict(
                 effect=Effect.ALLOW,
@@ -228,11 +284,27 @@ def refund_within_limit_predicate(max_pct: int, effect: str = "deny"):
     return _eval
 
 
+def _is_failed_tool_result(content) -> bool:
+    """True when a tool *returned* a failure instead of raising: the tools report
+    bad input as `"Error..."` text (process_order, refunds) or as JSON with
+    `"status": "error"` (barista, tray), while the ToolMessage status stays success."""
+    text = str(content).lstrip()
+    if text.startswith("Error"):
+        return True
+    try:
+        data = json.loads(text)
+    except (json.JSONDecodeError, TypeError):
+        return False
+    return isinstance(data, dict) and data.get("status") == "error"
+
+
 def max_tool_calls_predicate(tool_name: str, max_calls: int, effect: str = "deny"):
     """Factory: cap the number of successful invocations of `tool_name` in one
     conversation. Counts prior ToolMessages in `state["messages"]` whose `name`
-    matches and whose `status` is not "error" (i.e. previously allowed by the
-    gateway and executed by the tool). Violation when the count is already at or
+    matches, whose `status` is not "error" (i.e. previously allowed by the
+    gateway and executed by the tool) and whose content is not a failure the tool
+    returned (see `_is_failed_tool_result`), so a rejected process_order does not
+    use up the only allowed call. Violation when the count is already at or
     above `max_calls` at the moment of evaluation — remember the gateway runs
     *before* the current call, so `>= max_calls` blocks the (max+1)-th attempt.
     """
@@ -245,6 +317,7 @@ def max_tool_calls_predicate(tool_name: str, max_calls: int, effect: str = "deny
             for m in messages
             if getattr(m, "name", None) == tool_name
             and getattr(m, "status", None) != "error"
+            and not _is_failed_tool_result(getattr(m, "content", ""))
         )
         if prior < max_calls:
             return Verdict(
@@ -390,6 +463,24 @@ def transfer_context_summary_nonempty_predicate(
     return _eval
 
 
+def recent_order_brew_state():
+    """(most recent order or None, whether the barista cache flags its last brew
+    as contaminated). Shared by the hard clean_machine predicate and the soft
+    judges' `{recent_order}` context, so both read the same facts."""
+    order = load_recent_order()
+    if order is None:
+        return None, False
+    try:
+        from src.agents.barista_agent import ORDER_STATUS_CACHE
+
+        cache_entry = ORDER_STATUS_CACHE.get(
+            str(order.id), {}
+        ) or ORDER_STATUS_CACHE.get(f"ORD{int(order.id):04d}", {})
+        return order, bool(cache_entry.get("last_brew_contaminated"))
+    except Exception:
+        return order, False
+
+
 def clean_machine_only_after_error_predicate(effect: str = "deny"):
     """Factory: allow clean_machine only when the most-recent order is in
     `preparation_error` or when the barista cache flags the last brew as
@@ -399,7 +490,7 @@ def clean_machine_only_after_error_predicate(effect: str = "deny"):
     violation_effect = Effect(effect)
 
     def _eval(context: GuardrailContext) -> Verdict:
-        order = load_recent_order()
+        order, contaminated = recent_order_brew_state()
         if order is None:
             # No recent order (fresh session / test harness) — nothing to gate.
             return Verdict(
@@ -409,16 +500,6 @@ def clean_machine_only_after_error_predicate(effect: str = "deny"):
                 reason_internal="no recent order; clean_machine not gated",
             )
         status = order.status.value
-        contaminated = False
-        try:
-            from src.agents.barista_agent import ORDER_STATUS_CACHE
-
-            cache_entry = ORDER_STATUS_CACHE.get(str(order.id), {}) or ORDER_STATUS_CACHE.get(
-                f"ORD{int(order.id):04d}", {}
-            )
-            contaminated = bool(cache_entry.get("last_brew_contaminated"))
-        except Exception:
-            contaminated = False
         if status == "preparation_error" or contaminated:
             return Verdict(
                 effect=Effect.ALLOW,
@@ -445,6 +526,241 @@ def clean_machine_only_after_error_predicate(effect: str = "deny"):
     return _eval
 
 
+_DOLLAR_AMOUNT_RE = re.compile(r"\$\s?(\d+(?:\.\d{1,2})?)")
+# A message amount is either "$4.50" or "4.50 dollars"/"4 USD". The optional leading
+# hedge word marks vague statements ("around $5"), which the rule lets through.
+_QUOTED_PRICE_RE = re.compile(
+    r"(?:\b(around|about|roughly|approximately|approx\.?|under|over|less than|more than)\s+|(~)\s*)?"
+    r"(?:\$\s?(\d+(?:\.\d{1,2})?)|\b(\d+(?:\.\d{1,2})?)\s*(?:dollars?|usd|bucks)\b)",
+    re.IGNORECASE,
+)
+
+
+def _to_cents(amount: str | float) -> int:
+    return round(float(amount) * 100)
+
+
+def _json_number_cents(content: str) -> set[int]:
+    """Every numeric value in a JSON tool result, in cents (bools excluded). Tool results
+    like offer_partial_refund carry amounts such as `original_total` only as JSON numbers,
+    never as `$` text."""
+    try:
+        data = json.loads(content)
+    except (json.JSONDecodeError, TypeError):
+        return set()
+    cents: set[int] = set()
+    stack = [data]
+    while stack:
+        node = stack.pop()
+        if isinstance(node, dict):
+            stack.extend(node.values())
+        elif isinstance(node, list):
+            stack.extend(node)
+        elif isinstance(node, (int, float)) and not isinstance(node, bool):
+            cents.add(_to_cents(node))
+    return cents
+
+
+def no_unbacked_price_quotes_predicate(
+    source_tools: list[str] | None = None,
+    count_json_numbers: bool = False,
+    effect: str = "deny",
+):
+    """Factory: deterministic counterpart to the soft `assistant_message:no_price_promises`
+    judge. Applied to the synthetic `assistant_message` tool: every specific dollar amount
+    in the outgoing message must already appear as a `$` amount in an earlier successful
+    result of one of `source_tools` (default: calculate_total, process_order) in this
+    conversation. With `count_json_numbers`, numeric fields of a JSON result (e.g.
+    `original_total`) also back an amount. Hedged amounts ("around $5") and spelled-out
+    figures ("five dollars") are not specific quotes and pass.
+    """
+    sources = set(source_tools or ["calculate_total", "process_order"])
+    violation_effect = Effect(effect)
+
+    def _backed_cents(content: str) -> set[int]:
+        cents = {_to_cents(a) for a in _DOLLAR_AMOUNT_RE.findall(content)}
+        if count_json_numbers:
+            cents |= _json_number_cents(content)
+        return cents
+
+    def _eval(context: GuardrailContext) -> Verdict:
+        content = str(context.tool_args.get("content", ""))
+        quoted = {
+            dollars or plain
+            for hedge, tilde, dollars, plain in _QUOTED_PRICE_RE.findall(content)
+            if not (hedge or tilde)
+        }
+        if not quoted:
+            return Verdict(
+                effect=Effect.ALLOW,
+                guardrail_name="",
+                guardrail_type="",
+                reason_internal="no specific dollar amount in message",
+            )
+        backed = {
+            cents
+            for m in context.state.get("messages", []) or []
+            if getattr(m, "name", None) in sources
+            and getattr(m, "status", None) != "error"
+            for cents in _backed_cents(str(getattr(m, "content", "")))
+        }
+        unbacked = sorted(
+            (a for a in quoted if _to_cents(a) not in backed), key=_to_cents
+        )
+        if not unbacked:
+            return Verdict(
+                effect=Effect.ALLOW,
+                guardrail_name="",
+                guardrail_type="",
+                reason_internal=f"all quoted amounts {sorted(quoted, key=_to_cents)} backed by {sorted(sources)}",
+            )
+        amounts = ", ".join(f"${a}" for a in unbacked)
+        return Verdict(
+            effect=violation_effect,
+            guardrail_name="",
+            guardrail_type="",
+            reason_internal=f"unbacked price quote(s) {unbacked}; backed cents={sorted(backed)}",
+            reason_for_llm=(
+                f"Your message quotes {amounts}, but no {' or '.join(sorted(sources))} result "
+                f"in this conversation produced that amount. Run the tool first, or do not "
+                f"quote a specific price."
+            ),
+        )
+
+    return _eval
+
+
+# Clause boundaries for the off-menu check: punctuation, line breaks, and "but"
+# ("we don't have chai, but how about a mocha?" splits into two clauses).
+_CLAUSE_SPLIT_RE = re.compile(r"[.!?\n;,:—–()]+|\bbut\b", re.IGNORECASE)
+_NEGATION_RE = re.compile(
+    r"\b(?:not|no|never|cannot|without|unavailable|skip|skipping|instead of)\b|n['’]t\b",
+    re.IGNORECASE,
+)
+
+
+def no_off_menu_mentions_predicate(off_menu_terms: list[str], effect: str = "deny"):
+    """Factory: deterministic counterpart to the soft `assistant_message:on_menu_only`
+    judge. Splits the outgoing message into clauses and violates when a clause names
+    one of `off_menu_terms` (whole-word, case-insensitive) without a negation cue, so
+    "we don't serve mocha" passes while "how about a mocha?" does not. Deliberately
+    a blocklist: terms not listed pass, trading recall for few false refusals.
+    Flavour shorthand built from allowed extras ("vanilla latte") is not listed.
+    """
+    terms = sorted(
+        {t.lower().strip() for t in off_menu_terms if t.strip()}, key=len, reverse=True
+    )
+    if not terms:
+        raise ValueError("off_menu_terms must not be empty")
+    term_re = re.compile(
+        r"\b(" + "|".join(map(re.escape, terms)) + r")\b", re.IGNORECASE
+    )
+    violation_effect = Effect(effect)
+
+    def _eval(context: GuardrailContext) -> Verdict:
+        content = str(context.tool_args.get("content", ""))
+        hits: list[str] = []
+        for clause in _CLAUSE_SPLIT_RE.split(content):
+            found = [t.lower() for t in term_re.findall(clause)]
+            if found and not _NEGATION_RE.search(clause):
+                hits.extend(t for t in found if t not in hits)
+        if not hits:
+            return Verdict(
+                effect=Effect.ALLOW,
+                guardrail_name="",
+                guardrail_type="",
+                reason_internal="no un-negated off-menu term in message",
+            )
+        return Verdict(
+            effect=violation_effect,
+            guardrail_name="",
+            guardrail_type="",
+            reason_internal=f"un-negated off-menu term(s): {hits}",
+            # The menu itself reaches the agent through the guardrail's correction
+            # hint, which the soft judge gets too.
+            reason_for_llm=(
+                f"Your message offers {', '.join(repr(h) for h in hits)}, which is not on the menu."
+            ),
+        )
+
+    return _eval
+
+
+_REFUND_CUE_RE = re.compile(
+    r"\b(?:refund\w*|money back|reimburs\w*|compensat\w*|complain\w*|dissatisf\w*|unhappy|store credit)\b",
+    re.IGNORECASE,
+)
+_NEW_ORDER_CUE_RE = re.compile(
+    r"\b(?:new order|place (?:an?|their|the) order|wants? to order|take (?:an?|their|the) order|pick ?up|ready for pickup)\b",
+    re.IGNORECASE,
+)
+_REPLACEMENT_CUE_RE = re.compile(
+    r"\b(?:new order|replace\w*|re-?order\w*|remake|fresh|another)\b", re.IGNORECASE
+)
+_ISSUE_CUE_RE = re.compile(
+    r"\b(?:refund\w*|complain\w*|issue|problem|error|fail\w*|stuck|wrong|cancel\w*|missing|cold|lukewarm|blocked?)\b",
+    re.IGNORECASE,
+)
+# (cue in context_summary, target it must not go to, cue that makes the summary
+# ambiguous and therefore allowed). Only clear negative evidence denies.
+# A replacement order after a complaint runs the normal order -> inventory ->
+# barista flow, and its summaries keep mentioning the complaint, so a replacement
+# cue exempts every one of those targets.
+_HANDOVER_MISMATCHES = (
+    (_REFUND_CUE_RE, "barista_agent", _REPLACEMENT_CUE_RE),
+    (_REFUND_CUE_RE, "inventory_agent", _REPLACEMENT_CUE_RE),
+    (_REFUND_CUE_RE, "order_agent", _REPLACEMENT_CUE_RE),
+    (_NEW_ORDER_CUE_RE, "customer_service_agent", _ISSUE_CUE_RE),
+)
+_AGENT_SCOPES = {
+    "order_agent": "new orders and pricing",
+    "inventory_agent": "stock checks and food on the tray",
+    "barista_agent": "brewing coffee",
+    "customer_service_agent": "complaints and refunds",
+}
+
+
+def handover_scope_mismatch_predicate(effect: str = "deny"):
+    """Factory: deterministic counterpart to the soft `handover:reason_matches_target`
+    judge. Violates only on clear negative evidence from `_HANDOVER_MISMATCHES`:
+    refund/complaint work sent to barista, inventory or order_agent without a
+    replacement cue, or new-order/pickup work sent to customer_service without an
+    issue cue. Anything ambiguous or procedural is allowed; unknown targets are left
+    to `allowed_handover_targets`. Brewing/preparation words are deliberately not
+    used — normal order → inventory summaries mention them all the time.
+    """
+    violation_effect = Effect(effect)
+
+    def _eval(context: GuardrailContext) -> Verdict:
+        target = str(context.tool_args.get("target_agent", ""))
+        summary = str(context.tool_args.get("context_summary", ""))
+        for cue_re, forbidden, exception_re in _HANDOVER_MISMATCHES:
+            if target != forbidden:
+                continue
+            match = cue_re.search(summary)
+            if match and not (exception_re and exception_re.search(summary)):
+                cue = match.group(0)
+                return Verdict(
+                    effect=violation_effect,
+                    guardrail_name="",
+                    guardrail_type="",
+                    reason_internal=f"context_summary cue {cue!r} does not fit target {target!r}",
+                    reason_for_llm=(
+                        f"Handover to {target!r} does not fit the summary (mentions {cue!r}). "
+                        f"{target} handles {_AGENT_SCOPES[target]}. Hand off to the agent "
+                        f"responsible for this work instead."
+                    ),
+                )
+        return Verdict(
+            effect=Effect.ALLOW,
+            guardrail_name="",
+            guardrail_type="",
+            reason_internal=f"no scope mismatch for target {target!r}",
+        )
+
+    return _eval
+
+
 PREDICATE_REGISTRY = {
     "allowed_handover_targets": allowed_handover_targets_predicate,
     "discount_within_limit": discount_within_limit_predicate,
@@ -457,4 +773,7 @@ PREDICATE_REGISTRY = {
     "process_order_items_on_menu": process_order_items_on_menu_predicate,
     "transfer_context_summary_nonempty": transfer_context_summary_nonempty_predicate,
     "clean_machine_only_after_error": clean_machine_only_after_error_predicate,
+    "no_unbacked_price_quotes": no_unbacked_price_quotes_predicate,
+    "no_off_menu_mentions": no_off_menu_mentions_predicate,
+    "handover_scope_mismatch": handover_scope_mismatch_predicate,
 }
