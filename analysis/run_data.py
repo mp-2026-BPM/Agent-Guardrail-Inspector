@@ -8,12 +8,20 @@ conversation is one MLflow session; its traces carry the `setup` and
 of those traces.
 
 Tool calls a guardrail denied never reach the tool, so they have no TOOL span:
-the tool table only holds calls that actually ran.
+the tool table only holds calls that actually ran. The gateway's own record of
+every checked call (allow / flag / deny) is in `guardrail_log/events.jsonl`.
+
+LLM calls are CHAT_MODEL spans in the same traces. Their `langgraph_node`
+tells the agents' own calls (`llm`) apart from soft-guardrail judge calls
+(`gateway` for tool calls, `response_gateway` for agent messages). The customer
+simulator and the feedback call run outside the conversation's traces and are
+not included.
 """
 
 import json
 import sqlite3
 from pathlib import Path
+from typing import NamedTuple
 
 import pandas as pd
 
@@ -48,6 +56,7 @@ def load_conversations(run_dir: Path, run: str) -> pd.DataFrame:
                    s.value as setup,
                    cast(c.value as integer) as scenario,
                    min(i.timestamp_ms) as started_ms,
+                   max(i.timestamp_ms + coalesce(i.execution_time_ms, 0)) as ended_ms,
                    count(distinct m.request_id) as traces
             from trace_request_metadata m
             join trace_tags s on s.request_id = m.request_id and s.key = 'setup'
@@ -62,7 +71,11 @@ def load_conversations(run_dir: Path, run: str) -> pd.DataFrame:
         raise ValueError(f"{run}: a session carries more than one setup/scenario tag")
     df[["family", "enforcement"]] = df.setup.apply(lambda s: pd.Series(split_setup(s)))
     df.insert(0, "run", run)
+    # One trace per customer message; duration runs from the first message to the
+    # end of the last agent reply (customer think time included, feedback excluded).
+    df["duration_s"] = (df.ended_ms - df.started_ms) / 1000
     df["started"] = pd.to_datetime(df.pop("started_ms"), unit="ms", utc=True)
+    df.pop("ended_ms")
     return df.sort_values("started").reset_index(drop=True)
 
 
@@ -101,11 +114,80 @@ def load_tool_calls(run_dir: Path, run: str) -> pd.DataFrame:
     return df.sort_values(["thread_id", "start_ns"]).reset_index(drop=True)
 
 
-def load_runs(
-    run_dirs: dict[str, Path],
-) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
-    """Load several run folders; returns (runs, conversations, tool_calls)."""
-    runs, conversations, tool_calls = [], [], []
+LLM_ROLES = {"llm": "agent", "gateway": "judge", "response_gateway": "judge"}
+
+
+def load_llm_calls(run_dir: Path, run: str) -> pd.DataFrame:
+    """One row per LLM call inside a conversation, with its role and token usage."""
+    with _connect(run_dir) as con:
+        df = pd.read_sql_query(
+            """
+            select m.value as thread_id,
+                   json_extract(json_extract(s.content, '$.attributes.metadata'), '$.langgraph_node') as node,
+                   s.start_time_unix_nano as start_ns,
+                   (s.end_time_unix_nano - s.start_time_unix_nano) / 1e9 as seconds,
+                   json_extract(s.content, '$.attributes."mlflow.chat.tokenUsage"') as usage_json
+            from spans s
+            join trace_request_metadata m
+              on m.request_id = s.trace_id and m.key = 'mlflow.trace.session'
+            where s.type = 'CHAT_MODEL'
+            """,
+            con,
+        )
+    df.insert(0, "run", run)
+    df["role"] = df.node.map(LLM_ROLES).fillna("other")
+    usage = df.pop("usage_json").map(lambda t: _parse_json(t) or {})
+    for key in ("input_tokens", "output_tokens", "total_tokens"):
+        df[key] = usage.map(lambda u: u.get(key, 0)).astype(int)
+    return df.sort_values(["thread_id", "start_ns"]).reset_index(drop=True)
+
+
+def load_gateway_decisions(run_dir: Path, run: str) -> pd.DataFrame:
+    """One row per gateway check (tool call or assistant message), with its decision.
+
+    `assistant_message` is the response gateway's pseudo-tool. Fallback events
+    (the retry cap was hit) have no decision and are kept with `event_type`.
+    """
+    records = []
+    with (Path(run_dir) / "guardrail_log" / "events.jsonl").open(encoding="utf-8") as f:
+        for line in f:
+            event = json.loads(line)
+            records.append(
+                {
+                    "thread_id": event.get("thread_id"),
+                    "event_type": event.get("event_type"),
+                    "agent_id": event.get("agent_id"),
+                    "tool": event.get("tool_name"),
+                    "decision": event.get("final_decision"),
+                    # Rules that denied or flagged this call, with their type.
+                    "violations": [
+                        {
+                            "guardrail": v["guardrail_name"],
+                            "type": v.get("guardrail_type"),
+                            "effect": v["effect"],
+                        }
+                        for v in event.get("verdicts", [])
+                        if v.get("effect") in ("deny", "flag")
+                    ],
+                    "ts": event.get("ts"),
+                }
+            )
+    df = pd.DataFrame(records)
+    df.insert(0, "run", run)
+    return df
+
+
+class RunData(NamedTuple):
+    runs: pd.DataFrame
+    conversations: pd.DataFrame
+    tool_calls: pd.DataFrame
+    gateway: pd.DataFrame
+    llm_calls: pd.DataFrame
+
+
+def load_runs(run_dirs: dict[str, Path]) -> RunData:
+    """Load several run folders into one table per kind of record."""
+    runs, conversations, tool_calls, gateway, llm_calls = [], [], [], [], []
     for run, run_dir in run_dirs.items():
         ledger = load_ledger(run_dir)
         provenance = ledger["provenance"]
@@ -128,8 +210,12 @@ def load_runs(
         )
         conversations.append(load_conversations(run_dir, run))
         tool_calls.append(load_tool_calls(run_dir, run))
-    return (
+        gateway.append(load_gateway_decisions(run_dir, run))
+        llm_calls.append(load_llm_calls(run_dir, run))
+    return RunData(
         pd.DataFrame(runs),
         pd.concat(conversations, ignore_index=True),
         pd.concat(tool_calls, ignore_index=True),
+        pd.concat(gateway, ignore_index=True),
+        pd.concat(llm_calls, ignore_index=True),
     )
