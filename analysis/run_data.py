@@ -16,6 +16,11 @@ tells the agents' own calls (`llm`) apart from soft-guardrail judge calls
 (`gateway` for tool calls, `response_gateway` for agent messages). The customer
 simulator and the feedback call run outside the conversation's traces and are
 not included.
+
+The MLflow stores are several GB and stay on the machines that ran the
+experiments. `save_snapshot` writes the loaded tables as Parquet files (a few
+MB) that are shared in the repository, and `load_snapshot` reads them back
+unchanged, so the analysis runs without the stores.
 """
 
 import json
@@ -219,3 +224,33 @@ def load_runs(run_dirs: dict[str, Path]) -> RunData:
         pd.concat(gateway, ignore_index=True),
         pd.concat(llm_calls, ignore_index=True),
     )
+
+
+# Columns holding parsed JSON (dicts, lists, None); Parquet stores them as JSON text.
+_JSON_COLUMNS = {
+    "runs": ["scenarios"],
+    "tool_calls": ["inputs", "result"],
+    "gateway": ["violations"],
+}
+
+
+def save_snapshot(data: RunData, snapshot_dir: Path) -> None:
+    """Write every table of `data` to `<snapshot_dir>/<table>.parquet`."""
+    snapshot_dir = Path(snapshot_dir)
+    snapshot_dir.mkdir(parents=True, exist_ok=True)
+    for name in RunData._fields:
+        df = getattr(data, name).copy()
+        for col in _JSON_COLUMNS.get(name, []):
+            df[col] = df[col].map(json.dumps)
+        df.to_parquet(snapshot_dir / f"{name}.parquet", index=False)
+
+
+def load_snapshot(snapshot_dir: Path) -> RunData:
+    """Read the tables written by `save_snapshot`."""
+    tables = {}
+    for name in RunData._fields:
+        df = pd.read_parquet(Path(snapshot_dir) / f"{name}.parquet")
+        for col in _JSON_COLUMNS.get(name, []):
+            df[col] = df[col].map(json.loads)
+        tables[name] = df
+    return RunData(**tables)

@@ -28,12 +28,17 @@ Then open http://localhost:5006/metrics. With `METRICS_DATA_DIR` set, the Metric
 | `feedback_store.json` | The simulated customer's feedback per conversation (1,178 entries). |
 | `services/coffee_machine/logs/coffee_machine.csv` | Coffee-machine events (3,005 rows). |
 | `experiment_runs/<run>/` | Each run's ledger (grid, provenance, per-cell timing) and per-cell console logs. |
+| `analysis/*.parquet` | The tables the analysis notebook works on, extracted from the runs' MLflow stores: runs, conversations (1,200), executed tool calls with their arguments and results (11,599), gateway decisions (21,159) and LLM calls with token usage, agents and judges (34,863). |
 
 `case_id` in the event log is the conversation's LangGraph thread id; `case_setup` and `case_scenario_index` identify its cell. Order IDs restart at `ORD0001` in every cell, so don't join on `order_id` alone.
 
+## Run the analysis
+
+[analysis/guardrail_effects.ipynb](../../analysis/guardrail_effects.ipynb) reads the Parquet files in `analysis/`, so it runs on a plain checkout. Its results are identical to loading the MLflow stores directly.
+
 ## Not included
 
-The joined MLflow store (`mlflow.db`, 3.6 GB, 16,519 traces) and its trace artifacts are too large for the repository. Everything the dashboard and the notebook's per-conversation tables need is derived from it, but the notebook itself loads the MLflow stores of the individual runs, so re-running it needs those (ask Anton Neubauer).
+The runs' MLflow stores (3.6 GB together, 16,519 traces) and their trace artifacts are too large for the repository. The dashboard's event log and the notebook's tables are derived from them; rebuilding those needs the stores (ask Anton Neubauer).
 
 ## Known gaps
 
