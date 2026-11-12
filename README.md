@@ -131,6 +131,14 @@ Two pages:
 
 On every entry the Metrics page reconciles its cache with MLflow: if new conversations have been recorded, it re-runs the trace processor and consolidates all traces into `generated_event_log/_all_traces.csv`. Staleness is decided by comparing MLflow's trace count to the count in `_all_traces.meta`. No manual `--export-logs` step is required. The directory is owned by the cache — stale per-run CSVs get removed on build.
 
+To look at a shared snapshot instead of your local MLflow store, point `METRICS_DATA_DIR` at its folder. The Metrics page then reads that folder's `generated_event_log/_all_traces.csv` and `guardrail_log/events.jsonl` as they are, without syncing:
+
+```bash
+METRICS_DATA_DIR=experiment_data/2026-11 poetry run dashboard
+```
+
+The experiment runs used in the analysis are in [experiment_data/2026-11](experiment_data/2026-11/README.md).
+
 ### Sharing the event log CSV
 
 `generated_event_log/_all_traces.csv` embeds free-text content: verbatim customer utterances, LLM assistant responses, and LLM reasoning from the guardrail gateway (`gateway_tool_args_json`, `gateway_verdicts_json`, `feedback_reason`). In this TechEd repo the customer is LLM-simulated, so those cells are synthetic. **In any real deployment the same columns would carry PII and unredacted model reasoning — review the file before sharing.**
