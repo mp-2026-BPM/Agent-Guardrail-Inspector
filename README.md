@@ -46,6 +46,11 @@ Baseline policy family:
 - `baseline_flag` — every `baseline` guardrail in `flag` mode. Agents behave as unconstrained; violations still logged.
 - `anti_flow` — lifecycle gates inverted + severed barista handover; orders trapped mid-flow. Worst-case misconfiguration.
 - `strict_flow` — linear pipeline plus `process_order_once_per_conversation` (via `max_tool_calls` predicate).
+- `baseline_soft` / `strict_flow_soft` — every rule enforced by an LLM judge; the hard predicates run as `flag` shadows (deterministic call counters stay hard).
+- `baseline_hard` / `strict_flow_hard` — every rule enforced by a deterministic predicate, including hard versions of the menu, handover-reason and price judges.
+- `strict_flow_flag` — every `strict_flow` guardrail in `flag` mode.
+
+Within each family (`baseline*`, `strict_flow*`) agents, prompts and guidelines are identical and every rule has the same strength; `tests/test_setup_coherence.py` enforces this.
 
 List available setups: `poetry run simulate --list-setups`.
 
@@ -93,7 +98,7 @@ poetry run python scripts/run_experiment.py --help                              
 
 poetry run python scripts/run_experiment.py --dry-run                           # print the grid, run nothing
 poetry run python scripts/run_experiment.py --setups baseline --scenarios 1 --count 2   # pilot
-poetry run python scripts/run_experiment.py                                     # 6 setups x 4 scenarios x 50
+poetry run python scripts/run_experiment.py                                     # 8 setups x 3 scenarios (1, 3, 4) x 25
 poetry run python scripts/run_experiment.py --resume experiment_runs/<dir>      # continue after an interrupt
 ```
 
@@ -125,6 +130,14 @@ Two pages:
 - **Metrics Dashboard (`/metrics`)** — KPIs, per-agent workload, per-order timings, and OCEL-based visualizations (object-type mapping, OC-DFG, OC-PN). A dual-handle timeframe slider scopes every section to a window of traces.
 
 On every entry the Metrics page reconciles its cache with MLflow: if new conversations have been recorded, it re-runs the trace processor and consolidates all traces into `generated_event_log/_all_traces.csv`. Staleness is decided by comparing MLflow's trace count to the count in `_all_traces.meta`. No manual `--export-logs` step is required. The directory is owned by the cache — stale per-run CSVs get removed on build.
+
+To look at a shared snapshot instead of your local MLflow store, point `METRICS_DATA_DIR` at its folder. The Metrics page then reads that folder's `generated_event_log/_all_traces.csv` and `guardrail_log/events.jsonl` as they are, without syncing:
+
+```bash
+METRICS_DATA_DIR=experiment_data/2026-11 poetry run dashboard
+```
+
+The experiment runs used in the analysis are in [experiment_data/2026-11](experiment_data/2026-11/README.md).
 
 ### Sharing the event log CSV
 

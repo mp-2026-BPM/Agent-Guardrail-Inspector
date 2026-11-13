@@ -61,11 +61,15 @@ DEFAULT_SETUPS = (
     "baseline",
     "baseline_flag",
     "baseline_soft",
+    "baseline_hard",
     "strict_flow",
     "strict_flow_flag",
     "strict_flow_soft",
+    "strict_flow_hard",
 )
-DEFAULT_SCENARIOS = (1, 2, 3, 4)
+# Scenario 2 ("2 espressos (hurry)") is left out of the default grid; pass
+# --scenarios to include it.
+DEFAULT_SCENARIOS = (1, 3, 4)
 DEFAULT_COUNT = 25
 DEFAULT_MACHINE_SEED = 100
 

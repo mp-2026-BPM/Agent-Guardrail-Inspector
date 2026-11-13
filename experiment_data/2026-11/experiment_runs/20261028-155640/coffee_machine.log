@@ -1,0 +1,1311 @@
+INFO:     Started server process [2406]
+INFO:     Waiting for application startup.
+[2026-10-28:15:56] [INFO] coffee_shop.coffee_machine — OCEL background worker started
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8001 (Press CTRL+C to quit)
+INFO:     127.0.0.1:58630 - "GET /healthz HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58717 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:15:57] [INFO] coffee_shop.coffee_machine — Brew requested: drink=latte, correlation_id=ffe47e29-354b-4f0f-98a5-b82dc3bc44e7
+[2026-10-28:15:57] [INFO] coffee_shop.coffee_machine.state — Job created: 052e5c4b (drink=latte, duration=1.1s, contaminated=False)
+INFO:     127.0.0.1:58718 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:15:57] [INFO] coffee_shop.coffee_machine.state — Job 052e5c4b finished: ready
+INFO:     127.0.0.1:58723 - "GET /jobs/052e5c4b-819b-4f1f-ac8e-5b319673a961 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58852 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:15:59] [INFO] coffee_shop.coffee_machine — Brew requested: drink=latte, correlation_id=3b7f8284-3f7d-41d4-99c5-6b7d259994cf
+[2026-10-28:15:59] [INFO] coffee_shop.coffee_machine.state — Job created: 2b63e1fe (drink=latte, duration=1.7s, contaminated=False)
+INFO:     127.0.0.1:58853 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:15:59] [INFO] coffee_shop.coffee_machine.state — Job 2b63e1fe finished: ready
+INFO:     127.0.0.1:58874 - "GET /jobs/2b63e1fe-bd6c-4223-9d2e-988d9160e3e3 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59026 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:16:01] [INFO] coffee_shop.coffee_machine — Brew requested: drink=latte, correlation_id=63691931-a141-43f2-ad4b-e1b021aef934
+[2026-10-28:16:01] [INFO] coffee_shop.coffee_machine.state — Job created: 3969269e (drink=latte, duration=1.4s, contaminated=False)
+INFO:     127.0.0.1:59027 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:16:01] [INFO] coffee_shop.coffee_machine.state — Job 3969269e finished: ready
+INFO:     127.0.0.1:59032 - "GET /jobs/3969269e-8f58-45fb-87eb-93a83280255e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59133 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:16:02] [INFO] coffee_shop.coffee_machine — Brew requested: drink=latte, correlation_id=f0c2e43c-3335-47df-931d-9a9bc01a8b65
+[2026-10-28:16:02] [INFO] coffee_shop.coffee_machine.state — Job created: 2151e8c4 (drink=latte, duration=1.7s, contaminated=False)
+INFO:     127.0.0.1:59134 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:16:02] [INFO] coffee_shop.coffee_machine.state — Job 2151e8c4 finished: ready
+INFO:     127.0.0.1:59153 - "GET /jobs/2151e8c4-0227-4375-91d9-672b6a634989 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59237 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:16:03] [INFO] coffee_shop.coffee_machine — Brew requested: drink=latte, correlation_id=abc6948b-f45f-4f97-96b1-e41c8b17a286
+[2026-10-28:16:03] [INFO] coffee_shop.coffee_machine.state — Job created: 39907399 (drink=latte, duration=1.4s, contaminated=False)
+INFO:     127.0.0.1:59238 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:16:03] [INFO] coffee_shop.coffee_machine.state — Job 39907399 finished: ready
+INFO:     127.0.0.1:59258 - "GET /jobs/39907399-3c57-44ae-89a7-3d33b0fd0756 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59356 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:16:05] [INFO] coffee_shop.coffee_machine — Brew requested: drink=latte, correlation_id=24375645-e6b9-4ea6-837d-0e5515b5c160
+[2026-10-28:16:05] [INFO] coffee_shop.coffee_machine.state — Job created: 4b61d0c8 (drink=latte, duration=2.8s, contaminated=False)
+INFO:     127.0.0.1:59357 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:16:05] [INFO] coffee_shop.coffee_machine.state — Job 4b61d0c8 finished: ready
+INFO:     127.0.0.1:59375 - "GET /jobs/4b61d0c8-1c50-47d4-88e4-e054ad1c31b7 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59521 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:16:06] [INFO] coffee_shop.coffee_machine — Brew requested: drink=latte, correlation_id=468b74f8-2465-4936-955b-77e5b5626020
+[2026-10-28:16:06] [INFO] coffee_shop.coffee_machine.state — Job created: 594c2682 (drink=latte, duration=2.3s, contaminated=False)
+INFO:     127.0.0.1:59522 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:16:06] [INFO] coffee_shop.coffee_machine.state — Job 594c2682 finished: ready
+INFO:     127.0.0.1:59527 - "GET /jobs/594c2682-ad88-454f-a65a-c56b9f432ab6 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59694 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:16:08] [INFO] coffee_shop.coffee_machine — Brew requested: drink=latte, correlation_id=c5c79c3f-a168-4686-9ef0-143f3354b8a3
+[2026-10-28:16:08] [INFO] coffee_shop.coffee_machine.state — Job created: 645ed5fd (drink=latte, duration=1.8s, contaminated=False)
+INFO:     127.0.0.1:59695 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:16:08] [INFO] coffee_shop.coffee_machine.state — Machine marked dirty after job 645ed5fd failure
+[2026-10-28:16:08] [INFO] coffee_shop.coffee_machine.state — Job 645ed5fd finished: failed
+INFO:     127.0.0.1:59715 - "GET /jobs/645ed5fd-cc26-40b1-b3dd-ae33409ce32d HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59720 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:16:08] [INFO] coffee_shop.coffee_machine.state — Machine cleaned
+[2026-10-28:16:08] [INFO] coffee_shop.coffee_machine — Clean request: cleaned
+INFO:     127.0.0.1:59721 - "POST /clean HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59739 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:16:08] [INFO] coffee_shop.coffee_machine — Brew requested: drink=latte, correlation_id=c5c79c3f-a168-4686-9ef0-143f3354b8a3
+[2026-10-28:16:08] [INFO] coffee_shop.coffee_machine.state — Job created: 4fa389e0 (drink=latte, duration=1.4s, contaminated=False)
+INFO:     127.0.0.1:59740 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:16:08] [INFO] coffee_shop.coffee_machine.state — Job 4fa389e0 finished: ready
+INFO:     127.0.0.1:59746 - "GET /jobs/4fa389e0-e46a-4e68-9d5e-5dc8486d412f HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59867 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:16:10] [INFO] coffee_shop.coffee_machine — Brew requested: drink=latte, correlation_id=072fe46e-86c3-4fdc-ac0d-3dff0213f4a9
+[2026-10-28:16:10] [INFO] coffee_shop.coffee_machine.state — Job created: 9e53e494 (drink=latte, duration=1.5s, contaminated=False)
+INFO:     127.0.0.1:59868 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:16:10] [INFO] coffee_shop.coffee_machine.state — Job 9e53e494 finished: ready
+INFO:     127.0.0.1:59890 - "GET /jobs/9e53e494-09c0-4571-af15-f2b3d5c2c572 HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [2406]
+INFO:     Started server process [2564]
+INFO:     Waiting for application startup.
+[2026-10-28:16:10] [INFO] coffee_shop.coffee_machine — OCEL background worker started
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8001 (Press CTRL+C to quit)
+INFO:     127.0.0.1:59914 - "GET /healthz HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60316 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:16:15] [INFO] coffee_shop.coffee_machine — Brew requested: drink=cappuccino, correlation_id=8b073903-56bc-4376-a15b-d7b0328ae817
+[2026-10-28:16:15] [INFO] coffee_shop.coffee_machine.state — Job created: 67021793 (drink=cappuccino, duration=1.1s, contaminated=False)
+INFO:     127.0.0.1:60317 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:16:15] [INFO] coffee_shop.coffee_machine.state — Job 67021793 finished: ready
+INFO:     127.0.0.1:60337 - "GET /jobs/67021793-6c43-4327-b43d-2a1dadc58a53 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60837 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:16:23] [INFO] coffee_shop.coffee_machine — Brew requested: drink=cappuccino, correlation_id=67e63ac9-d6a6-4e23-8a9f-4dbde4a2e222
+[2026-10-28:16:23] [INFO] coffee_shop.coffee_machine.state — Job created: a3af0748 (drink=cappuccino, duration=1.7s, contaminated=False)
+INFO:     127.0.0.1:60838 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:16:23] [INFO] coffee_shop.coffee_machine.state — Job a3af0748 finished: ready
+INFO:     127.0.0.1:60857 - "GET /jobs/a3af0748-a928-48ad-9d77-1371681a1e23 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61197 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:16:26] [INFO] coffee_shop.coffee_machine — Brew requested: drink=cappuccino, correlation_id=6c4456cf-920d-42ab-b5a5-f74a8ff6b199
+[2026-10-28:16:26] [INFO] coffee_shop.coffee_machine.state — Job created: 55d53385 (drink=cappuccino, duration=1.4s, contaminated=False)
+INFO:     127.0.0.1:61198 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:16:27] [INFO] coffee_shop.coffee_machine.state — Job 55d53385 finished: ready
+INFO:     127.0.0.1:61204 - "GET /jobs/55d53385-af3b-46fd-b050-bec40cf1d1f5 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61378 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:16:29] [INFO] coffee_shop.coffee_machine — Brew requested: drink=cappuccino, correlation_id=930a2910-6a20-4c84-9230-5fb817679af7
+[2026-10-28:16:29] [INFO] coffee_shop.coffee_machine.state — Job created: 20c4e7c5 (drink=cappuccino, duration=1.7s, contaminated=False)
+INFO:     127.0.0.1:61379 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:16:29] [INFO] coffee_shop.coffee_machine.state — Job 20c4e7c5 finished: ready
+INFO:     127.0.0.1:61386 - "GET /jobs/20c4e7c5-9ca0-474b-a6de-c8c4893dd20a HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [2564]
+INFO:     Started server process [2714]
+INFO:     Waiting for application startup.
+[2026-10-28:16:29] [INFO] coffee_shop.coffee_machine — OCEL background worker started
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8001 (Press CTRL+C to quit)
+INFO:     127.0.0.1:61413 - "GET /healthz HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61755 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:16:33] [INFO] coffee_shop.coffee_machine — Brew requested: drink=espresso, correlation_id=e3fc035f-5ed0-4f97-9e77-ed4beefc7955
+[2026-10-28:16:33] [INFO] coffee_shop.coffee_machine.state — Job created: 02f9ad76 (drink=espresso, duration=1.1s, contaminated=False)
+INFO:     127.0.0.1:61756 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:16:33] [INFO] coffee_shop.coffee_machine.state — Job 02f9ad76 finished: ready
+INFO:     127.0.0.1:61775 - "GET /jobs/02f9ad76-1eda-4b1b-a9b2-efea60df1209 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61956 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:16:35] [INFO] coffee_shop.coffee_machine — Brew requested: drink=cappuccino, correlation_id=d6d31ff7-ea2f-41ae-b29c-d9463443a39c
+[2026-10-28:16:35] [INFO] coffee_shop.coffee_machine.state — Job created: db919ef3 (drink=cappuccino, duration=1.7s, contaminated=False)
+INFO:     127.0.0.1:61957 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:16:35] [INFO] coffee_shop.coffee_machine.state — Job db919ef3 finished: ready
+INFO:     127.0.0.1:61976 - "GET /jobs/db919ef3-061a-47a4-8c78-0628f2472662 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62143 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:16:38] [INFO] coffee_shop.coffee_machine — Brew requested: drink=latte, correlation_id=a3c830bb-3644-4408-af65-919aae7a413a
+[2026-10-28:16:38] [INFO] coffee_shop.coffee_machine.state — Job created: c0328598 (drink=latte, duration=1.4s, contaminated=False)
+INFO:     127.0.0.1:62144 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:16:38] [INFO] coffee_shop.coffee_machine.state — Job c0328598 finished: ready
+INFO:     127.0.0.1:62165 - "GET /jobs/c0328598-1d80-4f56-94e2-9d8762514b58 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62379 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:16:41] [INFO] coffee_shop.coffee_machine — Brew requested: drink=cappuccino, correlation_id=caa5f995-d2fc-4d44-9b65-4ba75fa6117f
+[2026-10-28:16:41] [INFO] coffee_shop.coffee_machine.state — Job created: 1d9f5984 (drink=cappuccino, duration=1.7s, contaminated=False)
+INFO:     127.0.0.1:62380 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:16:41] [INFO] coffee_shop.coffee_machine.state — Job 1d9f5984 finished: ready
+INFO:     127.0.0.1:62385 - "GET /jobs/1d9f5984-e978-4e97-b8b0-8185d4cd4d5f HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62552 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:16:43] [INFO] coffee_shop.coffee_machine — Brew requested: drink=espresso, correlation_id=a25164fb-4cda-43e7-8411-d56af8f08954
+[2026-10-28:16:43] [INFO] coffee_shop.coffee_machine.state — Job created: 4504cfeb (drink=espresso, duration=1.4s, contaminated=False)
+INFO:     127.0.0.1:62553 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:16:43] [INFO] coffee_shop.coffee_machine.state — Job 4504cfeb finished: ready
+INFO:     127.0.0.1:62574 - "GET /jobs/4504cfeb-6e7e-4be8-ae4e-edf7ca7a4e76 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62973 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:16:49] [INFO] coffee_shop.coffee_machine — Brew requested: drink=latte, correlation_id=d5057fa9-ac0f-41b7-9d1c-6f72238e6ffa
+[2026-10-28:16:49] [INFO] coffee_shop.coffee_machine.state — Job created: 1c624692 (drink=latte, duration=2.8s, contaminated=False)
+INFO:     127.0.0.1:62974 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:16:49] [INFO] coffee_shop.coffee_machine.state — Job 1c624692 finished: ready
+INFO:     127.0.0.1:62992 - "GET /jobs/1c624692-adab-44b4-8aa5-83ace3fa11df HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63131 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:16:51] [INFO] coffee_shop.coffee_machine — Brew requested: drink=espresso, correlation_id=bbacb1e8-34da-417e-9ec0-40150345f849
+[2026-10-28:16:51] [INFO] coffee_shop.coffee_machine.state — Job created: f4871d69 (drink=espresso, duration=2.3s, contaminated=False)
+INFO:     127.0.0.1:63132 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:16:51] [INFO] coffee_shop.coffee_machine.state — Job f4871d69 finished: ready
+INFO:     127.0.0.1:63137 - "GET /jobs/f4871d69-1027-4f68-94fd-e279ce766b92 HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [2714]
+INFO:     Started server process [2923]
+INFO:     Waiting for application startup.
+[2026-10-28:16:51] [INFO] coffee_shop.coffee_machine — OCEL background worker started
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8001 (Press CTRL+C to quit)
+INFO:     127.0.0.1:63180 - "GET /healthz HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63248 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:16:52] [INFO] coffee_shop.coffee_machine — Brew requested: drink=latte, correlation_id=c28aaafc-ad1f-4adc-a677-d31f60530b3d
+[2026-10-28:16:52] [INFO] coffee_shop.coffee_machine.state — Job created: ac793510 (drink=latte, duration=1.1s, contaminated=False)
+INFO:     127.0.0.1:63249 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:16:52] [INFO] coffee_shop.coffee_machine.state — Job ac793510 finished: ready
+INFO:     127.0.0.1:63256 - "GET /jobs/ac793510-5348-4903-899d-fa0581e92a42 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63403 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:16:54] [INFO] coffee_shop.coffee_machine — Brew requested: drink=latte, correlation_id=9a89c9ed-b5b6-4300-a57d-af80d6f533ef
+[2026-10-28:16:54] [INFO] coffee_shop.coffee_machine.state — Job created: d114c09d (drink=latte, duration=1.7s, contaminated=False)
+INFO:     127.0.0.1:63404 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:16:54] [INFO] coffee_shop.coffee_machine.state — Job d114c09d finished: ready
+INFO:     127.0.0.1:63409 - "GET /jobs/d114c09d-308b-4b97-917e-973f115d8f2e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63544 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:16:55] [INFO] coffee_shop.coffee_machine — Brew requested: drink=latte, correlation_id=4e64ea2e-aecd-45a1-8f6a-b6140c1c079b
+[2026-10-28:16:55] [INFO] coffee_shop.coffee_machine.state — Job created: da20363e (drink=latte, duration=1.4s, contaminated=False)
+INFO:     127.0.0.1:63545 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:16:55] [INFO] coffee_shop.coffee_machine.state — Job da20363e finished: ready
+INFO:     127.0.0.1:63754 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:16:58] [INFO] coffee_shop.coffee_machine — Brew requested: drink=latte, correlation_id=5b745dc4-cf24-4317-9aa6-46dc9ee54572
+[2026-10-28:16:58] [INFO] coffee_shop.coffee_machine.state — Job created: 9c907bc9 (drink=latte, duration=1.7s, contaminated=False)
+INFO:     127.0.0.1:63755 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:16:58] [INFO] coffee_shop.coffee_machine.state — Job 9c907bc9 finished: ready
+INFO:     127.0.0.1:63775 - "GET /jobs/9c907bc9-0357-4a42-8573-92a89f5a412f HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63951 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:17:00] [INFO] coffee_shop.coffee_machine — Brew requested: drink=latte, correlation_id=6b320880-ba28-41d0-ad45-da409909e856
+[2026-10-28:17:00] [INFO] coffee_shop.coffee_machine.state — Job created: caa92c34 (drink=latte, duration=1.4s, contaminated=False)
+INFO:     127.0.0.1:63952 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:17:00] [INFO] coffee_shop.coffee_machine.state — Job caa92c34 finished: ready
+INFO:     127.0.0.1:63957 - "GET /jobs/caa92c34-d4ea-470d-855b-bc19732eef9b HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64055 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:17:01] [INFO] coffee_shop.coffee_machine — Brew requested: drink=latte, correlation_id=bfd77f56-d33c-4889-9adc-6b2928e9314e
+[2026-10-28:17:01] [INFO] coffee_shop.coffee_machine.state — Job created: 6d05da3b (drink=latte, duration=2.8s, contaminated=False)
+INFO:     127.0.0.1:64056 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:17:01] [INFO] coffee_shop.coffee_machine.state — Job 6d05da3b finished: ready
+INFO:     127.0.0.1:64075 - "GET /jobs/6d05da3b-b71a-4c7e-8157-34fd093e5b9d HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64169 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:17:03] [INFO] coffee_shop.coffee_machine — Brew requested: drink=latte, correlation_id=5b9a9a03-8a4f-409c-9538-afc5beee6854
+[2026-10-28:17:03] [INFO] coffee_shop.coffee_machine.state — Job created: c7bb7fe8 (drink=latte, duration=2.3s, contaminated=False)
+INFO:     127.0.0.1:64170 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:17:03] [INFO] coffee_shop.coffee_machine.state — Job c7bb7fe8 finished: ready
+INFO:     127.0.0.1:64191 - "GET /jobs/c7bb7fe8-d358-44ce-a34e-18aa026f6502 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64335 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:17:05] [INFO] coffee_shop.coffee_machine — Brew requested: drink=latte, correlation_id=90ffdd72-3719-4040-bc91-419f385a2786
+[2026-10-28:17:05] [INFO] coffee_shop.coffee_machine.state — Job created: a5a16b7a (drink=latte, duration=1.8s, contaminated=False)
+INFO:     127.0.0.1:64336 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:17:05] [INFO] coffee_shop.coffee_machine.state — Machine marked dirty after job a5a16b7a failure
+[2026-10-28:17:05] [INFO] coffee_shop.coffee_machine.state — Job a5a16b7a finished: failed
+INFO:     127.0.0.1:64356 - "GET /jobs/a5a16b7a-36b0-4995-b7b0-588e8e57e334 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64361 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:17:05] [INFO] coffee_shop.coffee_machine.state — Machine cleaned
+[2026-10-28:17:05] [INFO] coffee_shop.coffee_machine — Clean request: cleaned
+INFO:     127.0.0.1:64362 - "POST /clean HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64381 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:17:05] [INFO] coffee_shop.coffee_machine — Brew requested: drink=latte, correlation_id=90ffdd72-3719-4040-bc91-419f385a2786
+[2026-10-28:17:05] [INFO] coffee_shop.coffee_machine.state — Job created: 1ca2845c (drink=latte, duration=1.4s, contaminated=False)
+INFO:     127.0.0.1:64382 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:17:05] [INFO] coffee_shop.coffee_machine.state — Job 1ca2845c finished: ready
+INFO:     127.0.0.1:64387 - "GET /jobs/1ca2845c-ff6a-4126-8354-7797dd03b906 HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [2923]
+INFO:     Started server process [3052]
+INFO:     Waiting for application startup.
+[2026-10-28:17:05] [INFO] coffee_shop.coffee_machine — OCEL background worker started
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8001 (Press CTRL+C to quit)
+INFO:     127.0.0.1:64417 - "GET /healthz HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64523 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:17:07] [INFO] coffee_shop.coffee_machine — Brew requested: drink=cappuccino, correlation_id=03c7864a-6533-4609-8472-cff02b9ca943
+[2026-10-28:17:07] [INFO] coffee_shop.coffee_machine.state — Job created: 1bb2e73f (drink=cappuccino, duration=1.1s, contaminated=False)
+INFO:     127.0.0.1:64524 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:17:07] [INFO] coffee_shop.coffee_machine.state — Job 1bb2e73f finished: ready
+INFO:     127.0.0.1:64558 - "GET /jobs/1bb2e73f-1e78-4514-af50-272e7edc2f6e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64722 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:17:09] [INFO] coffee_shop.coffee_machine — Brew requested: drink=cappuccino, correlation_id=9fa9971c-7eba-4635-9e9a-4e4c72c5e863
+[2026-10-28:17:09] [INFO] coffee_shop.coffee_machine.state — Job created: aa8b91b5 (drink=cappuccino, duration=1.7s, contaminated=False)
+INFO:     127.0.0.1:64723 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:17:09] [INFO] coffee_shop.coffee_machine.state — Job aa8b91b5 finished: ready
+INFO:     127.0.0.1:64743 - "GET /jobs/aa8b91b5-2e5d-4999-b91b-7c216b1417e1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65460 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:17:18] [INFO] coffee_shop.coffee_machine — Brew requested: drink=cappuccino, correlation_id=5805bc11-44af-4d47-b26e-40978c6dcb83
+[2026-10-28:17:18] [INFO] coffee_shop.coffee_machine.state — Job created: aeedf402 (drink=cappuccino, duration=1.4s, contaminated=False)
+INFO:     127.0.0.1:65461 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:17:18] [INFO] coffee_shop.coffee_machine.state — Job aeedf402 finished: ready
+INFO:     127.0.0.1:65466 - "GET /jobs/aeedf402-2644-4bda-a4ed-9eed2aa08da4 HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [3052]
+INFO:     Started server process [3228]
+INFO:     Waiting for application startup.
+[2026-10-28:17:19] [INFO] coffee_shop.coffee_machine — OCEL background worker started
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8001 (Press CTRL+C to quit)
+INFO:     127.0.0.1:49195 - "GET /healthz HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49328 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:17:21] [INFO] coffee_shop.coffee_machine — Brew requested: drink=latte, correlation_id=99858e35-aa37-4c8b-b17c-b4d82696665a
+[2026-10-28:17:21] [INFO] coffee_shop.coffee_machine.state — Job created: 4f25a623 (drink=latte, duration=1.1s, contaminated=False)
+INFO:     127.0.0.1:49329 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:17:21] [INFO] coffee_shop.coffee_machine.state — Job 4f25a623 finished: ready
+INFO:     127.0.0.1:49334 - "GET /jobs/4f25a623-7364-4088-b6b5-a3cab7f8be02 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49548 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:17:23] [INFO] coffee_shop.coffee_machine — Brew requested: drink=espresso, correlation_id=8e52f0c9-2df3-49bf-9060-b3fcc4712109
+[2026-10-28:17:23] [INFO] coffee_shop.coffee_machine.state — Job created: f93b148a (drink=espresso, duration=1.7s, contaminated=False)
+INFO:     127.0.0.1:49549 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:17:23] [INFO] coffee_shop.coffee_machine.state — Job f93b148a finished: ready
+INFO:     127.0.0.1:49554 - "GET /jobs/f93b148a-8f71-45c7-975c-c034bd34dbd7 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49784 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:17:26] [INFO] coffee_shop.coffee_machine — Brew requested: drink=latte, correlation_id=fc093c20-5b45-4689-813d-6bc5b0e764be
+[2026-10-28:17:26] [INFO] coffee_shop.coffee_machine.state — Job created: d9ef7fe2 (drink=latte, duration=1.4s, contaminated=False)
+INFO:     127.0.0.1:49785 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:17:26] [INFO] coffee_shop.coffee_machine.state — Job d9ef7fe2 finished: ready
+INFO:     127.0.0.1:49982 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:17:29] [INFO] coffee_shop.coffee_machine — Brew requested: drink=americano, correlation_id=0ca497cf-83b5-4b9e-8017-d191a1407484
+[2026-10-28:17:29] [INFO] coffee_shop.coffee_machine.state — Job created: ca14cfca (drink=americano, duration=1.7s, contaminated=False)
+INFO:     127.0.0.1:49983 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:17:29] [INFO] coffee_shop.coffee_machine.state — Job ca14cfca finished: ready
+INFO:     127.0.0.1:50001 - "GET /jobs/ca14cfca-5366-4ebc-b67c-b6464461603e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50218 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:17:31] [INFO] coffee_shop.coffee_machine — Brew requested: drink=latte, correlation_id=c7950dff-3f87-4364-90d1-824827b6a35b
+[2026-10-28:17:31] [INFO] coffee_shop.coffee_machine.state — Job created: b95765ae (drink=latte, duration=1.4s, contaminated=False)
+INFO:     127.0.0.1:50219 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:17:31] [INFO] coffee_shop.coffee_machine.state — Job b95765ae finished: ready
+INFO:     127.0.0.1:50240 - "GET /jobs/b95765ae-3bfa-408e-8dba-fa9bdfc819db HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50451 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:17:34] [INFO] coffee_shop.coffee_machine — Brew requested: drink=cappuccino, correlation_id=2fe73bce-34bb-4220-90f5-f64b1250c6fb
+[2026-10-28:17:34] [INFO] coffee_shop.coffee_machine.state — Job created: 45303ca7 (drink=cappuccino, duration=2.8s, contaminated=False)
+INFO:     127.0.0.1:50452 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:17:34] [INFO] coffee_shop.coffee_machine.state — Job 45303ca7 finished: ready
+INFO:     127.0.0.1:50472 - "GET /jobs/45303ca7-09b8-4ccf-86a1-5749e9eccf49 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50664 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:17:37] [INFO] coffee_shop.coffee_machine — Brew requested: drink=latte, correlation_id=5c2ee610-fb6f-4e8a-b0d4-e476ce0f3a36
+[2026-10-28:17:37] [INFO] coffee_shop.coffee_machine.state — Job created: 49fadb0b (drink=latte, duration=2.3s, contaminated=False)
+INFO:     127.0.0.1:50665 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:17:37] [INFO] coffee_shop.coffee_machine.state — Job 49fadb0b finished: ready
+INFO:     127.0.0.1:50684 - "GET /jobs/49fadb0b-be04-4210-ad2c-ace0acd1e3c3 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50902 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:17:40] [INFO] coffee_shop.coffee_machine — Brew requested: drink=americano, correlation_id=1ba4aba1-5caa-49c9-bea1-5d1ac281db8d
+[2026-10-28:17:40] [INFO] coffee_shop.coffee_machine.state — Job created: 1aeb35ec (drink=americano, duration=1.8s, contaminated=False)
+INFO:     127.0.0.1:50903 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:17:40] [INFO] coffee_shop.coffee_machine.state — Machine marked dirty after job 1aeb35ec failure
+[2026-10-28:17:40] [INFO] coffee_shop.coffee_machine.state — Job 1aeb35ec finished: failed
+INFO:     127.0.0.1:50909 - "GET /jobs/1aeb35ec-5be5-4ea6-b9ff-ea338015edea HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50928 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:17:40] [INFO] coffee_shop.coffee_machine.state — Machine cleaned
+[2026-10-28:17:40] [INFO] coffee_shop.coffee_machine — Clean request: cleaned
+INFO:     127.0.0.1:50929 - "POST /clean HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50934 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:17:40] [INFO] coffee_shop.coffee_machine — Brew requested: drink=americano, correlation_id=1ba4aba1-5caa-49c9-bea1-5d1ac281db8d
+[2026-10-28:17:40] [INFO] coffee_shop.coffee_machine.state — Job created: 684d6b89 (drink=americano, duration=1.4s, contaminated=False)
+INFO:     127.0.0.1:50935 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:17:40] [INFO] coffee_shop.coffee_machine.state — Job 684d6b89 finished: ready
+INFO:     127.0.0.1:50941 - "GET /jobs/684d6b89-3840-4348-bb3c-c78cc943c7a1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51110 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:17:43] [INFO] coffee_shop.coffee_machine — Brew requested: drink=cappuccino, correlation_id=3b7a9126-482a-488b-888f-b5a977a370fa
+[2026-10-28:17:43] [INFO] coffee_shop.coffee_machine.state — Job created: 6a3e120c (drink=cappuccino, duration=1.5s, contaminated=False)
+INFO:     127.0.0.1:51111 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:17:43] [INFO] coffee_shop.coffee_machine.state — Job 6a3e120c finished: ready
+INFO:     127.0.0.1:51116 - "GET /jobs/6a3e120c-5dc7-4574-bbe9-c807a40ef29b HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [3228]
+INFO:     Started server process [3555]
+INFO:     Waiting for application startup.
+[2026-10-28:17:43] [INFO] coffee_shop.coffee_machine — OCEL background worker started
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8001 (Press CTRL+C to quit)
+INFO:     127.0.0.1:51149 - "GET /healthz HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51460 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:17:46] [INFO] coffee_shop.coffee_machine — Brew requested: drink=latte, correlation_id=3e241747-0cfb-40c3-8c16-10c55e33c2af
+[2026-10-28:17:46] [INFO] coffee_shop.coffee_machine.state — Job created: eef4876d (drink=latte, duration=1.1s, contaminated=False)
+INFO:     127.0.0.1:51461 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:17:46] [INFO] coffee_shop.coffee_machine.state — Job eef4876d finished: ready
+INFO:     127.0.0.1:51488 - "GET /jobs/eef4876d-389f-4baa-bf2e-2dac9121d984 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51823 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:17:50] [INFO] coffee_shop.coffee_machine — Brew requested: drink=latte, correlation_id=a99f7893-89b7-4f33-8727-dcbe1bd9ef30
+[2026-10-28:17:50] [INFO] coffee_shop.coffee_machine.state — Job created: 98f07d38 (drink=latte, duration=1.7s, contaminated=False)
+INFO:     127.0.0.1:51824 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:17:50] [INFO] coffee_shop.coffee_machine.state — Job 98f07d38 finished: ready
+INFO:     127.0.0.1:51849 - "GET /jobs/98f07d38-c023-4fc3-a9ad-6f7778a605e5 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52144 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:17:54] [INFO] coffee_shop.coffee_machine — Brew requested: drink=latte, correlation_id=f6af742a-b2b6-4f7f-b4cb-3050230b0df0
+[2026-10-28:17:54] [INFO] coffee_shop.coffee_machine.state — Job created: 9608d8c0 (drink=latte, duration=1.4s, contaminated=False)
+INFO:     127.0.0.1:52145 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:17:54] [INFO] coffee_shop.coffee_machine.state — Job 9608d8c0 finished: ready
+INFO:     127.0.0.1:52169 - "GET /jobs/9608d8c0-9f48-4eec-b0d1-8f24a8dc2a50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52311 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:17:55] [INFO] coffee_shop.coffee_machine — Brew requested: drink=latte, correlation_id=03fbb7a2-038c-4090-837a-1cbcf9adf88a
+[2026-10-28:17:55] [INFO] coffee_shop.coffee_machine.state — Job created: def512df (drink=latte, duration=1.7s, contaminated=False)
+INFO:     127.0.0.1:52312 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:17:55] [INFO] coffee_shop.coffee_machine.state — Job def512df finished: ready
+INFO:     127.0.0.1:52336 - "GET /jobs/def512df-36a2-4e55-9138-c8a632c68b82 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52493 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:17:57] [INFO] coffee_shop.coffee_machine — Brew requested: drink=latte, correlation_id=51140147-90e1-44c8-aabd-124ac9847e06
+[2026-10-28:17:57] [INFO] coffee_shop.coffee_machine.state — Job created: f8c81b71 (drink=latte, duration=1.4s, contaminated=False)
+INFO:     127.0.0.1:52494 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:17:57] [INFO] coffee_shop.coffee_machine.state — Job f8c81b71 finished: ready
+INFO:     127.0.0.1:52519 - "GET /jobs/f8c81b71-6a5f-4255-bfcf-c479cc67fe92 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52663 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:17:59] [INFO] coffee_shop.coffee_machine — Brew requested: drink=latte, correlation_id=d64e8d3a-a7e3-4cef-b8c1-d9224354601a
+[2026-10-28:17:59] [INFO] coffee_shop.coffee_machine.state — Job created: b31bb71f (drink=latte, duration=2.8s, contaminated=False)
+INFO:     127.0.0.1:52664 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:17:59] [INFO] coffee_shop.coffee_machine.state — Job b31bb71f finished: ready
+INFO:     127.0.0.1:52688 - "GET /jobs/b31bb71f-b930-4c35-a768-206a442dffe2 HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [3555]
+INFO:     Started server process [3729]
+INFO:     Waiting for application startup.
+[2026-10-28:17:59] [INFO] coffee_shop.coffee_machine — OCEL background worker started
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8001 (Press CTRL+C to quit)
+INFO:     127.0.0.1:52712 - "GET /healthz HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53653 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:18:11] [INFO] coffee_shop.coffee_machine — Brew requested: drink=cappuccino, correlation_id=7e12145e-0da5-4795-ab3e-ff126d7dda1a
+[2026-10-28:18:11] [INFO] coffee_shop.coffee_machine.state — Job created: 41600656 (drink=cappuccino, duration=1.1s, contaminated=False)
+INFO:     127.0.0.1:53654 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:18:11] [INFO] coffee_shop.coffee_machine.state — Job 41600656 finished: ready
+INFO:     127.0.0.1:53678 - "GET /jobs/41600656-b986-41f1-989c-25cdbe3f2b9a HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [3729]
+INFO:     Started server process [4029]
+INFO:     Waiting for application startup.
+[2026-10-28:18:27] [INFO] coffee_shop.coffee_machine — OCEL background worker started
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8001 (Press CTRL+C to quit)
+INFO:     127.0.0.1:54757 - "GET /healthz HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54886 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:18:28] [INFO] coffee_shop.coffee_machine — Brew requested: drink=americano, correlation_id=680847b6-5e48-4331-8127-f998b28467ce
+[2026-10-28:18:28] [INFO] coffee_shop.coffee_machine.state — Job created: e5d539dc (drink=americano, duration=1.1s, contaminated=False)
+INFO:     127.0.0.1:54887 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:18:28] [INFO] coffee_shop.coffee_machine.state — Job e5d539dc finished: ready
+INFO:     127.0.0.1:54910 - "GET /jobs/e5d539dc-3c63-4a32-b641-90a889c1c1fc HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55186 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:18:32] [INFO] coffee_shop.coffee_machine — Brew requested: drink=americano, correlation_id=7bda3438-eee2-4e2c-b293-2fdc45a10781
+[2026-10-28:18:32] [INFO] coffee_shop.coffee_machine.state — Job created: c0cf12dd (drink=americano, duration=1.7s, contaminated=False)
+INFO:     127.0.0.1:55187 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:18:32] [INFO] coffee_shop.coffee_machine.state — Job c0cf12dd finished: ready
+INFO:     127.0.0.1:55210 - "GET /jobs/c0cf12dd-ca70-4d3e-bb18-16bca06e0431 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55434 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:18:35] [INFO] coffee_shop.coffee_machine — Brew requested: drink=cappuccino, correlation_id=953d3442-0006-460e-96e8-4f7e01e1142b
+[2026-10-28:18:35] [INFO] coffee_shop.coffee_machine.state — Job created: c22c1429 (drink=cappuccino, duration=1.4s, contaminated=False)
+INFO:     127.0.0.1:55435 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:18:35] [INFO] coffee_shop.coffee_machine.state — Job c22c1429 finished: ready
+INFO:     127.0.0.1:55445 - "GET /jobs/c22c1429-c2a2-472d-aad5-86b72a699815 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55610 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:18:37] [INFO] coffee_shop.coffee_machine — Brew requested: drink=espresso, correlation_id=e11cf5a2-fd36-4554-9987-8f1c96b33d27
+[2026-10-28:18:37] [INFO] coffee_shop.coffee_machine.state — Job created: 2242ca1f (drink=espresso, duration=1.7s, contaminated=False)
+INFO:     127.0.0.1:55611 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:18:37] [INFO] coffee_shop.coffee_machine.state — Job 2242ca1f finished: ready
+INFO:     127.0.0.1:55636 - "GET /jobs/2242ca1f-cc3e-487f-9ee3-8275d51ce659 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55927 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:18:41] [INFO] coffee_shop.coffee_machine — Brew requested: drink=americano, correlation_id=6253e98d-1b2b-4e40-b768-4a8d212707e8
+[2026-10-28:18:41] [INFO] coffee_shop.coffee_machine.state — Job created: 47838fde (drink=americano, duration=1.4s, contaminated=False)
+INFO:     127.0.0.1:55928 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:18:41] [INFO] coffee_shop.coffee_machine.state — Job 47838fde finished: ready
+INFO:     127.0.0.1:55953 - "GET /jobs/47838fde-3e1c-4606-9e6f-698be4ad126c HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56141 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:18:43] [INFO] coffee_shop.coffee_machine — Brew requested: drink=americano, correlation_id=cdaffd49-1a0d-4cc2-a29b-76e016ebd891
+[2026-10-28:18:43] [INFO] coffee_shop.coffee_machine.state — Job created: 869827c4 (drink=americano, duration=2.8s, contaminated=False)
+INFO:     127.0.0.1:56142 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:18:43] [INFO] coffee_shop.coffee_machine.state — Job 869827c4 finished: ready
+INFO:     127.0.0.1:56168 - "GET /jobs/869827c4-062a-4f0e-84d4-03b3339d6b00 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56375 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:18:46] [INFO] coffee_shop.coffee_machine — Brew requested: drink=espresso, correlation_id=7381dfa2-ab76-4246-9d78-8732005a290e
+[2026-10-28:18:46] [INFO] coffee_shop.coffee_machine.state — Job created: 0c0d069a (drink=espresso, duration=2.3s, contaminated=False)
+INFO:     127.0.0.1:56376 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:18:46] [INFO] coffee_shop.coffee_machine.state — Job 0c0d069a finished: ready
+INFO:     127.0.0.1:56402 - "GET /jobs/0c0d069a-8cc9-4425-a4c1-53c440c2b5b4 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56479 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:18:47] [INFO] coffee_shop.coffee_machine — Brew requested: drink=espresso, correlation_id=7381dfa2-ab76-4246-9d78-8732005a290e
+[2026-10-28:18:47] [INFO] coffee_shop.coffee_machine.state — Job created: e86174f8 (drink=espresso, duration=1.8s, contaminated=False)
+INFO:     127.0.0.1:56480 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:18:47] [INFO] coffee_shop.coffee_machine.state — Machine marked dirty after job e86174f8 failure
+[2026-10-28:18:47] [INFO] coffee_shop.coffee_machine.state — Job e86174f8 finished: failed
+INFO:     127.0.0.1:56502 - "GET /jobs/e86174f8-653e-4aa1-a559-f3f9dca083bd HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56512 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:18:47] [INFO] coffee_shop.coffee_machine.state — Machine cleaned
+[2026-10-28:18:47] [INFO] coffee_shop.coffee_machine — Clean request: cleaned
+INFO:     127.0.0.1:56513 - "POST /clean HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56538 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:18:48] [INFO] coffee_shop.coffee_machine — Brew requested: drink=espresso, correlation_id=7381dfa2-ab76-4246-9d78-8732005a290e
+[2026-10-28:18:48] [INFO] coffee_shop.coffee_machine.state — Job created: 03f79617 (drink=espresso, duration=1.4s, contaminated=False)
+INFO:     127.0.0.1:56539 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:18:48] [INFO] coffee_shop.coffee_machine.state — Job 03f79617 finished: ready
+INFO:     127.0.0.1:56548 - "GET /jobs/03f79617-92a8-47c4-a452-ebe994dbc5ed HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56729 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:18:50] [INFO] coffee_shop.coffee_machine — Brew requested: drink=espresso, correlation_id=07e08dc9-4f7e-407b-b8d5-03ab00defc87
+[2026-10-28:18:50] [INFO] coffee_shop.coffee_machine.state — Job created: 4cf73ef1 (drink=espresso, duration=1.5s, contaminated=False)
+INFO:     127.0.0.1:56730 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:18:50] [INFO] coffee_shop.coffee_machine.state — Job 4cf73ef1 finished: ready
+INFO:     127.0.0.1:56740 - "GET /jobs/4cf73ef1-e753-470d-9688-20389a4d9768 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56954 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:18:52] [INFO] coffee_shop.coffee_machine — Brew requested: drink=latte, correlation_id=42facb75-5d39-4792-9362-46bfe599321f
+[2026-10-28:18:52] [INFO] coffee_shop.coffee_machine.state — Job created: 9ecba440 (drink=latte, duration=2.8s, contaminated=False)
+INFO:     127.0.0.1:56955 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:18:52] [INFO] coffee_shop.coffee_machine.state — Machine marked dirty after job 9ecba440 failure
+[2026-10-28:18:52] [INFO] coffee_shop.coffee_machine.state — Job 9ecba440 finished: failed
+INFO:     127.0.0.1:56981 - "GET /jobs/9ecba440-9e0b-4989-bfab-dc7b06407cce HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56990 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:18:53] [INFO] coffee_shop.coffee_machine.state — Machine cleaned
+[2026-10-28:18:53] [INFO] coffee_shop.coffee_machine — Clean request: cleaned
+INFO:     127.0.0.1:56991 - "POST /clean HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57014 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:18:53] [INFO] coffee_shop.coffee_machine — Brew requested: drink=latte, correlation_id=42facb75-5d39-4792-9362-46bfe599321f
+[2026-10-28:18:53] [INFO] coffee_shop.coffee_machine.state — Job created: 33df2cbb (drink=latte, duration=2.9s, contaminated=False)
+INFO:     127.0.0.1:57015 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:18:53] [INFO] coffee_shop.coffee_machine.state — Machine marked dirty after job 33df2cbb failure
+[2026-10-28:18:53] [INFO] coffee_shop.coffee_machine.state — Job 33df2cbb finished: failed
+INFO:     127.0.0.1:57026 - "GET /jobs/33df2cbb-d855-4586-814d-0f8dbf57fc70 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57036 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:18:53] [INFO] coffee_shop.coffee_machine.state — Machine cleaned
+[2026-10-28:18:53] [INFO] coffee_shop.coffee_machine — Clean request: cleaned
+INFO:     127.0.0.1:57037 - "POST /clean HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [4029]
+INFO:     Started server process [4404]
+INFO:     Waiting for application startup.
+[2026-10-28:18:54] [INFO] coffee_shop.coffee_machine — OCEL background worker started
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8001 (Press CTRL+C to quit)
+INFO:     127.0.0.1:57125 - "GET /healthz HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57182 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:18:55] [INFO] coffee_shop.coffee_machine — Brew requested: drink=latte, correlation_id=08c5d104-e412-46e9-b352-fd11d9d409fd
+[2026-10-28:18:55] [INFO] coffee_shop.coffee_machine.state — Job created: bb694e40 (drink=latte, duration=1.1s, contaminated=False)
+INFO:     127.0.0.1:57183 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:18:55] [INFO] coffee_shop.coffee_machine.state — Job bb694e40 finished: ready
+INFO:     127.0.0.1:57188 - "GET /jobs/bb694e40-cd52-477c-8dbe-98546442c5dc HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57259 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:18:56] [INFO] coffee_shop.coffee_machine — Brew requested: drink=latte, correlation_id=94375be5-2720-43c6-9844-4451f2a39a2f
+[2026-10-28:18:56] [INFO] coffee_shop.coffee_machine.state — Job created: ab54774e (drink=latte, duration=1.7s, contaminated=False)
+INFO:     127.0.0.1:57260 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:18:56] [INFO] coffee_shop.coffee_machine.state — Job ab54774e finished: ready
+INFO:     127.0.0.1:57265 - "GET /jobs/ab54774e-2241-4554-953d-5504a3c1181b HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57341 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:18:57] [INFO] coffee_shop.coffee_machine — Brew requested: drink=latte, correlation_id=e197f3bf-9840-4f67-a661-17008255ed8f
+[2026-10-28:18:57] [INFO] coffee_shop.coffee_machine.state — Job created: bbe78f9a (drink=latte, duration=1.4s, contaminated=False)
+INFO:     127.0.0.1:57342 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:18:57] [INFO] coffee_shop.coffee_machine.state — Job bbe78f9a finished: ready
+INFO:     127.0.0.1:57356 - "GET /jobs/bbe78f9a-b533-4f03-9342-fdea48d3341f HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57434 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:18:58] [INFO] coffee_shop.coffee_machine — Brew requested: drink=latte, correlation_id=196cf8b0-55d4-4274-83c1-5e2388f55b81
+[2026-10-28:18:58] [INFO] coffee_shop.coffee_machine.state — Job created: b50921e4 (drink=latte, duration=1.7s, contaminated=False)
+INFO:     127.0.0.1:57435 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:18:58] [INFO] coffee_shop.coffee_machine.state — Job b50921e4 finished: ready
+INFO:     127.0.0.1:57440 - "GET /jobs/b50921e4-b186-48fd-ae1e-e89e26164cd9 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57515 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:18:59] [INFO] coffee_shop.coffee_machine — Brew requested: drink=latte, correlation_id=ea308319-cbe6-47ed-ae42-cbe4516d622c
+[2026-10-28:18:59] [INFO] coffee_shop.coffee_machine.state — Job created: 0bc61113 (drink=latte, duration=1.4s, contaminated=False)
+INFO:     127.0.0.1:57516 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:18:59] [INFO] coffee_shop.coffee_machine.state — Job 0bc61113 finished: ready
+INFO:     127.0.0.1:57522 - "GET /jobs/0bc61113-222b-4399-bf00-ab17affffc48 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57602 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:18:59] [INFO] coffee_shop.coffee_machine — Brew requested: drink=latte, correlation_id=5a34cd04-e42c-4d49-9801-7aa2b0dccbf6
+[2026-10-28:18:59] [INFO] coffee_shop.coffee_machine.state — Job created: c87da50f (drink=latte, duration=2.8s, contaminated=False)
+INFO:     127.0.0.1:57603 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:19:00] [INFO] coffee_shop.coffee_machine.state — Job c87da50f finished: ready
+INFO:     127.0.0.1:57608 - "GET /jobs/c87da50f-3e69-4724-bf87-e166fb331a64 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57689 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:19:00] [INFO] coffee_shop.coffee_machine — Brew requested: drink=latte, correlation_id=dbca7a38-3fda-4ce7-85a2-346f097366e8
+[2026-10-28:19:00] [INFO] coffee_shop.coffee_machine.state — Job created: c71f40d8 (drink=latte, duration=2.3s, contaminated=False)
+INFO:     127.0.0.1:57690 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:19:00] [INFO] coffee_shop.coffee_machine.state — Job c71f40d8 finished: ready
+INFO:     127.0.0.1:57705 - "GET /jobs/c71f40d8-ddb7-4051-a076-8a7652dfcc67 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57776 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:19:01] [INFO] coffee_shop.coffee_machine — Brew requested: drink=latte, correlation_id=2662feb5-cf9c-473f-8459-e7fe32de4bc7
+[2026-10-28:19:01] [INFO] coffee_shop.coffee_machine.state — Job created: 7aec94da (drink=latte, duration=1.8s, contaminated=False)
+INFO:     127.0.0.1:57777 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:19:01] [INFO] coffee_shop.coffee_machine.state — Machine marked dirty after job 7aec94da failure
+[2026-10-28:19:01] [INFO] coffee_shop.coffee_machine.state — Job 7aec94da finished: failed
+INFO:     127.0.0.1:57782 - "GET /jobs/7aec94da-8e94-40e2-8dbb-f568bc9267d1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57799 - "GET /docs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57800 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:19:02] [INFO] coffee_shop.coffee_machine.state — Machine cleaned
+[2026-10-28:19:02] [INFO] coffee_shop.coffee_machine — Clean request: cleaned
+INFO:     127.0.0.1:57801 - "POST /clean HTTP/1.1" 200 OK
+[2026-10-28:19:02] [INFO] coffee_shop.coffee_machine — Brew requested: drink=latte, correlation_id=2662feb5-cf9c-473f-8459-e7fe32de4bc7
+[2026-10-28:19:02] [INFO] coffee_shop.coffee_machine.state — Job created: be163d4f (drink=latte, duration=1.4s, contaminated=False)
+INFO:     127.0.0.1:57802 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:19:02] [INFO] coffee_shop.coffee_machine.state — Job be163d4f finished: ready
+INFO:     127.0.0.1:57807 - "GET /jobs/be163d4f-ab18-4635-997c-ca1d9bb61314 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57870 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:19:03] [INFO] coffee_shop.coffee_machine — Brew requested: drink=latte, correlation_id=29d008e4-ea67-424f-b444-3cfe9c3526ee
+[2026-10-28:19:03] [INFO] coffee_shop.coffee_machine.state — Job created: 271cd3d1 (drink=latte, duration=1.5s, contaminated=False)
+INFO:     127.0.0.1:57871 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:19:03] [INFO] coffee_shop.coffee_machine.state — Job 271cd3d1 finished: ready
+INFO:     127.0.0.1:57886 - "GET /jobs/271cd3d1-ca2e-47d6-ad4e-434c358af31b HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [4404]
+INFO:     Started server process [4495]
+INFO:     Waiting for application startup.
+[2026-10-28:19:03] [INFO] coffee_shop.coffee_machine — OCEL background worker started
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8001 (Press CTRL+C to quit)
+INFO:     127.0.0.1:57915 - "GET /healthz HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57982 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:19:04] [INFO] coffee_shop.coffee_machine — Brew requested: drink=cappuccino, correlation_id=bec22829-4e1a-4732-9dff-53897f71721c
+[2026-10-28:19:04] [INFO] coffee_shop.coffee_machine.state — Job created: 11b07f15 (drink=cappuccino, duration=1.1s, contaminated=False)
+INFO:     127.0.0.1:57983 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:19:04] [INFO] coffee_shop.coffee_machine.state — Job 11b07f15 finished: ready
+INFO:     127.0.0.1:57988 - "GET /jobs/11b07f15-c1f1-4beb-bc1c-293bbada77a9 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58474 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:19:13] [INFO] coffee_shop.coffee_machine — Brew requested: drink=cappuccino, correlation_id=0a2f600b-a238-4c7c-904c-c5b93ebbc795
+[2026-10-28:19:13] [INFO] coffee_shop.coffee_machine.state — Job created: 47890ee3 (drink=cappuccino, duration=1.7s, contaminated=False)
+INFO:     127.0.0.1:58475 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:19:13] [INFO] coffee_shop.coffee_machine.state — Job 47890ee3 finished: ready
+INFO:     127.0.0.1:58491 - "GET /jobs/47890ee3-e463-4fee-ae96-4c5daeba3176 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58582 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:19:14] [INFO] coffee_shop.coffee_machine — Brew requested: drink=cappuccino, correlation_id=10e862e8-88db-49c9-a323-29ccde59dc06
+[2026-10-28:19:14] [INFO] coffee_shop.coffee_machine.state — Job created: 4a710c2d (drink=cappuccino, duration=1.4s, contaminated=False)
+INFO:     127.0.0.1:58583 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:19:14] [INFO] coffee_shop.coffee_machine.state — Job 4a710c2d finished: ready
+INFO:     127.0.0.1:58597 - "GET /jobs/4a710c2d-cc25-4f0a-aa2a-b87429dac263 HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [4495]
+INFO:     Started server process [4715]
+INFO:     Waiting for application startup.
+[2026-10-28:19:15] [INFO] coffee_shop.coffee_machine — OCEL background worker started
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8001 (Press CTRL+C to quit)
+INFO:     127.0.0.1:58677 - "GET /healthz HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58743 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:19:16] [INFO] coffee_shop.coffee_machine — Brew requested: drink=cappuccino, correlation_id=d25f8b1d-c8bc-4708-93d3-ea97aad9912e
+[2026-10-28:19:16] [INFO] coffee_shop.coffee_machine.state — Job created: f953cdae (drink=cappuccino, duration=1.1s, contaminated=False)
+INFO:     127.0.0.1:58744 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:19:16] [INFO] coffee_shop.coffee_machine.state — Job f953cdae finished: ready
+INFO:     127.0.0.1:58749 - "GET /jobs/f953cdae-9c8c-4326-b6e7-b712bf703dbf HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58898 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:19:18] [INFO] coffee_shop.coffee_machine — Brew requested: drink=americano, correlation_id=ad357146-fe75-4edd-a613-c914ef3cc477
+[2026-10-28:19:18] [INFO] coffee_shop.coffee_machine.state — Job created: 841a8902 (drink=americano, duration=1.7s, contaminated=False)
+INFO:     127.0.0.1:58899 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:19:18] [INFO] coffee_shop.coffee_machine.state — Job 841a8902 finished: ready
+INFO:     127.0.0.1:58914 - "GET /jobs/841a8902-6891-429a-831e-3af10b090f51 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59154 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:19:22] [INFO] coffee_shop.coffee_machine — Brew requested: drink=americano, correlation_id=eb33ead5-68f7-46d4-b8b4-32d5a2a190cb
+[2026-10-28:19:22] [INFO] coffee_shop.coffee_machine.state — Job created: af72bd49 (drink=americano, duration=1.4s, contaminated=False)
+INFO:     127.0.0.1:59155 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:19:22] [INFO] coffee_shop.coffee_machine.state — Job af72bd49 finished: ready
+INFO:     127.0.0.1:59169 - "GET /jobs/af72bd49-5741-419b-933c-59e94b4a44b8 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59248 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:19:24] [INFO] coffee_shop.coffee_machine — Brew requested: drink=americano, correlation_id=05d983ab-bb09-4fb7-870d-c197b2e2707e
+[2026-10-28:19:24] [INFO] coffee_shop.coffee_machine.state — Job created: 44181e6b (drink=americano, duration=1.7s, contaminated=False)
+INFO:     127.0.0.1:59249 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:19:24] [INFO] coffee_shop.coffee_machine.state — Job 44181e6b finished: ready
+INFO:     127.0.0.1:59255 - "GET /jobs/44181e6b-44db-428a-9571-e07cccec158a HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59361 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:19:25] [INFO] coffee_shop.coffee_machine — Brew requested: drink=cappuccino, correlation_id=5b16ecb9-7283-4780-b2fc-ca8b583c0b61
+[2026-10-28:19:25] [INFO] coffee_shop.coffee_machine.state — Job created: f91e1d43 (drink=cappuccino, duration=1.4s, contaminated=False)
+INFO:     127.0.0.1:59362 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:19:25] [INFO] coffee_shop.coffee_machine.state — Job f91e1d43 finished: ready
+INFO:     127.0.0.1:59367 - "GET /jobs/f91e1d43-d01f-45cb-809d-b41c76a67d72 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59465 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:19:26] [INFO] coffee_shop.coffee_machine — Brew requested: drink=cappuccino, correlation_id=a536dfbf-426e-4fe5-aa22-cc47f4f5e004
+[2026-10-28:19:26] [INFO] coffee_shop.coffee_machine.state — Job created: a3ffb760 (drink=cappuccino, duration=2.8s, contaminated=False)
+INFO:     127.0.0.1:59466 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:19:26] [INFO] coffee_shop.coffee_machine.state — Job a3ffb760 finished: ready
+INFO:     127.0.0.1:59471 - "GET /jobs/a3ffb760-fddc-4443-a0fb-5787900c4bbb HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59560 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:19:27] [INFO] coffee_shop.coffee_machine — Brew requested: drink=cappuccino, correlation_id=7699d154-49e8-49ec-b219-517fa6793b96
+[2026-10-28:19:27] [INFO] coffee_shop.coffee_machine.state — Job created: c9062518 (drink=cappuccino, duration=2.3s, contaminated=False)
+INFO:     127.0.0.1:59561 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:19:27] [INFO] coffee_shop.coffee_machine.state — Job c9062518 finished: ready
+INFO:     127.0.0.1:59577 - "GET /jobs/c9062518-aa1d-4d42-bf21-1f6db57e4c1a HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59672 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:19:29] [INFO] coffee_shop.coffee_machine — Brew requested: drink=espresso, correlation_id=67ff0f3a-a67e-47dd-8405-e2034c8066a1
+[2026-10-28:19:29] [INFO] coffee_shop.coffee_machine.state — Job created: 17bfd218 (drink=espresso, duration=1.8s, contaminated=False)
+INFO:     127.0.0.1:59673 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:19:29] [INFO] coffee_shop.coffee_machine.state — Machine marked dirty after job 17bfd218 failure
+[2026-10-28:19:29] [INFO] coffee_shop.coffee_machine.state — Job 17bfd218 finished: failed
+INFO:     127.0.0.1:59679 - "GET /jobs/17bfd218-3d91-4e0c-8caf-cf50ba5c7132 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59684 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:19:29] [INFO] coffee_shop.coffee_machine.state — Machine cleaned
+[2026-10-28:19:29] [INFO] coffee_shop.coffee_machine — Clean request: cleaned
+INFO:     127.0.0.1:59685 - "POST /clean HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59699 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:19:29] [INFO] coffee_shop.coffee_machine — Brew requested: drink=espresso, correlation_id=67ff0f3a-a67e-47dd-8405-e2034c8066a1
+[2026-10-28:19:29] [INFO] coffee_shop.coffee_machine.state — Job created: 6e23f117 (drink=espresso, duration=1.4s, contaminated=False)
+INFO:     127.0.0.1:59700 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:19:29] [INFO] coffee_shop.coffee_machine.state — Job 6e23f117 finished: ready
+INFO:     127.0.0.1:59705 - "GET /jobs/6e23f117-8017-4aea-948e-3122100d6acd HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [4715]
+INFO:     Started server process [4861]
+INFO:     Waiting for application startup.
+[2026-10-28:19:29] [INFO] coffee_shop.coffee_machine — OCEL background worker started
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8001 (Press CTRL+C to quit)
+INFO:     127.0.0.1:59728 - "GET /healthz HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59831 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:19:31] [INFO] coffee_shop.coffee_machine — Brew requested: drink=latte, correlation_id=bf722098-f8ab-4873-9b34-ce14dbe0f254
+[2026-10-28:19:31] [INFO] coffee_shop.coffee_machine.state — Job created: 8a822b29 (drink=latte, duration=1.1s, contaminated=False)
+INFO:     127.0.0.1:59832 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:19:31] [INFO] coffee_shop.coffee_machine.state — Job 8a822b29 finished: ready
+INFO:     127.0.0.1:59853 - "GET /jobs/8a822b29-f95e-44f8-af27-66226f9368f9 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60166 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:19:34] [INFO] coffee_shop.coffee_machine — Brew requested: drink=latte, correlation_id=639be03d-4648-4937-81e0-6da94cb0274e
+[2026-10-28:19:34] [INFO] coffee_shop.coffee_machine.state — Job created: 42a0c42c (drink=latte, duration=1.7s, contaminated=False)
+INFO:     127.0.0.1:60167 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:19:34] [INFO] coffee_shop.coffee_machine.state — Job 42a0c42c finished: ready
+INFO:     127.0.0.1:60188 - "GET /jobs/42a0c42c-c978-446b-a87b-5253d414be94 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60348 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:19:36] [INFO] coffee_shop.coffee_machine — Brew requested: drink=latte, correlation_id=e37b22ee-bfef-4108-a535-1449a6ddf44c
+[2026-10-28:19:36] [INFO] coffee_shop.coffee_machine.state — Job created: 8c2778e0 (drink=latte, duration=1.4s, contaminated=False)
+INFO:     127.0.0.1:60349 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:19:36] [INFO] coffee_shop.coffee_machine.state — Job 8c2778e0 finished: ready
+INFO:     127.0.0.1:60354 - "GET /jobs/8c2778e0-80d8-45d8-a008-f290c9a0d60e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60465 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:19:38] [INFO] coffee_shop.coffee_machine — Brew requested: drink=latte, correlation_id=b15da6d3-f9bd-4305-9f4c-b7437e8fd231
+[2026-10-28:19:38] [INFO] coffee_shop.coffee_machine.state — Job created: ca2f24e7 (drink=latte, duration=1.7s, contaminated=False)
+INFO:     127.0.0.1:60466 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:19:38] [INFO] coffee_shop.coffee_machine.state — Job ca2f24e7 finished: ready
+INFO:     127.0.0.1:60484 - "GET /jobs/ca2f24e7-3de5-4006-9973-5208319a99e8 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60639 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:19:39] [INFO] coffee_shop.coffee_machine — Brew requested: drink=latte, correlation_id=91136acf-6986-4b58-87c9-4405fbe37167
+[2026-10-28:19:39] [INFO] coffee_shop.coffee_machine.state — Job created: 12d408d1 (drink=latte, duration=1.4s, contaminated=False)
+INFO:     127.0.0.1:60640 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:19:40] [INFO] coffee_shop.coffee_machine.state — Job 12d408d1 finished: ready
+INFO:     127.0.0.1:60645 - "GET /jobs/12d408d1-49eb-44e8-9f24-c5867a323943 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60787 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:19:41] [INFO] coffee_shop.coffee_machine — Brew requested: drink=latte, correlation_id=9c6c7ddf-e4e0-4e74-a4fc-df2187b8cba2
+[2026-10-28:19:41] [INFO] coffee_shop.coffee_machine.state — Job created: e5ec6e6f (drink=latte, duration=2.8s, contaminated=False)
+INFO:     127.0.0.1:60788 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:19:41] [INFO] coffee_shop.coffee_machine.state — Job e5ec6e6f finished: ready
+INFO:     127.0.0.1:60806 - "GET /jobs/e5ec6e6f-a3cb-433b-a6fd-475ef335508f HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60932 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:19:43] [INFO] coffee_shop.coffee_machine — Brew requested: drink=latte, correlation_id=dc2e4a7a-023a-4394-a46b-edeff0b1608e
+[2026-10-28:19:43] [INFO] coffee_shop.coffee_machine.state — Job created: 13059292 (drink=latte, duration=2.3s, contaminated=False)
+INFO:     127.0.0.1:60933 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:19:43] [INFO] coffee_shop.coffee_machine.state — Job 13059292 finished: ready
+INFO:     127.0.0.1:60952 - "GET /jobs/13059292-dcfe-4320-a8e9-acf3d8ed5ae6 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61076 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:19:44] [INFO] coffee_shop.coffee_machine — Brew requested: drink=latte, correlation_id=9899d87b-4b6b-4390-8641-163b56788245
+[2026-10-28:19:44] [INFO] coffee_shop.coffee_machine.state — Job created: a68ab43d (drink=latte, duration=1.8s, contaminated=False)
+INFO:     127.0.0.1:61077 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:19:44] [INFO] coffee_shop.coffee_machine.state — Machine marked dirty after job a68ab43d failure
+[2026-10-28:19:44] [INFO] coffee_shop.coffee_machine.state — Job a68ab43d finished: failed
+INFO:     127.0.0.1:61096 - "GET /jobs/a68ab43d-ff5a-412f-a62e-6f50b5af2279 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61101 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:19:44] [INFO] coffee_shop.coffee_machine.state — Machine cleaned
+[2026-10-28:19:44] [INFO] coffee_shop.coffee_machine — Clean request: cleaned
+INFO:     127.0.0.1:61102 - "POST /clean HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61122 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:19:45] [INFO] coffee_shop.coffee_machine — Brew requested: drink=latte, correlation_id=9899d87b-4b6b-4390-8641-163b56788245
+[2026-10-28:19:45] [INFO] coffee_shop.coffee_machine.state — Job created: b658ddee (drink=latte, duration=1.4s, contaminated=False)
+INFO:     127.0.0.1:61123 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:19:45] [INFO] coffee_shop.coffee_machine.state — Job b658ddee finished: ready
+INFO:     127.0.0.1:61142 - "GET /jobs/b658ddee-f431-489d-a89e-26c0ef42d61a HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [4861]
+INFO:     Started server process [5093]
+INFO:     Waiting for application startup.
+[2026-10-28:19:45] [INFO] coffee_shop.coffee_machine — OCEL background worker started
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8001 (Press CTRL+C to quit)
+INFO:     127.0.0.1:61169 - "GET /healthz HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61294 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:19:47] [INFO] coffee_shop.coffee_machine — Brew requested: drink=cappuccino, correlation_id=867e0dc4-3f8b-4715-8302-ff60a448fbb9
+[2026-10-28:19:47] [INFO] coffee_shop.coffee_machine.state — Job created: c84203fb (drink=cappuccino, duration=1.1s, contaminated=False)
+INFO:     127.0.0.1:61295 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:19:47] [INFO] coffee_shop.coffee_machine.state — Job c84203fb finished: ready
+INFO:     127.0.0.1:61692 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:19:52] [INFO] coffee_shop.coffee_machine — Brew requested: drink=cappuccino, correlation_id=0573ea58-0fed-4d72-92a2-681e719ae230
+[2026-10-28:19:52] [INFO] coffee_shop.coffee_machine.state — Job created: 940fba6c (drink=cappuccino, duration=1.7s, contaminated=False)
+INFO:     127.0.0.1:61693 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:19:52] [INFO] coffee_shop.coffee_machine.state — Job 940fba6c finished: ready
+INFO:     127.0.0.1:61711 - "GET /jobs/940fba6c-cf7d-41b8-b4ef-2fb9575134b2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62548 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:20:02] [INFO] coffee_shop.coffee_machine — Brew requested: drink=latte, correlation_id=5fa8e815-0dc6-4faf-a711-06be923d0dad
+[2026-10-28:20:02] [INFO] coffee_shop.coffee_machine.state — Job created: ef774a78 (drink=latte, duration=1.4s, contaminated=False)
+INFO:     127.0.0.1:62549 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:20:02] [INFO] coffee_shop.coffee_machine.state — Job ef774a78 finished: ready
+INFO:     127.0.0.1:62571 - "GET /jobs/ef774a78-517c-47ca-8768-0482cef4f105 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62880 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:20:06] [INFO] coffee_shop.coffee_machine — Brew requested: drink=cappuccino, correlation_id=f4fd892c-c00b-4457-b21d-a3001207e96c
+[2026-10-28:20:06] [INFO] coffee_shop.coffee_machine.state — Job created: 4ad47aa5 (drink=cappuccino, duration=1.7s, contaminated=False)
+INFO:     127.0.0.1:62881 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:20:06] [INFO] coffee_shop.coffee_machine.state — Job 4ad47aa5 finished: ready
+INFO:     127.0.0.1:62886 - "GET /jobs/4ad47aa5-3739-4bfb-a44c-cb272f183a14 HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [5093]
+INFO:     Started server process [5274]
+INFO:     Waiting for application startup.
+[2026-10-28:20:07] [INFO] coffee_shop.coffee_machine — OCEL background worker started
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8001 (Press CTRL+C to quit)
+INFO:     127.0.0.1:62923 - "GET /healthz HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63046 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:20:08] [INFO] coffee_shop.coffee_machine — Brew requested: drink=latte, correlation_id=f764567e-b6f4-4f99-9836-34ff0149ed0d
+[2026-10-28:20:08] [INFO] coffee_shop.coffee_machine.state — Job created: 5d559493 (drink=latte, duration=1.1s, contaminated=False)
+INFO:     127.0.0.1:63047 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:20:08] [INFO] coffee_shop.coffee_machine.state — Job 5d559493 finished: ready
+INFO:     127.0.0.1:63065 - "GET /jobs/5d559493-4c7c-4b57-b063-374a134891db HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63263 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:20:10] [INFO] coffee_shop.coffee_machine — Brew requested: drink=espresso, correlation_id=447fbc62-0a6b-46cc-bea9-f467332bef45
+[2026-10-28:20:10] [INFO] coffee_shop.coffee_machine.state — Job created: 21db9af6 (drink=espresso, duration=1.7s, contaminated=False)
+INFO:     127.0.0.1:63264 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:20:10] [INFO] coffee_shop.coffee_machine.state — Job 21db9af6 finished: ready
+INFO:     127.0.0.1:63284 - "GET /jobs/21db9af6-8fd3-4b63-96d5-1941fed27c97 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64024 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:20:23] [INFO] coffee_shop.coffee_machine — Brew requested: drink=cappuccino, correlation_id=26b9dcda-9b45-4089-9a6e-561769f9a2bf
+[2026-10-28:20:23] [INFO] coffee_shop.coffee_machine.state — Job created: 56b93664 (drink=cappuccino, duration=1.4s, contaminated=False)
+INFO:     127.0.0.1:64025 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:20:23] [INFO] coffee_shop.coffee_machine.state — Job 56b93664 finished: ready
+INFO:     127.0.0.1:64045 - "GET /jobs/56b93664-4151-4b16-ae32-4a7f59c3a8e9 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64163 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:20:24] [INFO] coffee_shop.coffee_machine — Brew requested: drink=cappuccino, correlation_id=af893a4c-c248-478c-95c2-0b0131dcdbba
+[2026-10-28:20:24] [INFO] coffee_shop.coffee_machine.state — Job created: e0fe4a47 (drink=cappuccino, duration=1.7s, contaminated=False)
+INFO:     127.0.0.1:64164 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:20:24] [INFO] coffee_shop.coffee_machine.state — Job e0fe4a47 finished: ready
+INFO:     127.0.0.1:64170 - "GET /jobs/e0fe4a47-6a7e-4f70-8916-eb91165ded2a HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64226 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:20:25] [INFO] coffee_shop.coffee_machine — Brew requested: drink=cappuccino, correlation_id=af893a4c-c248-478c-95c2-0b0131dcdbba
+[2026-10-28:20:25] [INFO] coffee_shop.coffee_machine.state — Job created: 03d9f8be (drink=cappuccino, duration=1.4s, contaminated=False)
+INFO:     127.0.0.1:64227 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:20:25] [INFO] coffee_shop.coffee_machine.state — Job 03d9f8be finished: ready
+INFO:     127.0.0.1:64232 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:20:25] [INFO] coffee_shop.coffee_machine — Brew requested: drink=cappuccino, correlation_id=af893a4c-c248-478c-95c2-0b0131dcdbba
+[2026-10-28:20:25] [INFO] coffee_shop.coffee_machine.state — Job created: 672a1811 (drink=cappuccino, duration=2.8s, contaminated=False)
+INFO:     127.0.0.1:64233 - "POST /brew HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64234 - "GET /jobs/03d9f8be-c1d8-42f0-9835-196c553e0fc3 HTTP/1.1" 200 OK
+[2026-10-28:20:25] [INFO] coffee_shop.coffee_machine.state — Job 672a1811 finished: ready
+INFO:     127.0.0.1:64406 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:20:28] [INFO] coffee_shop.coffee_machine — Brew requested: drink=americano, correlation_id=c5a7216d-1bd8-48cb-8a2c-a04224b72ec8
+[2026-10-28:20:28] [INFO] coffee_shop.coffee_machine.state — Job created: b286f6fe (drink=americano, duration=2.3s, contaminated=False)
+INFO:     127.0.0.1:64407 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:20:28] [INFO] coffee_shop.coffee_machine.state — Job b286f6fe finished: ready
+INFO:     127.0.0.1:64426 - "GET /jobs/b286f6fe-3146-4394-a837-3f4985089c84 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64449 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:20:28] [INFO] coffee_shop.coffee_machine — Brew requested: drink=americano, correlation_id=c5a7216d-1bd8-48cb-8a2c-a04224b72ec8
+[2026-10-28:20:28] [INFO] coffee_shop.coffee_machine.state — Job created: ec118add (drink=americano, duration=1.8s, contaminated=False)
+INFO:     127.0.0.1:64450 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:20:28] [INFO] coffee_shop.coffee_machine.state — Machine marked dirty after job ec118add failure
+[2026-10-28:20:28] [INFO] coffee_shop.coffee_machine.state — Job ec118add finished: failed
+INFO:     127.0.0.1:64471 - "GET /jobs/ec118add-17db-4f01-a4ec-2fd8de9434ab HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64476 - "GET /docs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64477 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:20:28] [INFO] coffee_shop.coffee_machine — Brew requested: drink=americano, correlation_id=c5a7216d-1bd8-48cb-8a2c-a04224b72ec8
+[2026-10-28:20:28] [INFO] coffee_shop.coffee_machine.state — Job created: 82d3c563 (drink=americano, duration=1.4s, contaminated=True)
+INFO:     127.0.0.1:64478 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:20:28] [INFO] coffee_shop.coffee_machine.state — Machine cleaned
+[2026-10-28:20:28] [INFO] coffee_shop.coffee_machine — Clean request: cleaned
+INFO:     127.0.0.1:64479 - "POST /clean HTTP/1.1" 200 OK
+[2026-10-28:20:28] [INFO] coffee_shop.coffee_machine.state — Job 82d3c563 finished: ready
+INFO:     127.0.0.1:64499 - "GET /jobs/82d3c563-f782-4bf9-989d-159018cedc17 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64506 - "GET /docs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64505 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:20:29] [INFO] coffee_shop.coffee_machine — Clean request: already_clean
+INFO:     127.0.0.1:64507 - "POST /clean HTTP/1.1" 200 OK
+[2026-10-28:20:29] [INFO] coffee_shop.coffee_machine — Brew requested: drink=americano, correlation_id=c5a7216d-1bd8-48cb-8a2c-a04224b72ec8
+[2026-10-28:20:29] [INFO] coffee_shop.coffee_machine.state — Job created: bd232712 (drink=americano, duration=1.5s, contaminated=False)
+INFO:     127.0.0.1:64508 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:20:29] [INFO] coffee_shop.coffee_machine.state — Job bd232712 finished: ready
+INFO:     127.0.0.1:64528 - "GET /jobs/bd232712-cc55-4f8c-b55a-fa0799aa21ea HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64685 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:20:31] [INFO] coffee_shop.coffee_machine — Brew requested: drink=latte, correlation_id=3b569dee-fefb-4477-98f3-b0ad7effc2a5
+[2026-10-28:20:31] [INFO] coffee_shop.coffee_machine.state — Job created: a7d85ad3 (drink=latte, duration=2.8s, contaminated=False)
+INFO:     127.0.0.1:64686 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:20:31] [INFO] coffee_shop.coffee_machine.state — Machine marked dirty after job a7d85ad3 failure
+[2026-10-28:20:31] [INFO] coffee_shop.coffee_machine.state — Job a7d85ad3 finished: failed
+INFO:     127.0.0.1:64705 - "GET /jobs/a7d85ad3-efef-41ac-9be4-252642b78a44 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64710 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:20:31] [INFO] coffee_shop.coffee_machine.state — Machine cleaned
+[2026-10-28:20:31] [INFO] coffee_shop.coffee_machine — Clean request: cleaned
+INFO:     127.0.0.1:64711 - "POST /clean HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64733 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:20:32] [INFO] coffee_shop.coffee_machine — Brew requested: drink=latte, correlation_id=3b569dee-fefb-4477-98f3-b0ad7effc2a5
+[2026-10-28:20:32] [INFO] coffee_shop.coffee_machine.state — Job created: 4c6ccea0 (drink=latte, duration=2.9s, contaminated=False)
+INFO:     127.0.0.1:64734 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:20:32] [INFO] coffee_shop.coffee_machine.state — Machine marked dirty after job 4c6ccea0 failure
+[2026-10-28:20:32] [INFO] coffee_shop.coffee_machine.state — Job 4c6ccea0 finished: failed
+INFO:     127.0.0.1:64739 - "GET /jobs/4c6ccea0-94b6-4fce-acba-dc4c91835c17 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64744 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:20:32] [INFO] coffee_shop.coffee_machine.state — Machine cleaned
+[2026-10-28:20:32] [INFO] coffee_shop.coffee_machine — Clean request: cleaned
+INFO:     127.0.0.1:64745 - "POST /clean HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65108 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:20:36] [INFO] coffee_shop.coffee_machine — Brew requested: drink=latte, correlation_id=d5a9073c-0116-4c03-8f0c-52a32ce5966c
+[2026-10-28:20:36] [INFO] coffee_shop.coffee_machine.state — Job created: 1735a907 (drink=latte, duration=2.5s, contaminated=False)
+INFO:     127.0.0.1:65109 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:20:36] [INFO] coffee_shop.coffee_machine.state — Job 1735a907 finished: ready
+INFO:     127.0.0.1:65221 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:20:38] [INFO] coffee_shop.coffee_machine — Brew requested: drink=cappuccino, correlation_id=f3fb9418-da6b-42fe-b667-b053fe993792
+[2026-10-28:20:38] [INFO] coffee_shop.coffee_machine.state — Job created: cd1bd40b (drink=cappuccino, duration=2.2s, contaminated=False)
+INFO:     127.0.0.1:65222 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:20:38] [INFO] coffee_shop.coffee_machine.state — Job cd1bd40b finished: ready
+INFO:     127.0.0.1:65241 - "GET /jobs/cd1bd40b-2cbc-4fee-a4e1-46d3592fbbe5 HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [5274]
+INFO:     Started server process [5740]
+INFO:     Waiting for application startup.
+[2026-10-28:20:38] [INFO] coffee_shop.coffee_machine — OCEL background worker started
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8001 (Press CTRL+C to quit)
+INFO:     127.0.0.1:65276 - "GET /healthz HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65412 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:20:40] [INFO] coffee_shop.coffee_machine — Brew requested: drink=latte, correlation_id=f3cf4d97-88a0-4645-a3f9-db3574fc75e0
+[2026-10-28:20:40] [INFO] coffee_shop.coffee_machine.state — Job created: 574f917a (drink=latte, duration=1.1s, contaminated=False)
+INFO:     127.0.0.1:65413 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:20:40] [INFO] coffee_shop.coffee_machine.state — Job 574f917a finished: ready
+INFO:     127.0.0.1:65418 - "GET /jobs/574f917a-a956-4ff4-a991-64a4b0d811f6 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65513 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:20:41] [INFO] coffee_shop.coffee_machine — Brew requested: drink=latte, correlation_id=a9e69850-47d7-4cf8-bfd4-98d0b0c70f0f
+[2026-10-28:20:41] [INFO] coffee_shop.coffee_machine.state — Job created: 727b6aa3 (drink=latte, duration=1.7s, contaminated=False)
+INFO:     127.0.0.1:65514 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:20:41] [INFO] coffee_shop.coffee_machine.state — Job 727b6aa3 finished: ready
+INFO:     127.0.0.1:65532 - "GET /jobs/727b6aa3-2b61-4556-9247-29bd0fc0f939 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49267 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:20:43] [INFO] coffee_shop.coffee_machine — Brew requested: drink=latte, correlation_id=daeb53d1-f08b-458b-979c-7e9bf2ab4f6c
+[2026-10-28:20:43] [INFO] coffee_shop.coffee_machine.state — Job created: 2b2cd8d4 (drink=latte, duration=1.4s, contaminated=False)
+INFO:     127.0.0.1:49268 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:20:43] [INFO] coffee_shop.coffee_machine.state — Job 2b2cd8d4 finished: ready
+INFO:     127.0.0.1:49287 - "GET /jobs/2b2cd8d4-9316-4694-8266-a7a00f224be2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49413 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:20:44] [INFO] coffee_shop.coffee_machine — Brew requested: drink=latte, correlation_id=3790e7c0-bcc3-485d-b0e0-c30becdcadf1
+[2026-10-28:20:44] [INFO] coffee_shop.coffee_machine.state — Job created: e03b0b07 (drink=latte, duration=1.7s, contaminated=False)
+INFO:     127.0.0.1:49414 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:20:44] [INFO] coffee_shop.coffee_machine.state — Job e03b0b07 finished: ready
+INFO:     127.0.0.1:49433 - "GET /jobs/e03b0b07-9268-4783-bf0d-d3860926cbf0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49692 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:20:47] [INFO] coffee_shop.coffee_machine — Brew requested: drink=latte, correlation_id=c3530075-9213-4d6a-b006-15ec86e38170
+[2026-10-28:20:47] [INFO] coffee_shop.coffee_machine.state — Job created: b9712da4 (drink=latte, duration=1.4s, contaminated=False)
+INFO:     127.0.0.1:49693 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:20:47] [INFO] coffee_shop.coffee_machine.state — Job b9712da4 finished: ready
+INFO:     127.0.0.1:49714 - "GET /jobs/b9712da4-86bc-45e7-8a94-93ad8a4f5c39 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49827 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:20:49] [INFO] coffee_shop.coffee_machine — Brew requested: drink=latte, correlation_id=ca346cc0-b05e-4c5e-853d-64d48d145abb
+[2026-10-28:20:49] [INFO] coffee_shop.coffee_machine.state — Job created: 3ebb1145 (drink=latte, duration=2.8s, contaminated=False)
+INFO:     127.0.0.1:49828 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:20:49] [INFO] coffee_shop.coffee_machine.state — Job 3ebb1145 finished: ready
+INFO:     127.0.0.1:49850 - "GET /jobs/3ebb1145-fbce-4a1d-99e1-52ef2b10d95b HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49957 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:20:50] [INFO] coffee_shop.coffee_machine — Brew requested: drink=latte, correlation_id=c3e653ee-f419-47a4-a16d-18e469105d5b
+[2026-10-28:20:50] [INFO] coffee_shop.coffee_machine.state — Job created: a7ef9593 (drink=latte, duration=2.3s, contaminated=False)
+INFO:     127.0.0.1:49958 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:20:50] [INFO] coffee_shop.coffee_machine.state — Job a7ef9593 finished: ready
+INFO:     127.0.0.1:49976 - "GET /jobs/a7ef9593-0de0-44f6-ad67-c015b13b210a HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50086 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:20:51] [INFO] coffee_shop.coffee_machine — Brew requested: drink=latte, correlation_id=3ee50379-e113-4208-adaf-622d65e8c588
+[2026-10-28:20:51] [INFO] coffee_shop.coffee_machine.state — Job created: f0c3791f (drink=latte, duration=1.8s, contaminated=False)
+INFO:     127.0.0.1:50087 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:20:52] [INFO] coffee_shop.coffee_machine.state — Machine marked dirty after job f0c3791f failure
+[2026-10-28:20:52] [INFO] coffee_shop.coffee_machine.state — Job f0c3791f finished: failed
+INFO:     127.0.0.1:50107 - "GET /jobs/f0c3791f-9b58-415c-9052-3596f51c0d44 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50112 - "GET /docs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50113 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:20:52] [INFO] coffee_shop.coffee_machine.state — Machine cleaned
+[2026-10-28:20:52] [INFO] coffee_shop.coffee_machine — Clean request: cleaned
+INFO:     127.0.0.1:50114 - "POST /clean HTTP/1.1" 200 OK
+[2026-10-28:20:52] [INFO] coffee_shop.coffee_machine — Brew requested: drink=latte, correlation_id=3ee50379-e113-4208-adaf-622d65e8c588
+[2026-10-28:20:52] [INFO] coffee_shop.coffee_machine.state — Job created: d7fec34a (drink=latte, duration=1.4s, contaminated=False)
+INFO:     127.0.0.1:50115 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:20:52] [INFO] coffee_shop.coffee_machine.state — Job d7fec34a finished: ready
+INFO:     127.0.0.1:50136 - "GET /jobs/d7fec34a-3a68-4660-852c-2010c5766899 HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [5740]
+INFO:     Started server process [5883]
+INFO:     Waiting for application startup.
+[2026-10-28:20:52] [INFO] coffee_shop.coffee_machine — OCEL background worker started
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8001 (Press CTRL+C to quit)
+INFO:     127.0.0.1:50161 - "GET /healthz HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50326 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:20:54] [INFO] coffee_shop.coffee_machine — Brew requested: drink=cappuccino, correlation_id=114c17f8-4530-4804-9b25-483468779b94
+[2026-10-28:20:54] [INFO] coffee_shop.coffee_machine.state — Job created: a595dc6a (drink=cappuccino, duration=1.1s, contaminated=False)
+INFO:     127.0.0.1:50327 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:20:54] [INFO] coffee_shop.coffee_machine.state — Job a595dc6a finished: ready
+INFO:     127.0.0.1:50345 - "GET /jobs/a595dc6a-fa0b-4613-ab43-8aeca37ac8ad HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50568 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:20:57] [INFO] coffee_shop.coffee_machine — Brew requested: drink=cappuccino, correlation_id=8e3b6278-da16-4284-826b-7363b635ff03
+[2026-10-28:20:57] [INFO] coffee_shop.coffee_machine.state — Job created: 834ef6c8 (drink=cappuccino, duration=1.7s, contaminated=False)
+INFO:     127.0.0.1:50569 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:20:57] [INFO] coffee_shop.coffee_machine.state — Job 834ef6c8 finished: ready
+INFO:     127.0.0.1:50589 - "GET /jobs/834ef6c8-c452-41bc-9172-686845ebdad9 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50951 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:21:02] [INFO] coffee_shop.coffee_machine — Brew requested: drink=cappuccino, correlation_id=9532bedc-70f6-4b52-829b-82a5eeaa27c5
+[2026-10-28:21:02] [INFO] coffee_shop.coffee_machine.state — Job created: 87c14c80 (drink=cappuccino, duration=1.4s, contaminated=False)
+INFO:     127.0.0.1:50952 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:21:02] [INFO] coffee_shop.coffee_machine.state — Job 87c14c80 finished: ready
+INFO:     127.0.0.1:51150 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:21:05] [INFO] coffee_shop.coffee_machine — Brew requested: drink=cappuccino, correlation_id=fd4a4046-ae57-4ac9-b686-be2888254efd
+[2026-10-28:21:05] [INFO] coffee_shop.coffee_machine.state — Job created: 245cf673 (drink=cappuccino, duration=1.7s, contaminated=False)
+INFO:     127.0.0.1:51151 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:21:05] [INFO] coffee_shop.coffee_machine.state — Job 245cf673 finished: ready
+INFO:     127.0.0.1:51156 - "GET /jobs/245cf673-496e-4cb6-9d2d-a5e4229051ef HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [5883]
+INFO:     Started server process [6029]
+INFO:     Waiting for application startup.
+[2026-10-28:21:08] [INFO] coffee_shop.coffee_machine — OCEL background worker started
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8001 (Press CTRL+C to quit)
+INFO:     127.0.0.1:51416 - "GET /healthz HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51662 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:21:10] [INFO] coffee_shop.coffee_machine — Brew requested: drink=latte, correlation_id=fe9f222c-9d81-4cec-a9a0-c0382ef02824
+[2026-10-28:21:10] [INFO] coffee_shop.coffee_machine.state — Job created: 0ff2daaa (drink=latte, duration=1.1s, contaminated=False)
+INFO:     127.0.0.1:51663 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:21:10] [INFO] coffee_shop.coffee_machine.state — Job 0ff2daaa finished: ready
+INFO:     127.0.0.1:51681 - "GET /jobs/0ff2daaa-4a45-45ef-b091-8196349202f5 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51865 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:21:13] [INFO] coffee_shop.coffee_machine — Brew requested: drink=latte, correlation_id=01dd7775-3ed9-4f7e-b3ab-de5036b1b21e
+[2026-10-28:21:13] [INFO] coffee_shop.coffee_machine.state — Job created: ae645150 (drink=latte, duration=1.7s, contaminated=False)
+INFO:     127.0.0.1:51866 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:21:13] [INFO] coffee_shop.coffee_machine.state — Job ae645150 finished: ready
+INFO:     127.0.0.1:51871 - "GET /jobs/ae645150-62b2-4170-bc40-b1e693aa390d HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52068 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:21:15] [INFO] coffee_shop.coffee_machine — Brew requested: drink=latte, correlation_id=6aac02b0-c48a-4d07-9637-22c928a33f62
+[2026-10-28:21:15] [INFO] coffee_shop.coffee_machine.state — Job created: 8ff4ec16 (drink=latte, duration=1.4s, contaminated=False)
+INFO:     127.0.0.1:52069 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:21:15] [INFO] coffee_shop.coffee_machine.state — Job 8ff4ec16 finished: ready
+INFO:     127.0.0.1:52793 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:21:24] [INFO] coffee_shop.coffee_machine — Brew requested: drink=latte, correlation_id=cccb6733-8255-402f-aa9d-96210f5f19e0
+[2026-10-28:21:24] [INFO] coffee_shop.coffee_machine.state — Job created: ae74c0d1 (drink=latte, duration=1.7s, contaminated=False)
+INFO:     127.0.0.1:52794 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:21:24] [INFO] coffee_shop.coffee_machine.state — Job ae74c0d1 finished: ready
+INFO:     127.0.0.1:52799 - "GET /jobs/ae74c0d1-1499-4a0d-acc1-439e8c195a79 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52960 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:21:27] [INFO] coffee_shop.coffee_machine — Brew requested: drink=latte, correlation_id=1b36230a-a236-4753-b555-64a800e8a95b
+[2026-10-28:21:27] [INFO] coffee_shop.coffee_machine.state — Job created: 12dfae7d (drink=latte, duration=1.4s, contaminated=False)
+INFO:     127.0.0.1:52961 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:21:27] [INFO] coffee_shop.coffee_machine.state — Job 12dfae7d finished: ready
+INFO:     127.0.0.1:52980 - "GET /jobs/12dfae7d-6e53-4d4d-addd-7e1bd7525f1c HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53199 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:21:30] [INFO] coffee_shop.coffee_machine — Brew requested: drink=latte, correlation_id=f7bdf9f8-e178-47b5-a69a-296500525196
+[2026-10-28:21:30] [INFO] coffee_shop.coffee_machine.state — Job created: 8ad33312 (drink=latte, duration=2.8s, contaminated=False)
+INFO:     127.0.0.1:53200 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:21:30] [INFO] coffee_shop.coffee_machine.state — Job 8ad33312 finished: ready
+INFO:     127.0.0.1:53220 - "GET /jobs/8ad33312-41d6-467f-ad8e-406999aefb2e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53463 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:21:33] [INFO] coffee_shop.coffee_machine — Brew requested: drink=cappuccino, correlation_id=d21dd6de-7369-4e92-92cc-2e1bf02970a3
+[2026-10-28:21:33] [INFO] coffee_shop.coffee_machine.state — Job created: 68c32e3c (drink=cappuccino, duration=2.3s, contaminated=False)
+INFO:     127.0.0.1:53464 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:21:33] [INFO] coffee_shop.coffee_machine.state — Job 68c32e3c finished: ready
+INFO:     127.0.0.1:53469 - "GET /jobs/68c32e3c-d301-48b5-9bd1-917c468781cb HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [6029]
+INFO:     Started server process [6373]
+INFO:     Waiting for application startup.
+[2026-10-28:21:33] [INFO] coffee_shop.coffee_machine — OCEL background worker started
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8001 (Press CTRL+C to quit)
+INFO:     127.0.0.1:53504 - "GET /healthz HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53625 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:21:35] [INFO] coffee_shop.coffee_machine — Brew requested: drink=latte, correlation_id=d9fda1d7-ca58-47f1-88a3-0da939052358
+[2026-10-28:21:35] [INFO] coffee_shop.coffee_machine.state — Job created: c383951b (drink=latte, duration=1.1s, contaminated=False)
+INFO:     127.0.0.1:53626 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:21:35] [INFO] coffee_shop.coffee_machine.state — Job c383951b finished: ready
+INFO:     127.0.0.1:53648 - "GET /jobs/c383951b-9bef-4527-b62a-961e75929ecd HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53831 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:21:37] [INFO] coffee_shop.coffee_machine — Brew requested: drink=latte, correlation_id=f3f21c9c-28a9-4da2-98d3-e1fe4f50b4bc
+[2026-10-28:21:37] [INFO] coffee_shop.coffee_machine.state — Job created: 9e13aad0 (drink=latte, duration=1.7s, contaminated=False)
+INFO:     127.0.0.1:53832 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:21:37] [INFO] coffee_shop.coffee_machine.state — Job 9e13aad0 finished: ready
+INFO:     127.0.0.1:53855 - "GET /jobs/9e13aad0-c6c5-47a0-932f-a3699f2b7bbd HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54000 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:21:38] [INFO] coffee_shop.coffee_machine — Brew requested: drink=latte, correlation_id=2686c873-16d0-4632-b832-1cd254319ae6
+[2026-10-28:21:38] [INFO] coffee_shop.coffee_machine.state — Job created: fefda1c7 (drink=latte, duration=1.4s, contaminated=False)
+INFO:     127.0.0.1:54001 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:21:38] [INFO] coffee_shop.coffee_machine.state — Job fefda1c7 finished: ready
+INFO:     127.0.0.1:54026 - "GET /jobs/fefda1c7-d5dd-4600-b681-f0ad8df9479e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54592 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:21:46] [INFO] coffee_shop.coffee_machine — Brew requested: drink=latte, correlation_id=07ce5ec6-9a5a-4850-a63e-2752a1c9cd45
+[2026-10-28:21:46] [INFO] coffee_shop.coffee_machine.state — Job created: 9b43ae17 (drink=latte, duration=1.7s, contaminated=False)
+INFO:     127.0.0.1:54593 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:21:46] [INFO] coffee_shop.coffee_machine.state — Job 9b43ae17 finished: ready
+INFO:     127.0.0.1:54620 - "GET /jobs/9b43ae17-a5ac-4a7b-aa58-af5a54b18318 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54778 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:21:47] [INFO] coffee_shop.coffee_machine — Brew requested: drink=latte, correlation_id=0ac636e1-1d5a-416f-8ec9-030be7b98903
+[2026-10-28:21:47] [INFO] coffee_shop.coffee_machine.state — Job created: 4af3aaff (drink=latte, duration=1.4s, contaminated=False)
+INFO:     127.0.0.1:54779 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:21:47] [INFO] coffee_shop.coffee_machine.state — Job 4af3aaff finished: ready
+INFO:     127.0.0.1:54802 - "GET /jobs/4af3aaff-6788-42f2-bb54-b5a3803484e1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54955 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:21:49] [INFO] coffee_shop.coffee_machine — Brew requested: drink=latte, correlation_id=d4d7a8b1-ee28-4e8e-ba00-5816d5521b70
+[2026-10-28:21:49] [INFO] coffee_shop.coffee_machine.state — Job created: e223b0b2 (drink=latte, duration=2.8s, contaminated=False)
+INFO:     127.0.0.1:54956 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:21:49] [INFO] coffee_shop.coffee_machine.state — Job e223b0b2 finished: ready
+INFO:     127.0.0.1:54981 - "GET /jobs/e223b0b2-8251-4d33-a320-d724e9c0b5c1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55289 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:21:52] [INFO] coffee_shop.coffee_machine — Brew requested: drink=latte, correlation_id=7e8f3eda-9d61-4b18-886a-ad03bafd79a5
+[2026-10-28:21:52] [INFO] coffee_shop.coffee_machine.state — Job created: 29a8a997 (drink=latte, duration=2.3s, contaminated=False)
+INFO:     127.0.0.1:55290 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:21:52] [INFO] coffee_shop.coffee_machine.state — Job 29a8a997 finished: ready
+INFO:     127.0.0.1:55314 - "GET /jobs/29a8a997-86e3-46b5-bc33-3e939533ae04 HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [6373]
+INFO:     Started server process [6687]
+INFO:     Waiting for application startup.
+[2026-10-28:21:53] [INFO] coffee_shop.coffee_machine — OCEL background worker started
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8001 (Press CTRL+C to quit)
+INFO:     127.0.0.1:55337 - "GET /healthz HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55608 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:21:56] [INFO] coffee_shop.coffee_machine — Brew requested: drink=cappuccino, correlation_id=d512269e-00b2-4a8e-ba1c-74e36d2a65de
+[2026-10-28:21:56] [INFO] coffee_shop.coffee_machine.state — Job created: 8a2cef88 (drink=cappuccino, duration=1.1s, contaminated=False)
+INFO:     127.0.0.1:55609 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:21:56] [INFO] coffee_shop.coffee_machine.state — Job 8a2cef88 finished: ready
+INFO:     127.0.0.1:55618 - "GET /jobs/8a2cef88-26ec-4b3e-b14d-a4275f2bdcae HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56001 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:22:00] [INFO] coffee_shop.coffee_machine — Brew requested: drink=latte, correlation_id=834c6c49-b977-4ecd-88a1-72ed4bcc24b5
+[2026-10-28:22:00] [INFO] coffee_shop.coffee_machine.state — Job created: e6a9c034 (drink=latte, duration=1.7s, contaminated=False)
+INFO:     127.0.0.1:56002 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:22:00] [INFO] coffee_shop.coffee_machine.state — Job e6a9c034 finished: ready
+INFO:     127.0.0.1:56025 - "GET /jobs/e6a9c034-a3d7-4b84-908e-d402fc279dfb HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56217 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:22:02] [INFO] coffee_shop.coffee_machine — Brew requested: drink=cappuccino, correlation_id=c120472a-776b-4f63-9864-89a7e9fa439a
+[2026-10-28:22:02] [INFO] coffee_shop.coffee_machine.state — Job created: 4ab7ef94 (drink=cappuccino, duration=1.4s, contaminated=False)
+INFO:     127.0.0.1:56218 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:22:02] [INFO] coffee_shop.coffee_machine.state — Job 4ab7ef94 finished: ready
+INFO:     127.0.0.1:56243 - "GET /jobs/4ab7ef94-a6b2-4df3-851e-f7b01510d70e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56554 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:22:06] [INFO] coffee_shop.coffee_machine — Brew requested: drink=cappuccino, correlation_id=cefdb023-bf0c-4bd8-85e4-fd854d975f02
+[2026-10-28:22:06] [INFO] coffee_shop.coffee_machine.state — Job created: ab63e734 (drink=cappuccino, duration=1.7s, contaminated=False)
+INFO:     127.0.0.1:56555 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:22:06] [INFO] coffee_shop.coffee_machine.state — Job ab63e734 finished: ready
+INFO:     127.0.0.1:56577 - "GET /jobs/ab63e734-3daf-498a-9614-293650c1c5ba HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57036 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:22:11] [INFO] coffee_shop.coffee_machine — Brew requested: drink=cappuccino, correlation_id=8d7febcd-0246-4a9e-bf14-dda54eafe1bb
+[2026-10-28:22:11] [INFO] coffee_shop.coffee_machine.state — Job created: e91df8f8 (drink=cappuccino, duration=1.4s, contaminated=False)
+INFO:     127.0.0.1:57037 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:22:11] [INFO] coffee_shop.coffee_machine.state — Job e91df8f8 finished: ready
+INFO:     127.0.0.1:57046 - "GET /jobs/e91df8f8-c03d-43f4-8a23-207f660259b7 HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [6687]
+INFO:     Started server process [6874]
+INFO:     Waiting for application startup.
+[2026-10-28:22:11] [INFO] coffee_shop.coffee_machine — OCEL background worker started
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8001 (Press CTRL+C to quit)
+INFO:     127.0.0.1:57072 - "GET /healthz HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57371 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:22:14] [INFO] coffee_shop.coffee_machine — Brew requested: drink=cappuccino, correlation_id=7a04c511-56a6-421e-9593-9a9e45ca8eaa
+[2026-10-28:22:14] [INFO] coffee_shop.coffee_machine.state — Job created: dc765102 (drink=cappuccino, duration=1.1s, contaminated=False)
+INFO:     127.0.0.1:57372 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:22:14] [INFO] coffee_shop.coffee_machine.state — Job dc765102 finished: ready
+INFO:     127.0.0.1:57396 - "GET /jobs/dc765102-e666-47bc-b0e3-33c1c43789e0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57636 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:22:17] [INFO] coffee_shop.coffee_machine — Brew requested: drink=latte, correlation_id=d4e6c82e-b36d-47d2-b620-e3af38cc5fe2
+[2026-10-28:22:17] [INFO] coffee_shop.coffee_machine.state — Job created: 5d0044cb (drink=latte, duration=1.7s, contaminated=False)
+INFO:     127.0.0.1:57637 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:22:18] [INFO] coffee_shop.coffee_machine.state — Job 5d0044cb finished: ready
+INFO:     127.0.0.1:57660 - "GET /jobs/5d0044cb-f124-494f-8e72-c836562304f0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57884 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:22:20] [INFO] coffee_shop.coffee_machine — Brew requested: drink=cappuccino, correlation_id=c2f1ae99-31c0-4c9d-9369-acc8bf481798
+[2026-10-28:22:20] [INFO] coffee_shop.coffee_machine.state — Job created: a4047d01 (drink=cappuccino, duration=1.4s, contaminated=False)
+INFO:     127.0.0.1:57885 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:22:20] [INFO] coffee_shop.coffee_machine.state — Job a4047d01 finished: ready
+INFO:     127.0.0.1:57894 - "GET /jobs/a4047d01-572b-43a6-91b5-ef1ba82d82f2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58156 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:22:23] [INFO] coffee_shop.coffee_machine — Brew requested: drink=latte, correlation_id=e737145d-ae93-400c-9a8c-0e908419d63f
+[2026-10-28:22:23] [INFO] coffee_shop.coffee_machine.state — Job created: 295fc611 (drink=latte, duration=1.7s, contaminated=False)
+INFO:     127.0.0.1:58157 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:22:23] [INFO] coffee_shop.coffee_machine.state — Job 295fc611 finished: ready
+INFO:     127.0.0.1:58180 - "GET /jobs/295fc611-52b1-488c-a348-e4333c1ec2b4 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58454 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:22:26] [INFO] coffee_shop.coffee_machine — Brew requested: drink=cappuccino, correlation_id=c4fc8eb7-c31b-4e41-8f22-7522c95ec6ab
+[2026-10-28:22:26] [INFO] coffee_shop.coffee_machine.state — Job created: 0b742f3a (drink=cappuccino, duration=1.4s, contaminated=False)
+INFO:     127.0.0.1:58455 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:22:26] [INFO] coffee_shop.coffee_machine.state — Job 0b742f3a finished: ready
+INFO:     127.0.0.1:58465 - "GET /jobs/0b742f3a-49d0-4458-b9b4-0685e7356cad HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58682 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:22:29] [INFO] coffee_shop.coffee_machine — Brew requested: drink=americano, correlation_id=97b9b920-fd09-4c8d-9404-801ac73bf6f6
+[2026-10-28:22:29] [INFO] coffee_shop.coffee_machine.state — Job created: 417b6602 (drink=americano, duration=2.8s, contaminated=False)
+INFO:     127.0.0.1:58683 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:22:29] [INFO] coffee_shop.coffee_machine.state — Job 417b6602 finished: ready
+INFO:     127.0.0.1:58706 - "GET /jobs/417b6602-0947-4f58-8c0e-cbabbc9969b8 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59171 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:22:34] [INFO] coffee_shop.coffee_machine — Brew requested: drink=latte, correlation_id=20651d4a-831d-4b8d-b4b8-615fe1c9c975
+[2026-10-28:22:34] [INFO] coffee_shop.coffee_machine.state — Job created: 44a4fdab (drink=latte, duration=2.3s, contaminated=False)
+INFO:     127.0.0.1:59172 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:22:34] [INFO] coffee_shop.coffee_machine.state — Job 44a4fdab finished: ready
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [6874]
+INFO:     Started server process [7093]
+INFO:     Waiting for application startup.
+[2026-10-28:22:35] [INFO] coffee_shop.coffee_machine — OCEL background worker started
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8001 (Press CTRL+C to quit)
+INFO:     127.0.0.1:59192 - "GET /healthz HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59328 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:22:36] [INFO] coffee_shop.coffee_machine — Brew requested: drink=latte, correlation_id=48b14b8d-85d0-4cf1-bd9d-aed20076f30b
+[2026-10-28:22:36] [INFO] coffee_shop.coffee_machine.state — Job created: 125c9b8c (drink=latte, duration=1.1s, contaminated=False)
+INFO:     127.0.0.1:59329 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:22:36] [INFO] coffee_shop.coffee_machine.state — Job 125c9b8c finished: ready
+INFO:     127.0.0.1:59344 - "GET /jobs/125c9b8c-5f44-4d5e-b588-b80e78708174 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59416 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:22:37] [INFO] coffee_shop.coffee_machine — Brew requested: drink=latte, correlation_id=c4b0e351-0c96-4ee4-be84-6c32ae93a1b1
+[2026-10-28:22:37] [INFO] coffee_shop.coffee_machine.state — Job created: 37e5f9fb (drink=latte, duration=1.7s, contaminated=False)
+INFO:     127.0.0.1:59417 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:22:37] [INFO] coffee_shop.coffee_machine.state — Job 37e5f9fb finished: ready
+INFO:     127.0.0.1:59431 - "GET /jobs/37e5f9fb-226c-48c4-b4f8-d3c61d917125 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59526 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:22:38] [INFO] coffee_shop.coffee_machine — Brew requested: drink=latte, correlation_id=f9aa624d-85b5-4621-8eb0-b4a644add785
+[2026-10-28:22:38] [INFO] coffee_shop.coffee_machine.state — Job created: f60cf0dc (drink=latte, duration=1.4s, contaminated=False)
+INFO:     127.0.0.1:59527 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:22:38] [INFO] coffee_shop.coffee_machine.state — Job f60cf0dc finished: ready
+INFO:     127.0.0.1:59693 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:22:41] [INFO] coffee_shop.coffee_machine — Brew requested: drink=latte, correlation_id=d23eaf9f-eb6d-4fdd-abe9-684cc20fcc00
+[2026-10-28:22:41] [INFO] coffee_shop.coffee_machine.state — Job created: 8ad0fc6f (drink=latte, duration=1.7s, contaminated=False)
+INFO:     127.0.0.1:59694 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:22:41] [INFO] coffee_shop.coffee_machine.state — Job 8ad0fc6f finished: ready
+INFO:     127.0.0.1:59708 - "GET /jobs/8ad0fc6f-de3d-41bf-be98-0d864663e296 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59797 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:22:42] [INFO] coffee_shop.coffee_machine — Brew requested: drink=latte, correlation_id=025d11c1-1c47-4572-81ab-eddcc8e58355
+[2026-10-28:22:42] [INFO] coffee_shop.coffee_machine.state — Job created: b04ed633 (drink=latte, duration=1.4s, contaminated=False)
+INFO:     127.0.0.1:59798 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:22:42] [INFO] coffee_shop.coffee_machine.state — Job b04ed633 finished: ready
+INFO:     127.0.0.1:59804 - "GET /jobs/b04ed633-fd61-4e84-ac56-29436fcd6cbc HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59870 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:22:43] [INFO] coffee_shop.coffee_machine — Brew requested: drink=latte, correlation_id=045c9b56-5889-4b22-a00b-c6a5b9b7a7ee
+[2026-10-28:22:43] [INFO] coffee_shop.coffee_machine.state — Job created: 65976723 (drink=latte, duration=2.8s, contaminated=False)
+INFO:     127.0.0.1:59871 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:22:43] [INFO] coffee_shop.coffee_machine.state — Job 65976723 finished: ready
+INFO:     127.0.0.1:59884 - "GET /jobs/65976723-6360-4021-a819-6f7f170e2944 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59975 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:22:44] [INFO] coffee_shop.coffee_machine — Brew requested: drink=latte, correlation_id=af76b9b2-729a-4f3a-8c25-8f0bb8244390
+[2026-10-28:22:44] [INFO] coffee_shop.coffee_machine.state — Job created: 79bca961 (drink=latte, duration=2.3s, contaminated=False)
+INFO:     127.0.0.1:59976 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:22:44] [INFO] coffee_shop.coffee_machine.state — Job 79bca961 finished: ready
+INFO:     127.0.0.1:59990 - "GET /jobs/79bca961-3070-4011-9fca-8531e87afa14 HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [7093]
+INFO:     Started server process [7331]
+INFO:     Waiting for application startup.
+[2026-10-28:22:44] [INFO] coffee_shop.coffee_machine — OCEL background worker started
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8001 (Press CTRL+C to quit)
+INFO:     127.0.0.1:60010 - "GET /healthz HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60062 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:22:45] [INFO] coffee_shop.coffee_machine — Brew requested: drink=cappuccino, correlation_id=98d79ac6-911a-4557-8932-1418a8cde575
+[2026-10-28:22:45] [INFO] coffee_shop.coffee_machine.state — Job created: f37b8252 (drink=cappuccino, duration=1.1s, contaminated=False)
+INFO:     127.0.0.1:60063 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:22:45] [INFO] coffee_shop.coffee_machine.state — Job f37b8252 finished: ready
+INFO:     127.0.0.1:60076 - "GET /jobs/f37b8252-386d-45c9-b2c5-557d92b8ea64 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60404 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:22:50] [INFO] coffee_shop.coffee_machine — Brew requested: drink=cappuccino, correlation_id=950a6344-e529-49c4-ae22-91155a2c9e14
+[2026-10-28:22:50] [INFO] coffee_shop.coffee_machine.state — Job created: 4ae3d3d9 (drink=cappuccino, duration=1.7s, contaminated=False)
+INFO:     127.0.0.1:60405 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:22:50] [INFO] coffee_shop.coffee_machine.state — Job 4ae3d3d9 finished: ready
+INFO:     127.0.0.1:60418 - "GET /jobs/4ae3d3d9-bc23-477c-831b-77bdfff2b0de HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [7331]
+INFO:     Started server process [7434]
+INFO:     Waiting for application startup.
+[2026-10-28:22:54] [INFO] coffee_shop.coffee_machine — OCEL background worker started
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8001 (Press CTRL+C to quit)
+INFO:     127.0.0.1:60722 - "GET /healthz HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60869 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:22:56] [INFO] coffee_shop.coffee_machine — Brew requested: drink=espresso, correlation_id=7b300e00-d775-4bfa-8a54-57fb3b53eaf0
+[2026-10-28:22:56] [INFO] coffee_shop.coffee_machine.state — Job created: 191e3008 (drink=espresso, duration=1.1s, contaminated=False)
+INFO:     127.0.0.1:60870 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:22:56] [INFO] coffee_shop.coffee_machine.state — Job 191e3008 finished: ready
+INFO:     127.0.0.1:60884 - "GET /jobs/191e3008-d7b5-4b37-84d8-169d2253d973 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60988 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:22:58] [INFO] coffee_shop.coffee_machine — Brew requested: drink=americano, correlation_id=de8266e5-ac98-468b-8419-d07363a357e2
+[2026-10-28:22:58] [INFO] coffee_shop.coffee_machine.state — Job created: f39d0b6d (drink=americano, duration=1.7s, contaminated=False)
+INFO:     127.0.0.1:60989 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:22:58] [INFO] coffee_shop.coffee_machine.state — Job f39d0b6d finished: ready
+INFO:     127.0.0.1:61005 - "GET /jobs/f39d0b6d-41c2-405e-96d0-63611d4fe36f HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61107 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:22:59] [INFO] coffee_shop.coffee_machine — Brew requested: drink=cappuccino, correlation_id=0c7b850d-cc5a-4fc4-adaf-13a13415eafd
+[2026-10-28:22:59] [INFO] coffee_shop.coffee_machine.state — Job created: ea0a04bd (drink=cappuccino, duration=1.4s, contaminated=False)
+INFO:     127.0.0.1:61108 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:22:59] [INFO] coffee_shop.coffee_machine.state — Job ea0a04bd finished: ready
+INFO:     127.0.0.1:61121 - "GET /jobs/ea0a04bd-f59a-4573-9df9-83d91cb2b49d HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61249 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:23:01] [INFO] coffee_shop.coffee_machine — Brew requested: drink=americano, correlation_id=7b40b21e-bbf3-4e4e-9eba-867a5c84b713
+[2026-10-28:23:01] [INFO] coffee_shop.coffee_machine.state — Job created: 925f1b0b (drink=americano, duration=1.7s, contaminated=False)
+INFO:     127.0.0.1:61250 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:23:01] [INFO] coffee_shop.coffee_machine.state — Job 925f1b0b finished: ready
+INFO:     127.0.0.1:61346 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:23:02] [INFO] coffee_shop.coffee_machine — Brew requested: drink=americano, correlation_id=afa2a095-91d0-4307-9173-48b26ad79061
+[2026-10-28:23:02] [INFO] coffee_shop.coffee_machine.state — Job created: 1a286256 (drink=americano, duration=1.4s, contaminated=False)
+INFO:     127.0.0.1:61347 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:23:02] [INFO] coffee_shop.coffee_machine.state — Job 1a286256 finished: ready
+INFO:     127.0.0.1:61361 - "GET /jobs/1a286256-cd4d-430f-ae9c-95993ecab80b HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61479 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:23:04] [INFO] coffee_shop.coffee_machine — Brew requested: drink=americano, correlation_id=50d27c94-cb02-48d6-bafa-4035cb7bd525
+[2026-10-28:23:04] [INFO] coffee_shop.coffee_machine.state — Job created: 80815ea2 (drink=americano, duration=2.8s, contaminated=False)
+INFO:     127.0.0.1:61480 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:23:04] [INFO] coffee_shop.coffee_machine.state — Job 80815ea2 finished: ready
+INFO:     127.0.0.1:61494 - "GET /jobs/80815ea2-be9d-4001-94ae-44845ce915a8 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61595 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:23:05] [INFO] coffee_shop.coffee_machine — Brew requested: drink=espresso, correlation_id=27d9904c-e15a-4888-a683-913529bba55d
+[2026-10-28:23:05] [INFO] coffee_shop.coffee_machine.state — Job created: 4053ab44 (drink=espresso, duration=2.3s, contaminated=False)
+INFO:     127.0.0.1:61596 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:23:05] [INFO] coffee_shop.coffee_machine.state — Job 4053ab44 finished: ready
+INFO:     127.0.0.1:61610 - "GET /jobs/4053ab44-539e-40cc-8d93-a851c530198f HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61704 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:23:06] [INFO] coffee_shop.coffee_machine — Brew requested: drink=americano, correlation_id=3552a0a6-4de3-4554-8bf0-83bd777360bd
+[2026-10-28:23:06] [INFO] coffee_shop.coffee_machine.state — Job created: ee17f24b (drink=americano, duration=1.8s, contaminated=False)
+INFO:     127.0.0.1:61705 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:23:07] [INFO] coffee_shop.coffee_machine.state — Machine marked dirty after job ee17f24b failure
+[2026-10-28:23:07] [INFO] coffee_shop.coffee_machine.state — Job ee17f24b finished: failed
+INFO:     127.0.0.1:61719 - "GET /jobs/ee17f24b-a66f-429c-9d6b-83c9d3d5fefc HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61724 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:23:07] [INFO] coffee_shop.coffee_machine.state — Machine cleaned
+[2026-10-28:23:07] [INFO] coffee_shop.coffee_machine — Clean request: cleaned
+INFO:     127.0.0.1:61725 - "POST /clean HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61739 - "GET /docs HTTP/1.1" 200 OK
+[2026-10-28:23:07] [INFO] coffee_shop.coffee_machine — Brew requested: drink=americano, correlation_id=3552a0a6-4de3-4554-8bf0-83bd777360bd
+[2026-10-28:23:07] [INFO] coffee_shop.coffee_machine.state — Job created: ff11a68f (drink=americano, duration=1.4s, contaminated=False)
+INFO:     127.0.0.1:61740 - "POST /brew HTTP/1.1" 200 OK
+[2026-10-28:23:07] [INFO] coffee_shop.coffee_machine.state — Job ff11a68f finished: ready
+INFO:     127.0.0.1:61755 - "GET /jobs/ff11a68f-e00f-458e-ad2c-c05ed6fed839 HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [7434]

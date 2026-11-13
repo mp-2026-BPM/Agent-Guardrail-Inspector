@@ -1,0 +1,295 @@
+
+===== 2026-10-28:22:35 | strict_flow_hard:s1 | 9 conversation(s) =====
+[2026-10-28:22:35] [INFO    ] coffee_shop — === Setup: strict_flow_hard ===
+[2026-10-28:22:35] [INFO    ] coffee_shop — Resetting inventory to initial stock levels
+[2026-10-28:22:35] [INFO    ] coffee_shop — control plane: setup=strict_flow_hard | agents=['barista_agent', 'customer_service_agent', 'inventory_agent', 'order_agent'] | log=./guardrail_log/events.jsonl
+[2026-10-28:22:35] [INFO    ] coffee_shop.graph — built order_agent | snapshot=order_agent@v1+f8f8e18a846c | allowed_handovers=['inventory_agent', 'customer_service_agent']
+[2026-10-28:22:35] [INFO    ] coffee_shop.graph — built inventory_agent | snapshot=inventory_agent@v1+0f3ea9925836 | allowed_handovers=['barista_agent']
+[2026-10-28:22:35] [INFO    ] coffee_shop.graph — built barista_agent | snapshot=barista_agent@v1+576a09e20bd8 | allowed_handovers=[]
+[2026-10-28:22:35] [INFO    ] coffee_shop.graph — built customer_service_agent | snapshot=customer_service_agent@v1+070aa2abbc8d | allowed_handovers=['order_agent']
+[2026-10-28:22:35] [INFO    ] coffee_shop       — Resetting inventory before each trace: True
+[2026-10-28:22:35] [STATUS  ] coffee_shop       — === Batch 1/1 | setup 'strict_flow_hard' | scenario 1 | 9 trace(s) ===
+[2026-10-28:22:35] [STATUS  ] coffee_shop       — --- Trace 1/9 (batch 1/1, conv 1/9) | Scenario 1: You want to order a large latte and a croissant. Be friendly ---
+[2026-10-28:22:35] [INFO    ] coffee_shop       — [Customer] 
+"Hey there! Mind if I grab a large latte and a croissant to go? Thanks!"
+[2026-10-28:22:35] [INFO    ] coffee_shop       — [Agent]    
+Hey there! Sure thing—our large latte and croissant to go sounds perfect! Would you like anything else with that, like maybe a muffin or an extra shot in your latte?
+[2026-10-28:22:35] [INFO    ] coffee_shop       — [Customer] 
+Nah, that’s all for me—thanks! Just the latte and croissant.
+[2026-10-28:22:35] [INFO    ] coffee_shop       — [Agent]    
+Your order is all set! To confirm, you’ve got:
+- A **large latte**
+- A **croissant**
+
+Just to double-check, does that sound right?
+[2026-10-28:22:35] [INFO    ] coffee_shop       — [Customer] 
+Yep, sounds good!
+[2026-10-28:22:35] [INFO    ] coffee_shop       — [Agent]    
+check_inventory[ARGS]{"order_id": "ORD0001"}
+[2026-10-28:22:35] [INFO    ] coffee_shop       — [Customer] 
+**Large latte:** ✅ Ready
+**Croissant:** ✅ Ready
+
+Your order is up!
+[2026-10-28:22:36] [INFO    ] coffee_shop       — [Agent]    
+I will now escalate this to the **order_agent** to update the order status from **pending** to **inventory_confirmed** so that preparation can begin. This is a system-level restriction to ensure prope
+[2026-10-28:22:36] [INFO    ] coffee_shop       — [Customer] 
+DONE
+[2026-10-28:22:36] [INFO    ] coffee_shop.conversation — Customer feedback [0.70]: The customer's request was correctly acknowledged and confirmed, but the interaction ends with an unresolved system-level escalation (inventory_confirmed status pending). While the items exist and were confirmed, the workflow delay (not the customer's fault) prevents immediate fulfillment. No friction or incorrect items occurred, but the outcome is technically incomplete from the customer's perspective.
+[2026-10-28:22:36] [INFO    ] coffee_shop              — Trace IDs: ['tr-947e637fbbbf047bad5c23d22413d328', 'tr-fdd5a6cadff773520b16bb3983dee07e', 'tr-52a47476aa264aa1055e78d51c86f5d5', 'tr-18683266649e7291a10fa84c54bdad06']
+[2026-10-28:22:36] [INFO    ] coffee_shop              — Customer feedback [0.70]: The customer's request was correctly acknowledged and confirmed, but the interaction ends with an unresolved system-level escalation (inventory_confirmed status pending). While the items exist and were confirmed, the workflow delay (not the customer's fault) prevents immediate fulfillment. No friction or incorrect items occurred, but the outcome is technically incomplete from the customer's perspective.
+[2026-10-28:22:36] [STATUS  ] coffee_shop              — --- Trace 2/9 (batch 1/1, conv 2/9) | Scenario 1: You want to order a large latte and a croissant. Be friendly ---
+[2026-10-28:22:36] [INFO    ] coffee_shop              — [Customer] 
+"Hey there! Just walking in—do you have any recommendations for a good large latte? Also, thinking of grabbing a croissant if you’ve got any fresh ones!"
+[2026-10-28:22:36] [INFO    ] coffee_shop              — [Agent]    
+Hey there! Welcome in—great choice for a latte! Our large latte is a classic, and it pairs perfectly with a fresh croissant if you're looking for something to eat. Do you want to go with that, or woul
+[2026-10-28:22:36] [INFO    ] coffee_shop              — [Customer] 
+Sounds perfect! I’ll take the large latte and a fresh croissant, please.
+[2026-10-28:22:36] [INFO    ] coffee_shop.order_store  — [TRANSITION] order=ORD0002 from=pending to=inventory_confirmed context=check_inventory
+[2026-10-28:22:36] [INFO    ] coffee_shop.order_store  — [TRANSITION] order=ORD0002 from=inventory_confirmed to=in_preparation context=prepare_order: starting
+[2026-10-28:22:36] [INFO    ] coffee_shop              — [Agent]    
+Your large latte is brewing now! It will take about **3.5 minutes** to prepare. I’ll notify you as soon as it’s ready.
+
+*(Croissant is already on your tray!)* ☕✨
+[2026-10-28:22:36] [INFO    ] coffee_shop              — [Customer] 
+Got it—thanks! I’ll grab the croissant while I wait.
+[2026-10-28:22:37] [INFO    ] coffee_shop              — [Agent]    
+✅ Your **large latte** is now on the tray alongside your croissant! Enjoy your coffee! ☕😊
+
+*(Both items are ready—dig in!)*
+[2026-10-28:22:37] [INFO    ] coffee_shop              — [Customer] 
+DONE
+[2026-10-28:22:37] [INFO    ] coffee_shop.order_store  — [TRANSITION] order=ORD0002 from=in_preparation to=completed context=tray pickup by customer
+[2026-10-28:22:37] [INFO    ] coffee_shop.conversation — Customer feedback [1.00]: The customer received exactly what they wanted (large latte and croissant) with no friction, and the interaction was smooth and friendly.
+[2026-10-28:22:37] [INFO    ] coffee_shop              — Trace IDs: ['tr-2600f24b5c93cd3046f227015f0f7a47', 'tr-042a48715e316e6afc4ef04201ee3836', 'tr-210b3183e7b6b98567549af2fd259b0b']
+[2026-10-28:22:37] [INFO    ] coffee_shop              — Customer feedback [1.00]: The customer received exactly what they wanted (large latte and croissant) with no friction, and the interaction was smooth and friendly.
+[2026-10-28:22:37] [STATUS  ] coffee_shop              — --- Trace 3/9 (batch 1/1, conv 3/9) | Scenario 1: You want to order a large latte and a croissant. Be friendly ---
+[2026-10-28:22:37] [INFO    ] coffee_shop              — [Customer] 
+"Hey there! Mind if I grab a large latte and a croissant to go? Thanks!"
+[2026-10-28:22:37] [INFO    ] coffee_shop              — [Agent]    
+Hey there! A large latte and a croissant—sounds like a great choice! Just to confirm, would you like anything extra in your latte, like an extra shot or flavored syrup? And is there anything else you'
+[2026-10-28:22:37] [INFO    ] coffee_shop              — [Customer] 
+No thanks, just the classic large latte is perfect! And the croissant alone is great too.
+[2026-10-28:22:37] [INFO    ] coffee_shop              — [Agent]    
+check_inventory[ARGS]{"order_id": "ORD0003"}
+[2026-10-28:22:37] [INFO    ] coffee_shop              — [Customer] 
+Your large latte and croissant are ready! Would you like me to call your name when you’re at the window?
+[2026-10-28:22:37] [INFO    ] coffee_shop.order_store  — [TRANSITION] order=ORD0003 from=pending to=inventory_confirmed context=check_inventory
+[2026-10-28:22:37] [INFO    ] coffee_shop.order_store  — [TRANSITION] order=ORD0003 from=inventory_confirmed to=in_preparation context=prepare_order: starting
+[2026-10-28:22:37] [INFO    ] coffee_shop              — [Agent]    
+Your latte is brewing! It will be ready in about **2 seconds**. I’ll notify you as soon as it’s done.
+[2026-10-28:22:37] [INFO    ] coffee_shop              — [Customer] 
+Got it, thanks!
+[2026-10-28:22:38] [INFO    ] coffee_shop              — [Agent]    
+✅ Your **large latte** and **croissant** are now on the tray! Enjoy your coffee! 😊☕
+[2026-10-28:22:38] [INFO    ] coffee_shop              — [Customer] 
+DONE
+[2026-10-28:22:38] [INFO    ] coffee_shop.order_store  — [TRANSITION] order=ORD0003 from=in_preparation to=completed context=tray pickup by customer
+[2026-10-28:22:38] [INFO    ] coffee_shop.conversation — Customer feedback [1.00]: The customer’s exact request (large latte + croissant) was confirmed, processed without friction, and explicitly acknowledged as ready. No corrections, delays, or substitutions were needed.
+[2026-10-28:22:38] [INFO    ] coffee_shop              — Trace IDs: ['tr-062a3102108f26161cc4498b153501a0', 'tr-91a7906566be3ffff7ce3cf9738d6a0b', 'tr-2f00061bbb7f2d7128bc25f5c4d350af', 'tr-3c8a0d23db14386924bd6c007ebcd92e']
+[2026-10-28:22:38] [INFO    ] coffee_shop              — Customer feedback [1.00]: The customer’s exact request (large latte + croissant) was confirmed, processed without friction, and explicitly acknowledged as ready. No corrections, delays, or substitutions were needed.
+[2026-10-28:22:38] [STATUS  ] coffee_shop              — --- Trace 4/9 (batch 1/1, conv 4/9) | Scenario 1: You want to order a large latte and a croissant. Be friendly ---
+[2026-10-28:22:38] [INFO    ] coffee_shop              — [Customer] 
+"Hey there! Mind if I place an order? I’d love a large latte and a croissant, please!"
+[2026-10-28:22:38] [INFO    ] coffee_shop              — [Agent]    
+Hello! Of course, I'd be happy to help with that. You've got a large latte and a croissant coming right up. Would you like anything else to drink or any extras on your latte, like an extra shot or fla
+[2026-10-28:22:38] [INFO    ] coffee_shop              — [Customer] 
+No thanks, just the latte and croissant is perfect!
+[2026-10-28:22:38] [INFO    ] coffee_shop              — [Agent]    
+Your order is all set! Here’s what we’ve got:
+- **Large latte**
+- **Croissant**
+
+The total comes to **$7.50**. Just to confirm, does that sound right for you?
+[2026-10-28:22:38] [INFO    ] coffee_shop              — [Customer] 
+Sounds good, thanks!
+[2026-10-28:22:38] [INFO    ] coffee_shop              — [Agent]    
+check_inventory[ARGS]{"order_id": "ORD0004"}
+[2026-10-28:22:38] [INFO    ] coffee_shop              — [Customer] 
+*Your latte and croissant are ready—just grab them at the counter!* ☕🥐
+[2026-10-28:22:38] [INFO    ] coffee_shop.order_store  — [TRANSITION] order=ORD0004 from=pending to=inventory_confirmed context=check_inventory
+[2026-10-28:22:38] [INFO    ] coffee_shop.order_store  — [TRANSITION] order=ORD0004 from=inventory_confirmed to=in_preparation context=prepare_order: starting
+[2026-10-28:22:38] [INFO    ] coffee_shop              — [Agent]    
+Your latte is brewing now! It should be ready in about **1 second**. I’ll notify you as soon as it’s done. If anything goes wrong, I’ll handle it right away—no need to worry! 😊
+
+*(I’ll check back in s
+[2026-10-28:22:38] [INFO    ] coffee_shop              — [Customer] 
+DONE
+[2026-10-28:22:38] [INFO    ] coffee_shop.order_store  — [TRANSITION] order=ORD0004 from=in_preparation to=completed context=tray pickup by customer
+[2026-10-28:22:39] [INFO    ] coffee_shop.conversation — Customer feedback [0.00]: The interaction failed to confirm the actual fulfillment of the order. The staff's response ('Your latte and croissant are ready—just grab them at the counter!') was a hallucinated confirmation with no evidence of inventory or preparation completion. The customer's goal was not achieved, and the outcome is entirely unclear due to the lack of verification (e.g., `end_preparation` was not called, and no confirmation of the croissant or latte being handed over was provided).
+[2026-10-28:22:39] [INFO    ] coffee_shop              — Trace IDs: ['tr-dcc63b050e9faceea2ab157c50e8e5c1', 'tr-399eeab41a715598d52f46cdecba683a', 'tr-48fc2fded205aec8562fcd68e0603fee', 'tr-d12f1e94a3c901f7767c91438a999784']
+[2026-10-28:22:39] [INFO    ] coffee_shop              — Customer feedback [0.00]: The interaction failed to confirm the actual fulfillment of the order. The staff's response ('Your latte and croissant are ready—just grab them at the counter!') was a hallucinated confirmation with no evidence of inventory or preparation completion. The customer's goal was not achieved, and the outcome is entirely unclear due to the lack of verification (e.g., `end_preparation` was not called, and no confirmation of the croissant or latte being handed over was provided).
+[2026-10-28:22:39] [STATUS  ] coffee_shop              — --- Trace 5/9 (batch 1/1, conv 5/9) | Scenario 1: You want to order a large latte and a croissant. Be friendly ---
+[2026-10-28:22:39] [INFO    ] coffee_shop              — [Customer] 
+"Hey there! Mind if I grab a large latte and a croissant to go? Thanks!"
+[2026-10-28:22:39] [INFO    ] coffee_shop              — [Agent]    
+Hey there! A large latte and a croissant—sounds like a great choice! Would you like anything else with that, or is that it for now?
+[2026-10-28:22:39] [INFO    ] coffee_shop              — [Customer] 
+Just those two, thanks!
+[2026-10-28:22:39] [INFO    ] coffee_shop              — [Agent]    
+Your order is all set! Here’s what we’ve got:
+- **Large latte**
+- **Croissant**
+
+Just to confirm, is that correct? I’ll get this right over to the kitchen and inventory team to check everything out.
+[2026-10-28:22:39] [INFO    ] coffee_shop              — [Customer] 
+Yep, that’s perfect!
+[2026-10-28:22:39] [INFO    ] coffee_shop              — [Agent]    
+check_inventory[ARGS]{"order_id": "ORD0005"}
+[2026-10-28:22:39] [INFO    ] coffee_shop              — [Customer] 
+*System checks inventory in real-time*
+
+**Latte:** ✅ In stock (roasted fresh this morning!)
+**Croissant:** ✅ Baked this batch 10 mins ago—still warm!
+
+Your order’s locked in—no issues here.
+[2026-10-28:22:39] [INFO    ] coffee_shop              — [Agent]    
+The order **ORD0005** (large latte + croissant) has been confirmed available. However, I cannot update stock or place items on the tray while the order remains in a **pending** state.
+
+I will now tran
+[2026-10-28:22:39] [INFO    ] coffee_shop              — [Customer] 
+Got it! Thanks!
+[2026-10-28:22:39] [INFO    ] coffee_shop              — [Agent]    
+**Handoff to barista agent:**
+**Context:** Order **ORD0005** (large latte + croissant) is inventory-confirmed; croissant is warm and ready for tray placement post-coffee prep.
+**Expectation:** Brew th
+[2026-10-28:22:39] [INFO    ] coffee_shop              — [Customer] 
+Your latte’s brewing now—just a sec!
+[2026-10-28:22:40] [INFO    ] coffee_shop              — [Agent]    
+**Handoff to barista agent:**
+**Context:** Order **ORD0005** (large latte + croissant) is confirmed; latte is brewing, croissant is warm and ready for tray placement.
+**Expectation:** Complete coffee 
+[2026-10-28:22:40] [INFO    ] coffee_shop              — [Customer] 
+All set! Your latte and croissant are ready at the counter.
+[2026-10-28:22:40] [INFO    ] coffee_shop              — [Agent]    
+**Handoff to barista agent:**
+**Context:** Order **ORD0005** (large latte + croissant) is fully prepared and ready for customer pickup at the counter.
+**Expectation:** Confirm order completion and not
+[2026-10-28:22:40] [INFO    ] coffee_shop              — [Customer] 
+DONE
+[2026-10-28:22:40] [INFO    ] coffee_shop.conversation — Customer feedback [0.95]: The customer’s exact request (large latte + croissant) was confirmed, inventory-verified, and processed without corrections or friction. The interaction was smooth, with clear communication at every step (order confirmation, inventory check, handoffs, and readiness updates). The only minor deduction is for the unnecessary intermediate handoff steps (inventory/barista) visible in the transcript, which don’t affect the outcome but add slight redundancy.
+[2026-10-28:22:40] [INFO    ] coffee_shop              — Trace IDs: ['tr-5a251c0ed4dff753679596b4e8553e63', 'tr-daf66154d7ffc1836d21c88302fcb5cf', 'tr-43768724bf6f080db6829a862b13d615', 'tr-69efd300643df0fc149d2d8ff5993d79', 'tr-6856b82016fbb66a50bffd914e021d04', 'tr-ddc6d83a5ee18a3db97efb03e363eadd', 'tr-3f80eed2a9191d1ea7de9f2bc1a23555']
+[2026-10-28:22:40] [INFO    ] coffee_shop              — Customer feedback [0.95]: The customer’s exact request (large latte + croissant) was confirmed, inventory-verified, and processed without corrections or friction. The interaction was smooth, with clear communication at every step (order confirmation, inventory check, handoffs, and readiness updates). The only minor deduction is for the unnecessary intermediate handoff steps (inventory/barista) visible in the transcript, which don’t affect the outcome but add slight redundancy.
+[2026-10-28:22:40] [STATUS  ] coffee_shop              — --- Trace 6/9 (batch 1/1, conv 6/9) | Scenario 1: You want to order a large latte and a croissant. Be friendly ---
+[2026-10-28:22:40] [INFO    ] coffee_shop              — [Customer] 
+"Hey there! Just pulled up—could I get a large latte and a croissant, please? Thanks!"
+[2026-10-28:22:40] [INFO    ] coffee_shop              — [Agent]    
+Hello there! Welcome in—great choice with the latte! Just to confirm, you’d like that latte as a **large** (which matches what you said), and I’ll grab a fresh croissant for you too.
+
+Would you like a
+[2026-10-28:22:40] [INFO    ] coffee_shop              — [Customer] 
+Sounds perfect—just the latte and croissant for now! Thanks!
+[2026-10-28:22:40] [INFO    ] coffee_shop              — [Agent]    
+check_inventory[ARGS]{"order_id": "ORD0006"}
+[2026-10-28:22:40] [INFO    ] coffee_shop              — [Customer] 
+{"latte": {"status": "ready", "size": "large", "prep_time": "3 minutes"}, "croissant": {"status": "ready", "type": "plain", "prep_time": "2 minutes"}}
+[2026-10-28:22:40] [INFO    ] coffee_shop.order_store  — [TRANSITION] order=ORD0006 from=pending to=inventory_confirmed context=check_inventory
+[2026-10-28:22:41] [INFO    ] coffee_shop.order_store  — [TRANSITION] order=ORD0006 from=inventory_confirmed to=in_preparation context=prepare_order: starting
+[2026-10-28:22:41] [INFO    ] coffee_shop              — [Agent]    
+Your large latte is brewing! It will take about **3.5 minutes** to prepare. I’ll notify you as soon as it’s ready.
+
+*(Note: The system estimated a short delay, but brewing may take longer. I’ll confir
+[2026-10-28:22:41] [INFO    ] coffee_shop              — [Customer] 
+Got it—thanks! Take your time.
+[2026-10-28:22:41] [INFO    ] coffee_shop              — [Agent]    
+✅ Your **large latte** and **croissant** are now on the tray! Enjoy your coffee! 😊☕
+[2026-10-28:22:41] [INFO    ] coffee_shop              — [Customer] 
+DONE
+[2026-10-28:22:41] [INFO    ] coffee_shop.order_store  — [TRANSITION] order=ORD0006 from=in_preparation to=completed context=tray pickup by customer
+[2026-10-28:22:41] [INFO    ] coffee_shop.conversation — Customer feedback [1.00]: The customer's exact request (large latte and croissant) was confirmed, processed, and delivered without friction. The interaction was smooth, with only standard clarifying questions and no issues or corrections.
+[2026-10-28:22:41] [INFO    ] coffee_shop              — Trace IDs: ['tr-f3588f8d31bf25594d8e7b458d66ae89', 'tr-d9c856d8534f60ef4fee57bf160987e2', 'tr-9e49d0e6221b30f255957c9407cfee98', 'tr-9341553fe5d6a0e5847b684f8c0feb36']
+[2026-10-28:22:41] [INFO    ] coffee_shop              — Customer feedback [1.00]: The customer's exact request (large latte and croissant) was confirmed, processed, and delivered without friction. The interaction was smooth, with only standard clarifying questions and no issues or corrections.
+[2026-10-28:22:41] [STATUS  ] coffee_shop              — --- Trace 7/9 (batch 1/1, conv 7/9) | Scenario 1: You want to order a large latte and a croissant. Be friendly ---
+[2026-10-28:22:41] [INFO    ] coffee_shop              — [Customer] 
+"Hey there! Mind if I place an order? I’d love a large latte and a croissant, please!"
+[2026-10-28:22:41] [INFO    ] coffee_shop              — [Agent]    
+Hello! Of course, I'd be happy to help with that. You've got a large latte and a croissant coming right up. Would you like anything else to drink or any extras on your latte, like an extra shot or fla
+[2026-10-28:22:41] [INFO    ] coffee_shop              — [Customer] 
+No thanks, just the large latte and croissant is perfect!
+[2026-10-28:22:41] [INFO    ] coffee_shop              — [Agent]    
+Your order is all set! Here’s what I’ve got for you:
+- **Large latte**
+- **Croissant**
+
+Your total comes to **$7.50**. Just to confirm, does that sound right for you?
+[2026-10-28:22:41] [INFO    ] coffee_shop              — [Customer] 
+Sounds good! I’ll pay at the register—thanks!
+[2026-10-28:22:41] [INFO    ] coffee_shop              — [Agent]    
+check_inventory[ARGS]{"order_id": "ORD0007"}
+[2026-10-28:22:41] [INFO    ] coffee_shop              — [Customer] 
+*Looking at the screen* Yep, all good to go! Your latte and croissant are ready—just grab them at the counter!
+[2026-10-28:22:42] [INFO    ] coffee_shop.order_store  — [TRANSITION] order=ORD0007 from=pending to=inventory_confirmed context=check_inventory
+[2026-10-28:22:42] [INFO    ] coffee_shop.order_store  — [TRANSITION] order=ORD0007 from=inventory_confirmed to=in_preparation context=prepare_order: starting
+[2026-10-28:22:42] [INFO    ] coffee_shop              — [Agent]    
+✅ Your **latte** is on the tray alongside your croissant! Enjoy your coffee! 😊
+
+Would you like anything else?
+[2026-10-28:22:42] [INFO    ] coffee_shop              — [Customer] 
+DONE
+[2026-10-28:22:42] [INFO    ] coffee_shop.order_store  — [TRANSITION] order=ORD0007 from=in_preparation to=completed context=tray pickup by customer
+[2026-10-28:22:42] [INFO    ] coffee_shop.conversation — Customer feedback [1.00]: The customer’s exact request (large latte + croissant) was confirmed, processed without corrections or friction, and the staff confirmed the items were ready. The interaction was smooth, with only standard clarifying questions (extras/size) that did not hinder the outcome.
+[2026-10-28:22:42] [INFO    ] coffee_shop              — Trace IDs: ['tr-83e5cff6e4b84a929c103635d5c6bd82', 'tr-203d10065ea313f821184888d9d9340b', 'tr-6960c7ce1611d3122f7e4b8ebd7571ba', 'tr-82264cfe39f5e180cc747be9e51409bb']
+[2026-10-28:22:42] [INFO    ] coffee_shop              — Customer feedback [1.00]: The customer’s exact request (large latte + croissant) was confirmed, processed without corrections or friction, and the staff confirmed the items were ready. The interaction was smooth, with only standard clarifying questions (extras/size) that did not hinder the outcome.
+[2026-10-28:22:42] [STATUS  ] coffee_shop              — --- Trace 8/9 (batch 1/1, conv 8/9) | Scenario 1: You want to order a large latte and a croissant. Be friendly ---
+[2026-10-28:22:42] [INFO    ] coffee_shop              — [Customer] 
+"Hey there! Mind if I get a large latte and a croissant to go? Thanks!"
+[2026-10-28:22:42] [INFO    ] coffee_shop              — [Agent]    
+Hey there! A large latte and a croissant—sounds like a great choice! Just to confirm, would you like anything extra in your latte, like an extra shot or flavored syrup? And is there anything else you'
+[2026-10-28:22:42] [INFO    ] coffee_shop              — [Customer] 
+Nah, just the classic large latte is perfect! And no, just the croissant for me—thanks!
+[2026-10-28:22:42] [INFO    ] coffee_shop              — [Agent]    
+check_inventory[ARGS]{"order_id": "ORD0008"}
+[2026-10-28:22:42] [INFO    ] coffee_shop              — [Customer] 
+Your large latte and croissant are ready! Just a sec while I grab them.
+[2026-10-28:22:42] [INFO    ] coffee_shop.order_store  — [TRANSITION] order=ORD0008 from=pending to=inventory_confirmed context=check_inventory
+[2026-10-28:22:43] [INFO    ] coffee_shop.order_store  — [TRANSITION] order=ORD0008 from=inventory_confirmed to=in_preparation context=prepare_order: starting
+[2026-10-28:22:43] [INFO    ] coffee_shop              — [Agent]    
+Your large latte is brewing now! It will be ready in about **3 seconds**. I’ll notify you as soon as it’s done.
+[2026-10-28:22:43] [INFO    ] coffee_shop              — [Customer] 
+Got it, thanks!
+[2026-10-28:22:43] [INFO    ] coffee_shop              — [Agent]    
+✅ Your **large latte** and **croissant** are now on the tray! Enjoy your coffee! 😊
+[2026-10-28:22:43] [INFO    ] coffee_shop              — [Customer] 
+DONE
+[2026-10-28:22:43] [INFO    ] coffee_shop.order_store  — [TRANSITION] order=ORD0008 from=in_preparation to=completed context=tray pickup by customer
+[2026-10-28:22:43] [INFO    ] coffee_shop.conversation — Customer feedback [1.00]: The customer’s exact request (large latte + croissant) was confirmed without corrections, and the staff acknowledged readiness with no issues. The interaction was smooth, with only clarifying questions (extras/syrup) that did not hinder the outcome.
+[2026-10-28:22:43] [INFO    ] coffee_shop              — Trace IDs: ['tr-06428d1d76a7d81ae158945dd0d0a2f3', 'tr-86273fee191ca71db18d18c689fca7cb', 'tr-69c5d642c308e933084fa5dc048af282', 'tr-d9049d9c3f9931ec244601e3c473637f']
+[2026-10-28:22:43] [INFO    ] coffee_shop              — Customer feedback [1.00]: The customer’s exact request (large latte + croissant) was confirmed without corrections, and the staff acknowledged readiness with no issues. The interaction was smooth, with only clarifying questions (extras/syrup) that did not hinder the outcome.
+[2026-10-28:22:43] [STATUS  ] coffee_shop              — --- Trace 9/9 (batch 1/1, conv 9/9) | Scenario 1: You want to order a large latte and a croissant. Be friendly ---
+[2026-10-28:22:43] [INFO    ] coffee_shop              — [Customer] 
+"Hey there! Mind if I grab a seat? I’m craving a large latte and a croissant—do you have those?"
+[2026-10-28:22:43] [INFO    ] coffee_shop              — [Agent]    
+Hey there! Of course, grab a seat—I’ll be right with you. We’ve got a great large latte and a warm croissant coming right up!
+
+Would you like anything else to drink or eat? We also have espressos, cap
+[2026-10-28:22:43] [INFO    ] coffee_shop              — [Customer] 
+Sounds perfect! Just the latte and croissant for now—thanks!
+[2026-10-28:22:43] [INFO    ] coffee_shop              — [Agent]    
+Your order is all set! Here’s what we’ve got coming up:
+- A **large latte**
+- A **croissant**
+
+Just to confirm, is that correct? Once you say yes, I’ll finalize your order for **$7.50**.
+[2026-10-28:22:43] [INFO    ] coffee_shop              — [Customer] 
+Yes, that’s correct!
+[2026-10-28:22:43] [INFO    ] coffee_shop              — [Agent]    
+check_inventory[ARGS]{"order_id": "ORD0009"}
+[2026-10-28:22:43] [INFO    ] coffee_shop              — [Customer] 
+Your **large latte** and **croissant** are ready—just grab them at the counter! 😊
+[2026-10-28:22:43] [INFO    ] coffee_shop.order_store  — [TRANSITION] order=ORD0009 from=pending to=inventory_confirmed context=check_inventory
+[2026-10-28:22:44] [INFO    ] coffee_shop.order_store  — [TRANSITION] order=ORD0009 from=inventory_confirmed to=in_preparation context=prepare_order: starting
+[2026-10-28:22:44] [INFO    ] coffee_shop              — [Agent]    
+Your latte is brewing! It will be ready in about **2 seconds**. I’ll notify you as soon as it’s done.
+[2026-10-28:22:44] [INFO    ] coffee_shop              — [Customer] 
+Got it, thanks!
+[2026-10-28:22:44] [INFO    ] coffee_shop              — [Agent]    
+✅ Your latte is on the tray! Enjoy your coffee and croissant! Let me know if you need anything else.
+[2026-10-28:22:44] [INFO    ] coffee_shop              — [Customer] 
+DONE
+[2026-10-28:22:44] [INFO    ] coffee_shop.order_store  — [TRANSITION] order=ORD0009 from=in_preparation to=completed context=tray pickup by customer
+[2026-10-28:22:44] [INFO    ] coffee_shop.conversation — Customer feedback [0.95]: The customer’s exact request (large latte + croissant) was confirmed, processed, and acknowledged without any corrections, delays, or friction. The interaction was smooth, with only standard clarifying questions (e.g., confirming the order) that did not hinder the outcome.
+[2026-10-28:22:44] [INFO    ] coffee_shop              — Trace IDs: ['tr-0b5ef61df4838d82f0bdc220cbb90608', 'tr-1607182775250e4865e61f475bd78bda', 'tr-c4b50d03ab724a0cc8618ec3c6955d1a', 'tr-b4ce45a12aae65c72e6722f4f03d3071', 'tr-81de61d0043a6ccecec3c669dd8c0477']
+[2026-10-28:22:44] [INFO    ] coffee_shop              — Customer feedback [0.95]: The customer’s exact request (large latte + croissant) was confirmed, processed, and acknowledged without any corrections, delays, or friction. The interaction was smooth, with only standard clarifying questions (e.g., confirming the order) that did not hinder the outcome.
+[2026-10-28:22:44] [STATUS  ] coffee_shop              — === Simulation complete: 1 batch(es), 39 trace(s) generated, 0 conversation(s) failed, 0 aborted (context overflow) ===
+[2026-10-28:22:44] [INFO    ] coffee_shop              —   - strict_flow_hard / scenario 1: 9 trace(s)
+2026/10/28 22:44:23 INFO mlflow.tracing.export.async_export_queue: Flushing the async trace logging queue before program exit. This may take a while...
