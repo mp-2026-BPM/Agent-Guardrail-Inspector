@@ -81,7 +81,78 @@ def load_conversations(run_dir: Path, run: str) -> pd.DataFrame:
     df["duration_s"] = (df.ended_ms - df.started_ms) / 1000
     df["started"] = pd.to_datetime(df.pop("started_ms"), unit="ms", utc=True)
     df.pop("ended_ms")
+    df = df.merge(load_message_counts(run_dir), on="thread_id", how="left")
     return df.sort_values("started").reset_index(drop=True)
+
+
+GUARDRAIL_NOTE = "[Internal note from the coffee shop's guardrails"
+
+
+def load_message_counts(run_dir: Path) -> pd.DataFrame:
+    """Messages per conversation, counted in its final message history.
+
+    Each trace outputs the conversation's whole history so far; the newest trace
+    with an output is used (a failed last turn has none). `customer_messages`
+    are the customer's messages, without the guardrails' internal notes to the
+    agents; `agent_messages` are agent messages with visible text. Tool calls
+    without text and tool results are not counted.
+    """
+    with _connect(run_dir) as con:
+        traces = con.execute(
+            """
+            select m.value, i.request_id
+            from trace_request_metadata m
+            join trace_tags s on s.request_id = m.request_id and s.key = 'setup'
+            join trace_info i on i.request_id = m.request_id
+            where m.key = 'mlflow.trace.session'
+            order by m.value, i.timestamp_ms desc
+            """
+        ).fetchall()
+        newest_first: dict[str, list[str]] = {}
+        for thread_id, request_id in traces:
+            newest_first.setdefault(thread_id, []).append(request_id)
+        rows = []
+        for thread_id, request_ids in newest_first.items():
+            messages = None
+            for request_id in request_ids:
+                (output,) = con.execute(
+                    """
+                    select json_extract(content, '$.attributes."mlflow.spanOutputs"')
+                    from spans where trace_id = ? and parent_span_id is null
+                    """,
+                    (request_id,),
+                ).fetchone() or (None,)
+                state = _parse_json(output)
+                # The span output may be the state's JSON text, encoded once more.
+                if isinstance(state, str):
+                    state = _parse_json(state)
+                if isinstance(state, dict) and state.get("messages"):
+                    messages = state["messages"]
+                    break
+            if messages is None:
+                continue
+
+            def text(m):
+                return str(m.get("content") or "").strip()
+
+            rows.append(
+                {
+                    "thread_id": thread_id,
+                    "customer_messages": sum(
+                        m.get("type") == "human"
+                        and not text(m).startswith(GUARDRAIL_NOTE)
+                        for m in messages
+                    ),
+                    "agent_messages": sum(
+                        m.get("type") == "ai" and bool(text(m)) for m in messages
+                    ),
+                }
+            )
+    df = pd.DataFrame(
+        rows, columns=["thread_id", "customer_messages", "agent_messages"]
+    )
+    df["messages"] = df.customer_messages + df.agent_messages
+    return df
 
 
 def _parse_json(text):
