@@ -110,6 +110,25 @@ class TestRefundWithinLimit(unittest.TestCase):
             pred(_ctx("offer_partial_refund", refund_percent=90)).effect, Effect.FLAG
         )
 
+    def test_negative_allowed_without_min(self):
+        # min_pct is opt-in; setups that omit it keep the historical upper-bound-only check.
+        pred = refund_within_limit_predicate(max_pct=100, effect="deny")
+        self.assertEqual(
+            pred(_ctx("offer_partial_refund", refund_percent=-10)).effect, Effect.ALLOW
+        )
+
+    def test_below_min_denied(self):
+        pred = refund_within_limit_predicate(max_pct=100, min_pct=0, effect="deny")
+        verdict = pred(_ctx("offer_partial_refund", refund_percent=-10))
+        self.assertEqual(verdict.effect, Effect.DENY)
+        self.assertIn("-10%", verdict.reason_for_llm)
+
+    def test_at_min_allowed(self):
+        pred = refund_within_limit_predicate(max_pct=100, min_pct=0, effect="deny")
+        self.assertEqual(
+            pred(_ctx("offer_partial_refund", refund_percent=0)).effect, Effect.ALLOW
+        )
+
 
 class TestOrderTotalWithinLimit(unittest.TestCase):
     def setUp(self):

@@ -40,3 +40,9 @@ src/services/coffee-machine/logs/
 
 # Docs (local only)
 docs/
+
+# Shared experiment snapshots for the metrics dashboard (see experiment_data/2026-11/README.md)
+!/experiment_data/**
+/experiment_data/**/*.db
+/experiment_data/**/*.db-wal
+/experiment_data/**/*.db-shm

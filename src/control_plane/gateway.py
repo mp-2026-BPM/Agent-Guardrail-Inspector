@@ -105,6 +105,32 @@ class Gateway:
         self._log_decision(decision, thread_id, verdict_versions)
         return decision
 
+    def log_response_fallback(
+        self,
+        thread_id: str | None,
+        rejecting_guardrail: str,
+        rejected_content: str,
+        reason: str,
+        corrections: int,
+        fallback_content: str,
+    ) -> None:
+        """Record that the response guardrail retry cap was hit and the customer got
+        the canned fallback instead of the agent's (rejected) message. Readers that
+        only want verdicts filter on `event_type == "gateway_decision"`."""
+        self.log_sink.append(
+            {
+                "event_type": "response_guardrail_fallback",
+                "snapshot_id": self.snapshot_id,
+                "agent_id": self.agent_id,
+                "thread_id": thread_id,
+                "rejecting_guardrail": rejecting_guardrail,
+                "rejected_content": rejected_content,
+                "reason": reason,
+                "corrections_before_fallback": corrections,
+                "fallback_content": fallback_content,
+            }
+        )
+
     def _log_decision(
         self,
         decision: CallDecision,

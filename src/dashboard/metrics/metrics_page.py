@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import os
 from collections import OrderedDict
 from datetime import datetime, timedelta
 from pathlib import Path
@@ -26,7 +27,14 @@ _TIMESTAMP_COL = "time:timestamp"
 # Naive-UTC sibling of `time:timestamp`. Read by the guardrail-extension
 # resolver so it doesn't double-shift the already UTC→local converted column.
 _TIMESTAMP_UTC_NAIVE_COL = "time:timestamp_utc_naive"
-_GUARDRAIL_LOG_PATH = Path(CoffeeShopConfig.__dataclass_fields__["guardrail_log_path"].default)
+_GUARDRAIL_LOG_PATH = Path(
+    CoffeeShopConfig.__dataclass_fields__["guardrail_log_path"].default
+)
+# Set to a shared data folder (e.g. experiment_data/2026-11) to show its
+# snapshot instead of the local MLflow store: the page reads the folder's
+# generated_event_log/_all_traces.csv and guardrail_log/events.jsonl as they
+# are, without syncing against MLflow.
+_DATA_DIR_ENV = "METRICS_DATA_DIR"
 
 # Scenario labels mirror the interaction observatory's dropdown
 # (src/dashboard/interaction/interaction_page.py) — both dashboards use
@@ -52,8 +60,16 @@ def create_metrics_dashboard():
     """Create the Metrics Dashboard page."""
     pn.extension("plotly", sizing_mode="stretch_width")
 
-    LOG_DIR = Path("generated_event_log")
-    cache_path = ensure_trace_cache(LOG_DIR)
+    data_dir = os.getenv(_DATA_DIR_ENV)
+    if data_dir:
+        LOG_DIR = Path(data_dir) / "generated_event_log"
+        snapshot = LOG_DIR / CACHE_FILENAME
+        cache_path = snapshot if snapshot.exists() else None
+        guardrail_log_path = Path(data_dir) / "guardrail_log" / "events.jsonl"
+    else:
+        LOG_DIR = Path("generated_event_log")
+        cache_path = ensure_trace_cache(LOG_DIR)
+        guardrail_log_path = _GUARDRAIL_LOG_PATH
     if cache_path is None:
         return _empty_template(LOG_DIR)
 
@@ -80,15 +96,24 @@ def create_metrics_dashboard():
     # a new setup added later shows up automatically; scenario labels come
     # from _SCENARIO_LABELS with a fallback to the raw int for anything
     # outside the known range.
-    scenarios_present = sorted(
-        int(v) for v in case_metadata["case_scenario_index"].drop_nulls().unique().to_list()
-    ) if not case_metadata.is_empty() else []
+    scenarios_present = (
+        sorted(
+            int(v)
+            for v in case_metadata["case_scenario_index"]
+            .drop_nulls()
+            .unique()
+            .to_list()
+        )
+        if not case_metadata.is_empty()
+        else []
+    )
     scenario_options = {
         _SCENARIO_LABELS.get(v, f"Scenario {v}"): v for v in scenarios_present
     }
     setups_present_raw = (
         case_metadata["case_setup"].unique().to_list()
-        if not case_metadata.is_empty() else []
+        if not case_metadata.is_empty()
+        else []
     )
     setup_options = {}
     for s in setups_present_raw:
@@ -98,7 +123,8 @@ def create_metrics_dashboard():
             setup_options[s] = s
     models_present_raw = (
         case_metadata["case_model"].unique().to_list()
-        if not case_metadata.is_empty() and "case_model" in case_metadata.columns else []
+        if not case_metadata.is_empty() and "case_model" in case_metadata.columns
+        else []
     )
     model_options: dict[str, str | None] = {}
     for m in sorted(models_present_raw, key=lambda x: (x is None, x or "")):
@@ -129,7 +155,9 @@ def create_metrics_dashboard():
     )
 
     def _preset_button(label: str, on_click) -> pn.widgets.Button:
-        btn = pn.widgets.Button(name=label, button_type="light", height=28, sizing_mode="stretch_width")
+        btn = pn.widgets.Button(
+            name=label, button_type="light", height=28, sizing_mode="stretch_width"
+        )
         btn.on_click(on_click)
         return btn
 
@@ -203,7 +231,9 @@ def create_metrics_dashboard():
     )
 
     trace_count_label = pn.pane.HTML(
-        _format_count_label(*_case_counts(case_metadata, full_start, full_end, [], [], [])),
+        _format_count_label(
+            *_case_counts(case_metadata, full_start, full_end, [], [], [])
+        ),
         sizing_mode="stretch_width",
         margin=(0, 0, 4, 0),
     )
@@ -220,15 +250,20 @@ def create_metrics_dashboard():
     )
 
     time_card = pn.Card(
-        preset_row_top, preset_row_mid, preset_row_bot,
-        start_picker, end_picker,
+        preset_row_top,
+        preset_row_mid,
+        preset_row_bot,
+        start_picker,
+        end_picker,
         title="Time",
         collapsed=False,
         sizing_mode="stretch_width",
         styles={"margin-bottom": "6px"},
     )
     scenario_card = pn.Card(
-        scenario_group if scenario_options else pn.pane.HTML(
+        scenario_group
+        if scenario_options
+        else pn.pane.HTML(
             '<div style="font-size:11px;color:#999;">No scenarios found.</div>'
         ),
         title="Scenario",
@@ -237,7 +272,9 @@ def create_metrics_dashboard():
         styles={"margin-bottom": "6px"},
     )
     setup_card = pn.Card(
-        setup_group if setup_options else pn.pane.HTML(
+        setup_group
+        if setup_options
+        else pn.pane.HTML(
             '<div style="font-size:11px;color:#999;">No configurations found.</div>'
         ),
         title="Configuration",
@@ -246,7 +283,9 @@ def create_metrics_dashboard():
         styles={"margin-bottom": "6px"},
     )
     model_card = pn.Card(
-        model_group if model_options else pn.pane.HTML(
+        model_group
+        if model_options
+        else pn.pane.HTML(
             '<div style="font-size:11px;color:#999;">No models found.</div>'
         ),
         title="Model",
@@ -278,35 +317,63 @@ def create_metrics_dashboard():
     def _restage(_event=None) -> None:
         s = _staged()
         trace_count_label.object = _format_count_label(
-            *_case_counts(case_metadata, s["start"], s["end"], s["scenarios"], s["setups"], s["models"])
+            *_case_counts(
+                case_metadata,
+                s["start"],
+                s["end"],
+                s["scenarios"],
+                s["setups"],
+                s["models"],
+            )
         )
         span_hint_label.object = _format_span_hint(
-            case_metadata, s["start"], s["end"], s["scenarios"], s["setups"], s["models"]
+            case_metadata,
+            s["start"],
+            s["end"],
+            s["scenarios"],
+            s["setups"],
+            s["models"],
         )
         apply_button.disabled = _same_filter(s, applied)
 
     render_cache: OrderedDict[
-        tuple[datetime, datetime, tuple[int, ...], tuple[str | None, ...], tuple[str | None, ...]],
+        tuple[
+            datetime,
+            datetime,
+            tuple[int, ...],
+            tuple[str | None, ...],
+            tuple[str | None, ...],
+        ],
         tuple[ObjectCentricEventlog, int],
     ] = OrderedDict()
 
     def _render_from_applied() -> pn.viewable.Viewable:
         key = _filter_signature(
-            applied["start"], applied["end"],
-            applied["scenarios"], applied["setups"], applied["models"],
+            applied["start"],
+            applied["end"],
+            applied["scenarios"],
+            applied["setups"],
+            applied["models"],
         )
         cached = render_cache.get(key)
         if cached is not None:
             render_cache.move_to_end(key)
             ocel, event_count = cached
             return _render_metrics_from_ocel(
-                ocel, event_count,
-                applied["start"], applied["end"],
+                ocel,
+                event_count,
+                applied["start"],
+                applied["end"],
             )
         view, entry = _build_metrics(
-            combined, case_metadata,
-            applied["start"], applied["end"],
-            applied["scenarios"], applied["setups"], applied["models"],
+            combined,
+            case_metadata,
+            applied["start"],
+            applied["end"],
+            applied["scenarios"],
+            applied["setups"],
+            applied["models"],
+            guardrail_log_path,
         )
         if entry is not None:
             render_cache[key] = entry
@@ -332,9 +399,7 @@ def create_metrics_dashboard():
     model_group.param.watch(_restage, "value")
     apply_button.on_click(_on_apply)
 
-    total_cases = (
-        case_metadata.height if not case_metadata.is_empty() else 0
-    )
+    total_cases = case_metadata.height if not case_metadata.is_empty() else 0
     sidebar = pn.Column(
         pn.pane.HTML(
             '<div style="font-size:14px;font-weight:600;margin-bottom:6px;">Metrics Dashboard</div>',
@@ -401,16 +466,20 @@ def _load_combined_eventlog(csv_files: list[Path]) -> tuple[pl.DataFrame, pl.Dat
     if not frames:
         return pl.DataFrame(), pl.DataFrame()
     local_tz = _local_tz_name()
-    combined = pl.concat(frames, how="diagonal_relaxed").with_columns(
-        pl.col(_TIMESTAMP_COL)
-        .str.to_datetime(strict=False)
-        .alias(_TIMESTAMP_UTC_NAIVE_COL)
-    ).with_columns(
-        pl.col(_TIMESTAMP_COL)
-        .str.to_datetime(strict=False)
-        .dt.replace_time_zone("UTC")
-        .dt.convert_time_zone(local_tz)
-        .dt.replace_time_zone(None)
+    combined = (
+        pl.concat(frames, how="diagonal_relaxed")
+        .with_columns(
+            pl.col(_TIMESTAMP_COL)
+            .str.to_datetime(strict=False)
+            .alias(_TIMESTAMP_UTC_NAIVE_COL)
+        )
+        .with_columns(
+            pl.col(_TIMESTAMP_COL)
+            .str.to_datetime(strict=False)
+            .dt.replace_time_zone("UTC")
+            .dt.convert_time_zone(local_tz)
+            .dt.replace_time_zone(None)
+        )
     )
     case_metadata = _build_case_metadata(combined)
     return combined, case_metadata
@@ -433,6 +502,7 @@ def _local_tz_name() -> str:
     """
     try:
         from datetime import datetime as _dt
+
         tz = _dt.now().astimezone().tzinfo
         key = getattr(tz, "key", None)
         if key:
@@ -454,7 +524,7 @@ def _local_tz_name() -> str:
             marker = "/zoneinfo/"
             idx = target.find(marker)
             if idx >= 0:
-                return target[idx + len(marker):]
+                return target[idx + len(marker) :]
     except Exception:
         pass
     return "UTC"
@@ -488,7 +558,10 @@ def _build_case_metadata(eventlog: pl.DataFrame) -> pl.DataFrame:
         else pl.lit(None, dtype=pl.Utf8).alias("case_setup")
     )
     scenario_expr = (
-        pl.col("case_scenario_index").first().cast(pl.Int64).alias("case_scenario_index")
+        pl.col("case_scenario_index")
+        .first()
+        .cast(pl.Int64)
+        .alias("case_scenario_index")
         if "case_scenario_index" in eventlog.columns
         else pl.lit(-1, dtype=pl.Int64).alias("case_scenario_index")
     )
@@ -513,11 +586,7 @@ def _build_case_metadata(eventlog: pl.DataFrame) -> pl.DataFrame:
         .then(pl.lit(None, dtype=pl.Utf8))
         .when(pl.col("_models").list.len() == 1)
         .then(pl.col("_models").list.first())
-        .otherwise(
-            pl.lit("(mixed: ")
-            + pl.col("_models").list.join(", ")
-            + pl.lit(")")
-        )
+        .otherwise(pl.lit("(mixed: ") + pl.col("_models").list.join(", ") + pl.lit(")"))
         .alias("case_model")
     ).drop("_models")
 
@@ -562,14 +631,18 @@ def _apply_filters(
     return case_metadata.filter(filt)
 
 
+def _null_safe(x):
+    """Sort key that orders None before any value."""
+    return (x is None, x)
+
+
 def _same_filter(a: dict, b: dict) -> bool:
-    null_safe = lambda x: (x is None, x)
     return (
         a["start"] == b["start"]
         and a["end"] == b["end"]
         and sorted(a["scenarios"]) == sorted(b["scenarios"])
-        and sorted(a["setups"], key=null_safe) == sorted(b["setups"], key=null_safe)
-        and sorted(a["models"], key=null_safe) == sorted(b["models"], key=null_safe)
+        and sorted(a["setups"], key=_null_safe) == sorted(b["setups"], key=_null_safe)
+        and sorted(a["models"], key=_null_safe) == sorted(b["models"], key=_null_safe)
     )
 
 
@@ -586,13 +659,12 @@ def _filter_signature(
     models: list[str | None],
 ) -> tuple:
     """Hashable, order-insensitive key for the render cache."""
-    null_safe = lambda x: (x is None, x)
     return (
         start,
         end,
         tuple(sorted(scenarios)),
-        tuple(sorted(setups, key=null_safe)),
-        tuple(sorted(models, key=null_safe)),
+        tuple(sorted(setups, key=_null_safe)),
+        tuple(sorted(models, key=_null_safe)),
     )
 
 
@@ -612,7 +684,9 @@ def _case_counts(
     "excluded" number reflects what a widened time window would rescue."""
     if case_metadata.is_empty():
         return 0, 0
-    contained = _apply_filters(case_metadata, start, end, scenarios, setups, models).height
+    contained = _apply_filters(
+        case_metadata, start, end, scenarios, setups, models
+    ).height
     overlap_filt = (pl.col("first_t") <= end) & (pl.col("last_t") >= start)
     if scenarios:
         overlap_filt = overlap_filt & pl.col("case_scenario_index").is_in(scenarios)
@@ -693,10 +767,13 @@ def _build_metrics(
     scenarios: list[int],
     setups: list[str | None],
     models: list[str | None],
+    guardrail_log_path: Path = _GUARDRAIL_LOG_PATH,
 ) -> tuple[pn.viewable.Viewable, tuple | None]:
     """Returns `(view, cache_entry)`. `cache_entry` is `(ocel, event_count)`
     for the render cache, or `None` when the filter yielded nothing."""
-    keep_ids = _apply_filters(case_metadata, start, end, scenarios, setups, models)["case_id"]
+    keep_ids = _apply_filters(case_metadata, start, end, scenarios, setups, models)[
+        "case_id"
+    ]
     if keep_ids.is_empty():
         return pn.pane.Alert(
             "No traces match the current filters.", alert_type="warning"
@@ -708,12 +785,10 @@ def _build_metrics(
         ), None
     try:
         ocel = ObjectCentricEventlog.from_eventlog(
-            filtered, guardrail_log_path=_GUARDRAIL_LOG_PATH
+            filtered, guardrail_log_path=guardrail_log_path
         )
     except Exception as e:
-        return pn.pane.Alert(
-            f"Error processing events: {e}", alert_type="danger"
-        ), None
+        return pn.pane.Alert(f"Error processing events: {e}", alert_type="danger"), None
     view = _render_metrics_from_ocel(ocel, filtered.height, start, end)
     return view, (ocel, filtered.height)
 
@@ -771,9 +846,7 @@ def _lazy_visualization_panel(ocel) -> pn.viewable.Viewable:
         try:
             panel = VisualizationSection(ocel).panel()
         except Exception as e:
-            panel = pn.pane.Alert(
-                f"Visualization failed: {e}", alert_type="warning"
-            )
+            panel = pn.pane.Alert(f"Visualization failed: {e}", alert_type="warning")
             button.disabled = False
             button.name = "Retry visualization"
             slot[:] = [panel, button]

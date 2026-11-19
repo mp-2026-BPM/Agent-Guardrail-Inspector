@@ -23,7 +23,9 @@ def create_chat_llm():
             )
         return ChatAnthropic(
             model=os.getenv("ANTHROPIC_MODEL", "anthropic--claude-4.6-opus"),
-            base_url=os.getenv("ANTHROPIC_BASE_URL", "http://localhost:6655/anthropic/"),
+            base_url=os.getenv(
+                "ANTHROPIC_BASE_URL", "http://localhost:6655/anthropic/"
+            ),
             api_key=api_key,
         )
 
@@ -31,6 +33,34 @@ def create_chat_llm():
         from langchain_ollama import ChatOllama
 
         return ChatOllama(model=os.getenv("OLLAMA_MODEL", "ministral-3:14b"))
+
+    raise ValueError(
+        f"Unknown LLM_PROVIDER: '{provider}'. Supported values: 'ollama', 'anthropic'."
+    )
+
+
+def create_judge_llm():
+    """Chat LLM for soft-guardrail judges: the agents' model, called with
+    temperature 0 and (for Ollama) JSON output mode.
+
+    Both are per-request options, so Ollama reuses the model it already has
+    loaded for the agents; nothing that forces a reload (such as `num_ctx`) is
+    changed here.
+    """
+    provider = os.getenv("LLM_PROVIDER", "ollama").lower().strip()
+
+    if provider == "anthropic":
+        llm = create_chat_llm()
+        return llm.model_copy(update={"temperature": 0})
+
+    if provider == "ollama":
+        from langchain_ollama import ChatOllama
+
+        return ChatOllama(
+            model=os.getenv("OLLAMA_MODEL", "ministral-3:14b"),
+            temperature=0,
+            format="json",
+        )
 
     raise ValueError(
         f"Unknown LLM_PROVIDER: '{provider}'. Supported values: 'ollama', 'anthropic'."
@@ -58,43 +88,60 @@ class _HandoffDeferrer:
     def __call__(self, message):
         tool_calls = getattr(message, "tool_calls", None) or []
         names = [tc["name"] for tc in tool_calls]
-        logger.debug("model returned tool_calls=%s | pending=%s",
-                      names, self._pending["name"] if self._pending else None)
+        logger.debug(
+            "model returned tool_calls=%s | pending=%s",
+            names,
+            self._pending["name"] if self._pending else None,
+        )
 
         if self._pending is not None:
             has_handoff_now = any(
-                tc["name"].startswith("transfer_to_")
-                for tc in tool_calls
+                tc["name"].startswith("transfer_to_") for tc in tool_calls
             )
             if has_handoff_now:
-                logger.info("LLM re-issued handoff — discarding old pending "
-                            "(new message will be re-evaluated)")
+                logger.info(
+                    "LLM re-issued handoff — discarding old pending "
+                    "(new message will be re-evaluated)"
+                )
                 self._pending = None
                 self._defer_count = 0
             elif not tool_calls:
-                logger.info("injecting deferred handoff %s into text-only response",
-                            self._pending["name"])
+                logger.info(
+                    "injecting deferred handoff %s into text-only response",
+                    self._pending["name"],
+                )
                 message.tool_calls = [self._pending]
                 self._pending = None
                 self._defer_count = 0
                 return message
             else:
                 self._defer_count += 1
-                logger.debug("LLM made more non-handoff calls %s — keeping pending "
-                             "(defer count: %d)", names, self._defer_count)
+                logger.debug(
+                    "LLM made more non-handoff calls %s — keeping pending "
+                    "(defer count: %d)",
+                    names,
+                    self._defer_count,
+                )
 
         if len(tool_calls) <= 1:
             return message
 
         handoff = [tc for tc in tool_calls if tc["name"].startswith("transfer_to_")]
-        non_handoff = [tc for tc in tool_calls if not tc["name"].startswith("transfer_to_")]
+        non_handoff = [
+            tc for tc in tool_calls if not tc["name"].startswith("transfer_to_")
+        ]
 
         if handoff and non_handoff:
             if len(handoff) > 1:
-                logger.warning("multiple handoffs in one response — keeping only first: %s",
-                               [tc["name"] for tc in handoff])
-            logger.info("stripping %s (will defer); keeping %s",
-                        handoff[0]["name"], [tc["name"] for tc in non_handoff])
+                logger.warning(
+                    "multiple handoffs in one response — keeping only first: %s",
+                    [tc["name"] for tc in handoff],
+                )
+            logger.info(
+                "stripping %s (will defer); keeping %s",
+                handoff[0]["name"],
+                [tc["name"] for tc in non_handoff],
+            )
             self._pending = handoff[0]
             self._defer_count = 0
             message.tool_calls = non_handoff

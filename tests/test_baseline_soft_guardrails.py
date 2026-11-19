@@ -14,11 +14,14 @@ still validating:
   configured so),
 - and that an allow verdict is passed through cleanly.
 
-The baseline_soft setup contains ONLY soft (LLM-judge) guardrails: the three
-native soft rules from `baseline` (verbatim) plus a `soft_*`-prefixed
-counterpart for each of `baseline`'s eleven hard rules. No hard predicates
-run in this setup — enforcement is entirely LLM-driven.
+The baseline_soft setup enforces only through soft (LLM-judge) guardrails: the
+three native soft rules from `baseline` (verbatim) plus a `soft_*`-prefixed
+counterpart for each of `baseline`'s eleven hard rules. The eleven hard rules
+still run, but only as `flag` shadows, so every judge verdict can be compared
+with the deterministic verdict on the same call — enforcement is entirely
+LLM-driven.
 """
+
 from __future__ import annotations
 
 import json
@@ -38,7 +41,9 @@ def _catalog() -> Catalog:
     return Catalog(BASELINE_SOFT_DIR)
 
 
-def _install_stub(catalog: Catalog, guardrail_id: str, invoker: Callable[[str, str], str]) -> SoftGuardrail:
+def _install_stub(
+    catalog: Catalog, guardrail_id: str, invoker: Callable[[str, str], str]
+) -> SoftGuardrail:
     """Attach a stub judge to the named soft guardrail loaded from YAML."""
     [gr] = catalog.guardrails([guardrail_id])
     assert isinstance(gr, SoftGuardrail), f"{guardrail_id} should be a SoftGuardrail"
@@ -85,11 +90,10 @@ class SoftBaselineCatalogWiringTest(unittest.TestCase):
             self.assertIsInstance(gr, SoftGuardrail, f"{name} must be soft")
             self.assertTrue(gr.tools, f"{name} must declare tools")
 
-    def test_no_hard_rules_present(self):
-        """baseline_soft is pure LLM-judge: none of baseline's hard rule ids exist here.
-
-        The policy concepts still exist under their `soft_*` counterparts (covered by
-        `test_all_soft_counterparts_load`), but the deterministic hard rules are gone."""
+    def test_hard_rules_are_flag_only_shadows(self):
+        """baseline's hard rules exist here only as observers: each is a hard
+        predicate whose violation verdict is FLAG, never DENY, so the `soft_*`
+        judges stay the only enforcers."""
         catalog = _catalog()
         for hard_id in (
             "handover:allowed_targets",
@@ -104,14 +108,23 @@ class SoftBaselineCatalogWiringTest(unittest.TestCase):
             "transfer:context_summary_nonempty",
             "clean_machine:only_after_error",
         ):
-            with self.assertRaises(KeyError, msg=f"{hard_id} should not exist in baseline_soft"):
-                catalog.guardrails([hard_id])
+            with self.subTest(guardrail=hard_id):
+                [gr] = catalog.guardrails([hard_id])
+                self.assertEqual(gr.type, "hard")
+                # The gateway uses the predicate's own effect, not the YAML one.
+                self.assertEqual((gr.predicate_args or {}).get("effect"), "flag")
 
 
 class SoftAllowedHandoverTargetsTest(unittest.TestCase):
     """LLM-as-judge counterpart to handover:allowed_targets."""
 
-    def _eval(self, invoker, target: str, allowed_handovers: list[str], agent_id: str = "order_agent"):
+    def _eval(
+        self,
+        invoker,
+        target: str,
+        allowed_handovers: list[str],
+        agent_id: str = "order_agent",
+    ):
         catalog = _catalog()
         gr = _install_stub(catalog, "soft_handover:allowed_targets", invoker)
         context = GuardrailContext(
@@ -183,12 +196,11 @@ class SoftAllowedHandoverTargetsTest(unittest.TestCase):
             captured["system"] = system
             return _deny_response("no handovers allowed")
 
-        _gr, verdict = self._eval(
-            invoker, target="anything", allowed_handovers=[]
-        )
+        _gr, verdict = self._eval(invoker, target="anything", allowed_handovers=[])
         self.assertIn("(none)", captured["system"])
         self.assertEqual(
-            verdict.effect, Effect.DENY,
+            verdict.effect,
+            Effect.DENY,
             "empty allowed_handovers must not short-circuit ALLOW",
         )
 
@@ -200,7 +212,9 @@ class SoftDiscountWithinLimitTest(unittest.TestCase):
 
     def _eval(self, invoker, discount: int):
         catalog = _catalog()
-        gr = _install_stub(catalog, "soft_calculate_total:discount_within_limit_30pct", invoker)
+        gr = _install_stub(
+            catalog, "soft_calculate_total:discount_within_limit_30pct", invoker
+        )
         context = GuardrailContext(
             agent_id="order_agent",
             tool_name="calculate_total",
@@ -212,7 +226,9 @@ class SoftDiscountWithinLimitTest(unittest.TestCase):
 
     def test_wiring_deny(self):
         """Soft counterpart enforces (deny) while the parallel hard rule stays flag."""
-        [gr] = _catalog().guardrails(["soft_calculate_total:discount_within_limit_30pct"])
+        [gr] = _catalog().guardrails(
+            ["soft_calculate_total:discount_within_limit_30pct"]
+        )
         self.assertEqual(gr.effect, Effect.DENY)
         self.assertIn("calculate_total", gr.tools)
 
@@ -277,7 +293,9 @@ class SoftGateCheckInventoryTest(unittest.TestCase):
     def test_non_pending_order_denied_by_judge(self):
         order_id = _order_with_status(OrderStatus.INVENTORY_CONFIRMED)
         _gr, verdict = self._eval(
-            lambda _s, _u: _deny_response("status is 'inventory_confirmed', not 'pending'"),
+            lambda _s, _u: _deny_response(
+                "status is 'inventory_confirmed', not 'pending'"
+            ),
             order_id,
         )
         self.assertEqual(verdict.effect, Effect.DENY)
@@ -530,13 +548,15 @@ class SoftGuardrailPromptContentTest(unittest.TestCase):
 
         gr = _install_stub(catalog, "soft_start_preparation:order_status", invoker)
         order_id = _order_with_status(OrderStatus.INVENTORY_CONFIRMED)
-        gr.eval(GuardrailContext(
-            agent_id="barista_agent",
-            tool_name="start_preparation",
-            tool_args={"order_id": order_id, "hint": "smoke-test"},
-            state={},
-            allowed_handovers=[],
-        ))
+        gr.eval(
+            GuardrailContext(
+                agent_id="barista_agent",
+                tool_name="start_preparation",
+                tool_args={"order_id": order_id, "hint": "smoke-test"},
+                state={},
+                allowed_handovers=[],
+            )
+        )
         self.assertIn(order_id, captured["user"])
         self.assertIn("smoke-test", captured["user"])
 
@@ -554,15 +574,18 @@ class SoftGuardrailPromptContentTest(unittest.TestCase):
             return _deny_response("blank order_id, cannot verify status")
 
         gr = _install_stub(catalog, "soft_check_inventory:order_status", invoker)
-        verdict = gr.eval(GuardrailContext(
-            agent_id="inventory_agent",
-            tool_name="check_inventory",
-            tool_args={"content": "", "order_id": ""},
-            state={},
-            allowed_handovers=[],
-        ))
+        verdict = gr.eval(
+            GuardrailContext(
+                agent_id="inventory_agent",
+                tool_name="check_inventory",
+                tool_args={"content": "", "order_id": ""},
+                state={},
+                allowed_handovers=[],
+            )
+        )
         self.assertEqual(
-            len(invocations), 1,
+            len(invocations),
+            1,
             "judge must be invoked even when tool_args has a blank content key",
         )
         self.assertEqual(verdict.effect, Effect.DENY)
@@ -584,21 +607,25 @@ class SoftGuardrailPromptContentTest(unittest.TestCase):
             return _allow_response()
 
         gr = _install_stub(catalog, "assistant_message:on_menu_only", invoker)
-        deny_verdict = gr.eval(GuardrailContext(
-            agent_id="order_agent",
-            tool_name="assistant_message",
-            tool_args={"content": "How about a hazelnut latte?"},
-            state={},
-            allowed_handovers=[],
-        ))
+        deny_verdict = gr.eval(
+            GuardrailContext(
+                agent_id="order_agent",
+                tool_name="assistant_message",
+                tool_args={"content": "How about a hazelnut latte?"},
+                state={},
+                allowed_handovers=[],
+            )
+        )
         self.assertEqual(deny_verdict.effect, Effect.DENY)
-        allow_verdict = gr.eval(GuardrailContext(
-            agent_id="order_agent",
-            tool_name="assistant_message",
-            tool_args={"content": "Would you like a latte?"},
-            state={},
-            allowed_handovers=[],
-        ))
+        allow_verdict = gr.eval(
+            GuardrailContext(
+                agent_id="order_agent",
+                tool_name="assistant_message",
+                tool_args={"content": "Would you like a latte?"},
+                state={},
+                allowed_handovers=[],
+            )
+        )
         self.assertEqual(allow_verdict.effect, Effect.ALLOW)
 
         self.assertIn("espresso", captured["system"])

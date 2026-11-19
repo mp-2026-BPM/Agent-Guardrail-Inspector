@@ -3,6 +3,7 @@ import subprocess
 import sys
 import tempfile
 import unittest
+import urllib.request
 from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
@@ -10,6 +11,27 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 TIMEOUT_SECONDS = 300
 
 
+def _llm_unreachable_reason() -> str | None:
+    """The simulation needs a live LLM. With the default Ollama provider, skip
+    (instead of failing) when no Ollama server answers."""
+    import src.llm  # noqa: F401 — loads .env, like the simulation does
+
+    if os.getenv("LLM_PROVIDER", "ollama").lower().strip() != "ollama":
+        return None
+    host = os.getenv("OLLAMA_HOST", "http://localhost:11434")
+    if not host.startswith("http"):
+        host = f"http://{host}"
+    try:
+        urllib.request.urlopen(f"{host}/api/tags", timeout=2)
+    except OSError as exc:
+        return f"Ollama not reachable at {host}: {exc}"
+    return None
+
+
+_SKIP_REASON = _llm_unreachable_reason()
+
+
+@unittest.skipIf(_SKIP_REASON is not None, _SKIP_REASON or "")
 class TestSimulationE2E(unittest.TestCase):
     """Integration test: run a full simulation and verify the order reaches COMPLETED."""
 
@@ -126,13 +148,18 @@ class TestSimulationE2E(unittest.TestCase):
         found_tagged = False
         checked = 0
         for exp in experiments:
-            traces = client.search_traces(experiment_ids=[exp.experiment_id], max_results=50)
+            traces = client.search_traces(
+                experiment_ids=[exp.experiment_id], max_results=50
+            )
             for t in traces:
                 tags = dict(t.info.tags or {})
                 if tags.get("mlflow.traceName") != "LangGraph":
                     continue
                 checked += 1
-                if tags.get("setup") == "baseline" and tags.get("scenario_index") == "0":
+                if (
+                    tags.get("setup") == "baseline"
+                    and tags.get("scenario_index") == "0"
+                ):
                     found_tagged = True
                     break
             if found_tagged:
